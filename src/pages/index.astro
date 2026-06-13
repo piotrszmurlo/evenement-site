@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Hero from '../components/Hero.astro';
+import CTA from '../components/CTA.astro';
+import { brand } from '../config/brand';
+import { client } from '../data/client';
+import { mockInvestment } from '../data/mock-investments';
+import { Image } from 'astro:assets';
+---
+
+<BaseLayout
+  title={brand.name}
+  description={brand.description}
+  schema={{
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: client.name,
+    telephone: client.phoneForTel,
+    email: client.email,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: client.address.lineOne,
+      addressLocality: client.address.city,
+      addressRegion: client.address.state,
+      postalCode: client.address.zip,
+      addressCountry: client.address.country,
+    },
+    url: client.domain,
+  }}
+>
+  <Header slot="header" />
+
+  <Hero />
+
+  <!-- Active Investment Highlight Section -->
+  <section class="py-section bg-surface">
+    <div class="mx-auto max-w-site px-4 sm:px-6">
+      <div class="mx-auto mb-10 max-w-2xl text-center">
+        <span class="text-topper font-bold uppercase tracking-widest text-accent">Aktualna Inwestycja</span>
+        <h2 class="mt-2 font-heading text-h2 font-bold uppercase text-text">Poznaj Nasz Najnowszy Projekt</h2>
+      </div>
+
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14 items-center max-w-5xl mx-auto">
+        <div class="overflow-hidden rounded-lg shadow-lg">
+          <Image
+            src={mockInvestment.heroImage}
+            alt={mockInvestment.name}
+            width={800}
+            height={500}
+            class="w-full object-cover transition-transform duration-300 hover:scale-105"
+          />
+        </div>
+        <div class="space-y-6">
+          <h3 class="font-heading text-h3 font-bold text-text uppercase tracking-wide">{mockInvestment.name}</h3>
+          <p class="text-sm text-text-muted flex items-center gap-1">
+            <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {mockInvestment.locationAddress}
+          </p>
+          <p class="text-text-muted leading-relaxed text-sm">
+            {mockInvestment.summary}
+          </p>
+          <div>
+            <a
+              href={`/inwestycje/${mockInvestment.slug}/`}
+              class="inline-flex min-h-[44px] items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-bold text-primary-fg shadow-sm transition-opacity hover:opacity-90"
+            >
+              Zobacz listę mieszkań
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+
+  <Footer slot="footer" />
+</BaseLayout>

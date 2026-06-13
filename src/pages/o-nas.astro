@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Banner from '../components/Banner.astro';
+import CTA from '../components/CTA.astro';
+import { Image } from 'astro:assets';
+import { brand } from '../config/brand';
+
+const team = [
+  { name: 'Jan Kowalski',    role: 'Założyciel i Główny Inżynier', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80' },
+  { name: 'Anna Nowak',      role: 'Dyrektor Zarządzająca',        image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80' },
+  { name: 'Tomasz Wiśniewski', role: 'Kierownik Budowy',             image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80' },
+];
+---
+
+<BaseLayout title="O nas" description={`Dowiedz się więcej o firmie ${brand.name} — naszej historii, wartościach i zespole.`}>
+  <Header slot="header" />
+
+  <Banner title="O nas" />
+
+  <!-- Story -->
+  <section class="py-section">
+    <div class="mx-auto grid max-w-site grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:gap-14">
+      <div class="overflow-hidden rounded-lg shadow-lg">
+        <Image
+          src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80"
+          alt="Nasz zespół podczas planowania projektu"
+          width={800}
+          height={600}
+          loading="lazy"
+          class="size-full object-cover"
+        />
+      </div>
+      <div class="space-y-5">
+        <span class="text-topper font-bold uppercase tracking-widest text-accent">Nasza Historia</span>
+        <h2 class="font-heading text-h2 font-bold uppercase text-text">Zbudowane na zaufaniu i najwyższej jakości</h2>
+        <p class="text-text-muted leading-relaxed">
+          Zaczynaliśmy jako niewielka firma rodzinna, a dziś jesteśmy zaufanym deweloperem budującym nowoczesne mieszkania i domy. Od ponad 15 lat realizujemy inwestycje z dbałością o każdy detal — z myślą o kolejnych pokoleniach.
+        </p>
+        <p class="text-text-muted leading-relaxed">
+          Nasze projekty łączą nowoczesną architekturę, funkcjonalne układy oraz ekologiczne rozwiązania. Dbamy o to, aby każdy etap budowy przebiegał zgodnie z najwyższymi standardami, gwarantując naszym klientom bezpieczeństwo i spokój na lata.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section class="bg-surface py-section">
+    <div class="mx-auto max-w-site px-4 sm:px-6">
+      <div class="mx-auto mb-10 max-w-2xl text-center">
+        <span class="text-topper font-bold uppercase tracking-widest text-accent">Nasz Zespół</span>
+        <h2 class="mt-2 font-heading text-h2 font-bold uppercase text-text">Poznaj ludzi stojących za naszym sukcesem</h2>
+      </div>
+
+      <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {team.map(({ name, role, image }) => (
+          <div class="overflow-hidden rounded-lg bg-background shadow-sm">
+            <Image
+              src={image}
+              alt={name}
+              width={400}
+              height={400}
+              loading="lazy"
+              class="aspect-square w-full object-cover"
+            />
+            <div class="p-5">
+              <h3 class="font-heading text-lg font-semibold text-text">{name}</h3>
+              <p class="text-sm text-text-muted">{role}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+
+  <Footer slot="footer" />
+</BaseLayout>

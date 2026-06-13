@@ -12,6 +12,7 @@ export function getStaticPaths() {
 
 const { investmentSlug } = Astro.params;
 const investment = mockInvestment;
+const galleryImages = investment.gallery?.length ? investment.gallery : [investment.heroImage];
 ---
 
 <BaseLayout title={investment.name} description={investment.summary}>
@@ -22,14 +23,80 @@ const investment = mockInvestment;
   <section class="py-section">
     <div class="mx-auto max-w-site px-4 sm:px-6">
       <div class="space-y-12">
-        <div class="overflow-hidden rounded-2xl shadow-lg">
-          <Image
-            src={investment.heroImage}
-            alt={investment.name}
-            width={1400}
-            height={780}
-            class="w-full object-cover"
-          />
+        <div class="overflow-hidden rounded-2xl border border-border bg-background shadow-lg">
+          <div class="embla" data-embla>
+            <div class="relative">
+              <div class="embla__viewport overflow-hidden" data-embla-viewport>
+                <div class="embla__container flex touch-pan-y">
+                  {galleryImages.map((src, index) => (
+                    <div class="embla__slide min-w-0 flex-[0_0_100%]">
+                      <Image
+                        src={src}
+                        alt={`${investment.name} - zdjęcie ${index + 1}`}
+                        width={1400}
+                        height={780}
+                        class="aspect-[1400/780] w-full object-cover"
+                        loading={index === 0 ? 'eager' : 'lazy'}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {galleryImages.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    class="embla__button absolute left-4 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/45 text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-black/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+                    data-embla-prev
+                    aria-label="Poprzednie zdjęcie"
+                  >
+                    <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="embla__button absolute right-4 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/45 text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-black/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+                    data-embla-next
+                    aria-label="Następne zdjęcie"
+                  >
+                    <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </button>
+                </>
+              )}
+            </div>
+
+            {galleryImages.length > 1 && (
+              <div class="border-t border-border bg-surface px-4 py-4 sm:px-5">
+                <div class="flex gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]" data-embla-thumbs aria-label="Miniatury galerii">
+                  {galleryImages.map((src, index) => (
+                    <button
+                      type="button"
+                      class="relative aspect-[4/3] w-20 shrink-0 overflow-hidden rounded-lg border border-border bg-border opacity-70 transition-all hover:opacity-100 sm:w-24"
+                      data-embla-thumb
+                      data-index={index}
+                      aria-label={`Przejdź do zdjęcia ${index + 1}`}
+                      aria-pressed={index === 0 ? 'true' : 'false'}
+                    >
+                      <Image
+                        src={src}
+                        alt=""
+                        aria-hidden="true"
+                        width={240}
+                        height={180}
+                        class="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <div class="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-start">
@@ -181,6 +248,72 @@ const investment = mockInvestment;
       </div>
     </div>
   </section>
+
+  <script>
+    import EmblaCarousel from 'embla-carousel';
+
+    const initGallery = () => {
+      const root = document.querySelector('[data-embla]');
+      if (!root) return;
+
+      const viewport = root.querySelector('[data-embla-viewport]');
+      const prevBtn = root.querySelector('[data-embla-prev]');
+      const nextBtn = root.querySelector('[data-embla-next]');
+      const thumbs = Array.from(root.querySelectorAll('[data-embla-thumb]'));
+
+      if (!viewport) return;
+
+      const embla = EmblaCarousel(viewport, {
+        loop: false,
+        align: 'start',
+        skipSnaps: false,
+      });
+
+      const setSelected = () => {
+        const selectedIndex = embla.selectedScrollSnap();
+
+        thumbs.forEach((thumb, index) => {
+          const active = index === selectedIndex;
+          thumb.setAttribute('aria-pressed', String(active));
+          thumb.classList.toggle('border-2', active);
+          thumb.classList.toggle('border-primary', active);
+          thumb.classList.toggle('opacity-100', active);
+          thumb.classList.toggle('opacity-70', !active);
+        });
+
+        const canPrev = embla.canScrollPrev();
+        const canNext = embla.canScrollNext();
+
+        if (prevBtn) {
+          prevBtn.toggleAttribute('disabled', !canPrev);
+          prevBtn.classList.toggle('opacity-40', !canPrev);
+          prevBtn.classList.toggle('pointer-events-none', !canPrev);
+        }
+
+        if (nextBtn) {
+          nextBtn.toggleAttribute('disabled', !canNext);
+          nextBtn.classList.toggle('opacity-40', !canNext);
+          nextBtn.classList.toggle('pointer-events-none', !canNext);
+        }
+      };
+
+      thumbs.forEach((thumb, index) => {
+        thumb.addEventListener('click', () => embla.scrollTo(index));
+      });
+
+      prevBtn?.addEventListener('click', () => embla.scrollPrev());
+      nextBtn?.addEventListener('click', () => embla.scrollNext());
+      embla.on('select', setSelected);
+      embla.on('reInit', setSelected);
+      setSelected();
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGallery, { once: true });
+    } else {
+      initGallery();
+    }
+  </script>
 
   <Footer slot="footer" />
 </BaseLayout>

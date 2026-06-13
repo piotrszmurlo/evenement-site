@@ -36,6 +36,7 @@
     "@tailwindcss/vite": "^4.2.1",
     "astro": "^6.0.4",
     "astro-robots-txt": "^1.0.0",
+    "embla-carousel": "^8.6.0",
     "tailwindcss": "^4.2.1"
   },
   "devDependencies": {

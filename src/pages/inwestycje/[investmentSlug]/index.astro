@@ -7,9 +7,7 @@ import { mockInvestment } from '../../../data/mock-investments';
 import { Image } from 'astro:assets';
 
 export function getStaticPaths() {
-  return [
-    { params: { investmentSlug: mockInvestment.slug } },
-  ];
+  return [{ params: { investmentSlug: mockInvestment.slug } }];
 }
 
 const { investmentSlug } = Astro.params;
@@ -23,107 +21,162 @@ const investment = mockInvestment;
 
   <section class="py-section">
     <div class="mx-auto max-w-site px-4 sm:px-6">
-      <div class="mb-16 grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-14">
-        <div class="overflow-hidden rounded-lg shadow-lg">
+      <div class="space-y-12">
+        <div class="overflow-hidden rounded-2xl shadow-lg">
           <Image
             src={investment.heroImage}
             alt={investment.name}
-            width={800}
-            height={500}
+            width={1400}
+            height={780}
             class="w-full object-cover"
           />
         </div>
 
-        <div class="space-y-6">
-          <span class="text-topper font-bold uppercase tracking-widest text-accent">Inwestycja</span>
-          <h2 class="font-heading text-h2 font-bold uppercase text-text">{investment.name}</h2>
-          <p class="flex items-center gap-1 text-sm text-text-muted">
-            <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            {investment.locationAddress}
-          </p>
-          <div class="prose max-w-none text-sm leading-relaxed text-text-muted">
-            <p>{investment.description}</p>
-          </div>
-          {investment.prospectusUrl && (
-            <div class="pt-4">
-              <a
-                href={investment.prospectusUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex min-h-[44px] items-center gap-2 rounded-md border border-border bg-surface px-5 py-2.5 text-sm font-semibold text-text transition-colors hover:bg-border"
-              >
-                <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Pobierz prospekt informacyjny (PDF)
-              </a>
+        <div class="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-start">
+          <div class="space-y-6">
+            <span class="text-topper font-bold uppercase tracking-widest text-accent">Inwestycja</span>
+            <h2 class="font-heading text-h2 font-bold uppercase text-text">{investment.name}</h2>
+            <p class="flex items-center gap-1 text-sm text-text-muted">
+              <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              {investment.locationAddress}
+            </p>
+            <div class="prose prose-slate max-w-none text-sm leading-7 text-text-muted">
+              <p>{investment.description}</p>
             </div>
-          )}
-        </div>
-      </div>
+          </div>
 
-      <div class="border-t border-border pt-12">
-        <div class="mb-8">
-          <h3 class="font-heading text-h3 font-bold uppercase text-text">Lista dostępnych domów</h3>
-          <p class="text-sm text-text-muted">Przeglądaj dostępne segmenty w tej inwestycji.</p>
-        </div>
-
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {investment.units.map((unit) => {
-            const currentPrice = unit.priceHistory[unit.priceHistory.length - 1];
-            return (
-              <div class="flex flex-col justify-between overflow-hidden rounded-lg border border-border bg-background shadow-sm">
-                <div>
-                  <div class="relative h-48 overflow-hidden">
-                    <Image
-                      src={unit.mainImage}
-                      alt={`Dom ${unit.unitNumber}`}
-                      width={400}
-                      height={300}
-                      class="size-full object-cover"
-                    />
-                    <div class="absolute left-3 top-3">
-                      <span class:list={[
-                        'rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white',
-                        unit.status === 'available' ? 'bg-green-600' :
-                        unit.status === 'reserved' ? 'bg-amber-600' : 'bg-red-600'
-                      ]}>
-                        {unit.status === 'available' ? 'Dostępne' :
-                         unit.status === 'reserved' ? 'Rezerwacja' : 'Sprzedane'}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="p-5">
-                    <div class="mb-2 flex items-baseline justify-between">
-                      <h4 class="font-heading text-xl font-bold text-text">Dom {unit.unitNumber}</h4>
-                      <span class="text-xs font-semibold uppercase text-text-muted">{unit.propertyType}</span>
-                    </div>
-                    <ul class="mb-4 space-y-1.5 text-sm text-text-muted">
-                      <li><strong>Liczba pokoi:</strong> {unit.rooms}</li>
-                      <li><strong>Powierzchnia:</strong> {unit.usableAreaM2} m²</li>
-                      {unit.plotAreaM2 && <li><strong>Działka:</strong> {unit.plotAreaM2} m²</li>}
-                    </ul>
-                    <p class="text-xs text-text-muted line-clamp-2">{unit.shortDescription}</p>
-                  </div>
-                </div>
-
-                <div class="mt-4 flex items-center justify-between border-t border-border p-5 pt-0">
-                  <div class="text-sm font-bold text-text">
-                    {currentPrice ? `${currentPrice.baseTotalPrice.toLocaleString('pl-PL')} zł` : 'Zapytaj o cenę'}
-                  </div>
-                  <a
-                    href={`/inwestycje/${investmentSlug}/${unit.slug}/`}
-                    class="inline-flex min-h-[36px] items-center rounded bg-primary px-3 py-1.5 text-xs font-semibold text-primary-fg shadow-sm transition-opacity hover:opacity-90"
-                  >
-                    Szczegóły
-                  </a>
-                </div>
+          <div class="rounded-2xl border border-border bg-surface p-6 shadow-sm">
+            <h3 class="font-heading text-xl font-bold uppercase text-text">Szybkie informacje</h3>
+            <dl class="mt-5 space-y-4 text-sm">
+              <div class="flex items-start justify-between gap-4 border-b border-border pb-3">
+                <dt class="text-text-muted">Lokale</dt>
+                <dd class="font-semibold text-text">{investment.units.length}</dd>
               </div>
-            );
-          })}
+              <div class="flex items-start justify-between gap-4 border-b border-border pb-3">
+                <dt class="text-text-muted">Status sprzedaży</dt>
+                <dd class="font-semibold text-text">
+                  {investment.salesStatus === 'active' ? 'Aktywna' : 'Zakończona'}
+                </dd>
+              </div>
+              <div class="flex items-start justify-between gap-4">
+                <dt class="text-text-muted">Prospekt</dt>
+                <dd class="font-semibold text-text">
+                  {investment.prospectusUrl ? 'Dostępny' : 'Brak'}
+                </dd>
+              </div>
+            </dl>
+
+            {investment.prospectusUrl && (
+              <div class="pt-6">
+                <a
+                  href={investment.prospectusUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md border border-border bg-background px-5 py-2.5 text-sm font-semibold text-text transition-colors hover:bg-border"
+                >
+                  <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Pobierz prospekt informacyjny (PDF)
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div class="border-t border-border pt-12">
+          <div class="mb-8">
+            <h3 class="font-heading text-h3 font-bold uppercase text-text">Lista dostępnych domów</h3>
+            <p class="text-sm text-text-muted">Przeglądaj dostępne segmenty w tej inwestycji.</p>
+          </div>
+
+          <div class="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-border text-left text-sm">
+                <thead class="bg-surface text-xs uppercase tracking-wider text-text-muted">
+                  <tr>
+                    <th scope="col" class="px-4 py-3">Budynek</th>
+                    <th scope="col" class="px-4 py-3">Pow. budynku</th>
+                    <th scope="col" class="px-4 py-3">Pow. działki</th>
+                    <th scope="col" class="px-4 py-3">Status</th>
+                    <th scope="col" class="px-4 py-3">Cena z VAT (brutto)</th>
+                    <th scope="col" class="px-4 py-3">Cena za metr (z VAT) brutto</th>
+                    <th scope="col" class="px-4 py-3">Rzuty</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-border bg-background">
+                  {investment.units.map((unit) => {
+                    const currentPrice = unit.priceHistory[unit.priceHistory.length - 1];
+                    const statusLabel =
+                      unit.status === 'available'
+                        ? 'Dostępny'
+                        : unit.status === 'reserved'
+                          ? 'Rezerwacja'
+                          : 'Sprzedany';
+
+                    return (
+                      <tr class="align-top">
+                        <td class="px-4 py-4 font-semibold text-text">
+                          <div class="space-y-1">
+                            <div>SK{unit.unitNumber.replace(/^A/i, '')}</div>
+                            <div class="text-xs font-normal text-text-muted">{unit.shortDescription}</div>
+                          </div>
+                        </td>
+                        <td class="px-4 py-4 text-text-muted">{unit.usableAreaM2.toLocaleString('pl-PL')} m²</td>
+                        <td class="px-4 py-4 text-text-muted">
+                          {unit.plotAreaM2 ? `${unit.plotAreaM2.toLocaleString('pl-PL')} m²` : '—'}
+                        </td>
+                        <td class="px-4 py-4">
+                          <span class:list={[
+                            'inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white',
+                            unit.status === 'available'
+                              ? 'bg-green-600'
+                              : unit.status === 'reserved'
+                                ? 'bg-amber-600'
+                                : 'bg-red-600',
+                          ]}>
+                            {statusLabel}
+                          </span>
+                        </td>
+                        <td class="px-4 py-4 font-semibold text-text">
+                          {currentPrice ? `${currentPrice.totalPriceWithComponents.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
+                        </td>
+                        <td class="px-4 py-4 font-semibold text-text">
+                          {currentPrice ? `${currentPrice.pricePerM2.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
+                        </td>
+                        <td class="px-4 py-4">
+                          <div class="flex flex-col gap-3">
+                            <a
+                              href={`/inwestycje/${investmentSlug}/${unit.slug}/`}
+                              class="inline-flex min-h-[36px] w-fit items-center rounded bg-primary px-3 py-1.5 text-xs font-semibold text-primary-fg shadow-sm transition-opacity hover:opacity-90"
+                            >
+                              Szczegóły
+                            </a>
+                            {unit.slug === 'a2' && investment.prospectusUrl ? (
+                              <a
+                                href={investment.prospectusUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="inline-flex items-center gap-2 text-xs font-medium text-primary transition-colors hover:text-primaryLight"
+                              >
+                                <span aria-hidden="true">ℹ️</span>
+                                Karta SK2
+                              </a>
+                            ) : (
+                              <span class="text-xs text-text-muted">—</span>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>

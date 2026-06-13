@@ -1,0 +1,101 @@
+W jaki sposób zautomatyzować proces pobierania danych?
+
+Podobnie jak przy udostępnianiu danych z wykorzystaniem panelu administracyjnego należy skontaktować się z administratorem portalu w celu założenia profilu dostawcy i uzyskania odpowiednich uprawnień – więcej informacji TUTAJ (pobierz plik pdf).
+Należy przygotować plik XML, którego struktura ma być zgodna ze schematem XSD dostępnym pod adresem https://www.dane.gov.pl/static/xml/otwarte_dane_latest.xsd
+Należy skontaktować się z administratorem portalu (kontakt@dane.gov.pl) w celu utworzenia tzw. źródła danych. W treści korespondencji należy podać: nazwę dostawcy danych (zgodną z utworzoną w portalu dla dewelopera), adres e-mail osoby lub osób, którym zostały nadane uprawnienia edytora oraz adres URL określający lokalizację pliku XML oraz pliku MD5, częstotliwość aktualizacji danych (codziennie). Pobierz listę danych niezbędnych do uruchomienia automatyzacji procesu
+Więcej informacji dotyczących automatycznego dodawania danych (import xml) znajduje się w części "Materiały informacyjne" niniejszej strony
+
+
+Kiedy pobierane są dane do portalu dane.gov.pl przy wykorzystaniu metody automatycznego importu (import xml)
+
+Pierwsze zasilenie danych odbywa się po włączeniu źródła danych przez administratora portalu. Kolejne importy odbywają się raz dziennie.
+
+
+Czy dostawca danych (deweloper) może upoważnić kilku edytorów do umieszczania danych?
+
+Tak, deweloper może upoważnić kilku edytorów do udostępniania danych.
+
+
+Czy jedna osoba może być edytorem u kilku dostawców?
+
+Tak, jedna osoba może być edytorem u kilku dostawców.
+
+
+Czy dostawcy danych mogą zakładać konta testowe?
+
+Obecnie nie ma możliwości tworzenia kont testowych dla dostawców danych.
+
+
+Jaki zakres danych jest wymagany do udostępnienia w portalu dane.gov.pl?
+
+Zakres wymaganych danych wynika z art. 19a ustawy z dnia 20 maja 2021 r. o ochronie praw nabywcy lokalu mieszkalnego lub domu jednorodzinnego oraz Deweloperskim Funduszu Gwarancyjnym (Dz. U. z 2024 r. poz. 695). Ministerstwo Cyfryzacji nie jest właściwe do określania powyższego zakresu danych. W celu jednak zapewnienia zgodności przekazywanych danych ze standardem technicznym portalu dane.gov.pl oraz osiągnięcia spójności publikowanych danych Ministerstwo Cyfryzacji przygotowało plik zawierający wzorcowy zakres danych dostępny na niniejszej stronie (sekcja „materiały informacyjne”).
+
+
+W jakich formatach plików należy udostępniać dane w portalu dane.gov.pl?
+
+Struktura danych powinna umożliwiać ich odczyt maszynowy. Za odczytywalne maszynowo formaty plików należy uznać m.in. xlsx, csv, xml lub json. Jednocześnie zwracamy uwagę na brak możliwości udostępniania w portalu dane.gov.pl danych utrudniających odczyt maszynowy odczyt np. pdf czy doc.
+
+
+Jakie są parametry obowiązkowe dla pliku? Czy są jakieś walidacje po stronie dane.gov.pl przewidziane i zwrotne informacje w przypadku nie zapisania pliku lub braków w nim wykrytych?
+
+Standardy techniczne dotyczące przygotowania danych znajdują się w załączniku nr 2 do Programu otwierania danych na lata 2021-2027. Szczególną uwagę należy zwrócić na rekomendacje dot. przygotowania arkusza ustrukturyzowanych danych (strona 122 powyższego dokumentu, zobacz także skrócony materiał – pobierz plik pdf). Dane powinny być zapisane w odczytywalnych maszynowo formatach, np. xlsx, csv. Niedopuszczalne są formaty pdf czy właściwe dla plików graficznych. W panelu administratora znajdują się komunikaty walidacyjne. Więcej informacji na ten temat można znaleźć w przewodniku dla dostawców danych.
+
+
+W jaki sposób przekazywać do MC i udostępniać prospekt informacyjny w portalu dane.gov.pl?
+
+Art. 19b ust 1 ustawy o zmianie ustawy o ochronie praw nabywcy lokalu mieszkalnego lub domu jednorodzinnego oraz Deweloperskim Funduszu Gwarancyjnym nie wprowadza obowiązku przekazywania ministrowi właściwemu do spraw informatyzacji prospektu informacyjnego. Powyższy artykuł wskazuje obowiązek przekazywania danych zawartych w informacjach o których mowa w art. 19a ust. 1 i 2, w tym w prospekcie informacyjnym. Dla uniknięcia ewentualnych wątpliwości interpretacyjnych sugerujemy dodanie w udostępnianych informacjach dodatkowej informacji - adresu strony internetowej pod którym dany deweloper udostępnia prospekt informacyjny. Umożliwi to użytkownikom portalu dane.gov.pl zapoznanie się z pełną treścią prospektu.
+
+
+Czy należy udostępniać pliki za kolejne dni z cenami mieszkań czy udostępniać jeden plik i codziennie go aktualizować?
+
+Rekomendujemy aby dostawca danych (deweloper) tworzył w portalu dane.gov.pl zbiór danych, którego elementami (danymi) będą oddzielne pliki z zestawieniami cen mieszkań za kolejne dni (każdy plik odpowiada jednemu dniowi)
+
+
+Czy deweloper udostępniający dane w portalu dane.gov.pl jest zobowiązany do posiadania Biuletynu Informacji Publicznej?
+
+Obowiązek prowadzenia Biuletynu Informacji Publicznej nie wynika z przepisów ustawy o otwartych danych, tylko z ustawy o dostępie do informacji publicznej, zatem pozostaje poza zakresem regulacji dotyczących udostępniania danych w portalu dane.gov.pl.
+
+
+Jaka jest relacja art. 19b ustawy z dnia 20 maja 2021 r. o ochronie praw nabywcy lokalu mieszkalnego lub domu jednorodzinnego oraz Deweloperskim Funduszu Gwarancyjnym do art. 26 ustawy z dnia 11 sierpnia 2021 r. o otwartych danych i ponownym wykorzystywaniu informacji sektora publicznego i art. 14 ust. 1 dyrektywy Parlamentu Europejskiego i Rady (UE) 2019/1024 z dnia 20 czerwca 2019 r. w sprawie otwartych danych i ponownego wykorzystywania informacji sektora publicznego (Dz.Urz. UE L 172 z 26.06.2019, str. 56) danych dotyczących cen ofertowych nieruchomości?
+
+Pojęcie danych o wysokiej wartości wprowadziła dyrektywa 2019/1024, a za nią implementowała je polska ustawa o otwartych danych (zob. art. 2 pkt 10 dyrektywy oraz art. 2 pkt 4 ustawy). W dyrektywie i ustawie ustalono szczególne zasady udostępniania danych o wysokiej wartości (m.in. udostępnianie danych przez API). Nie dotyczy to wszystkich tego rodzaju informacji. Udostępnianiu w celu ponownego wykorzystywania (na szczególnych zasadach) podlegają tylko dane o wysokiej wartości wymienione w wykazie ustanowionym w aktach wykonawczych Komisji Europejskiej wydanych na podstawie art. 14 ust. 1 dyrektywy 2019/1024 (zob. art. 26 ustawy). Do tej pory Komisja Europejska wydała jeden taki akt wykonawczy, tj. rozporządzenie wykonawcze Komisji (UE) 2023/138 z dnia 21 grudnia 2022 r. ustanawiające wykaz szczególnych zbiorów danych o wysokiej wartości oraz warunki ich publikacji i ponownego wykorzystywania. Rozporządzenie to zawiera szczegółowy wykaz konkretnych zbiorów danych o wysokiej wartości, które podlegają wspomnianym szczególnym zasadom udostępniania. W wykazie tym nie ma danych dotyczących cen ofertowych nieruchomości.
+
+Czy deweloper, który prowadzi inwestycje poprzez osobne spółki powinien utworzyć w portalu dane.gov.pl jeden profil dostawcy czy odrębne profile dla każdej ze spółek?
+
+Tworzenie profili dostawców w portalu dane.gov.pl odbywa się zgodnie z Rozporządzeniem Rady Ministrów z dnia 21 listopada 2022 r. w sprawie portalu danych (Dz. U. poz. 2415). Deweloper przesyła administratorowi portalu zgłoszenie zawierające komplet wymaganych rozporządzeniem danych (więcej informacji na ten temat znajduje się w niniejszym materiale – pobierz plik pdf). Administrator portalu tworzy na podstawie powyższego zgłoszenia profil dostawcy. Wyjaśniamy jednocześnie, że kwestia czy deweloper powinien utworzyć w portalu dane.gov.pl jeden profil dostawcy czy odrębne dla poszczególnych spółek nie wynika z przepisów regulujących funkcjonowanie portalu dane.gov.pl tylko z przepisów Ustawy o ochronie praw nabywcy lokalu mieszkalnego lub domu jednorodzinnego oraz Deweloperskim Funduszu Gwarancyjnym (w tym art. 19a), pozostających poza właściwością Ministerstwa Cyfryzacji.
+
+
+Zamierzam rozpocząć udostępnianie danych z wykorzystaniem automatyzacji procesu (import xml). W jaki sposób uzyskać identyfikator extIdent niezbędny do umieszczenia wewnątrz pliku xml? Czy otrzymam ten identyfikator od Ministerstwa Cyfryzacji?
+
+Ministerstwo Cyfryzacji nie nadaje powyższych identyfikatorów. Identyfikatory extIdent są tworzone we własnym zakresie przez dostawcę danych (dewelopera). Identyfikator powinien składać się z 36 znaków (rekomendujemy używanie jedynie cyfr i liter, bez znaków diakrytycznych). Dostawca danych powinien umieszczać w pliku xml identyfikatory extIdent dla każdego zbioru danych i udostępnianych w nich danych. Identyfikatory muszą być unikalne w ramach jednego pliku xml (nie mogą się powtarzać).
+
+
+Dlaczego dla danych, które udostępniłem w portalu dane.gov.pl nie wygenerował się automatycznie dodatkowy plik csv i json-ld?
+
+Od 25 września 2025 r. dla plików udostępnianych przez deweloperów nie są w portalu dane.gov.pl generowane automatycznie dodatkowe pliki w formatach csv oraz json-ld. Brak dodatkowych plików nie jest błędem. Nie wpływa to w żaden sposób na możliwość pobrania przez użytkowników portalu danych udostępnianych zgodnie z obowiązkiem wskazanym w art. 19b ustawy z dnia 20 maja 2021 r. o ochronie praw nabywcy lokalu mieszkalnego lub domu jednorodzinnego oraz Deweloperskim Funduszu Gwarancyjnym.
+
+
+Dlaczego dane, które udostępniłem w portalu dane.gov.pl nie posiadają widoku tabelarycznego?
+
+Od 25 września 2025 r. dla plików udostępnianych przez deweloperów nie jest w portalu dane.gov.pl generowany widok tabelaryczny, a dla plików udostępnionych przez deweloperów przed 25 września takie widoki będą stopniowo wycofywane z portalu. Brak widoku tabelarycznego nie jest błędem. Nie wpływa to w żaden sposób na możliwość pobrania przez użytkowników portalu danych udostępnianych zgodnie z obowiązkiem wskazanym w art. 19b ustawy z dnia 20 maja 2021 r. o ochronie praw nabywcy lokalu mieszkalnego lub domu jednorodzinnego oraz Deweloperskim Funduszu Gwarancyjnym.
+
+
+Dla danych udostępnianych w portalu dane.gov.pl widoczna jest w panelu administracyjnym portalu informacja „brak walidacji” – czy jest to błąd?
+
+Wyświetlany komunikat nie jest błędem. Od 25 września 2025 r. w zakładce „Walidacja danych” nie są zamieszczane informacje o jej wynikach. Nie wpływa to w żaden sposób na możliwość pobrania przez użytkowników portalu danych udostępnianych zgodnie z obowiązkiem wskazanym w art. 19b ustawy z dnia 20 maja 2021 r. o ochronie praw nabywcy lokalu mieszkalnego lub domu jednorodzinnego oraz Deweloperskim Funduszu Gwarancyjnym. Pozostałe walidacje systemowe pozostają bez zmian a ich wyniki są wyświetlane po ich przeprowadzeniu przez system.
+
+
+
+Udostępnione przeze mnie dane są widoczne w panelu administracyjnym portalu, nie mogę ich natomiast odnaleźć w części dostępnej dla wszystkich użytkowników portalu dane gov.pl. Dlaczego nie mogę wyszukać tych danych?
+
+Udostępniane w panelu administracyjnym dane mogą pojawić się z opóźnieniem w części widocznej dla użytkowników portalu. Dotyczy to także danych udostępnianych z wykorzystaniem automatycznego dodawania danych (import xml). Opóźnienie spowodowane jest dużym przyrostem codziennie publikowanych danych. Prosimy o cierpliwość w oczekiwaniu na publikację danych. Wyjaśniamy jednocześnie, że dane widoczne w panelu administracyjnym pojawią się w części widocznej dla użytkowników portalu bez konieczności dodatkowych działań z Państwa strony.
+
+
+Czy w nowym roku kalendarzowym powinienem tworzyć nowe źródło danych (import xml)?
+
+Rekomendujemy, aby w ramach jednego pliku xml udostępniać maksymalnie 1000 zasobów (elementów <Resource>), w zw. z tym nie ma konieczności tworzenia nowego źródła na każdy kolejny rok kalendarzowy (więcej informacji na ten temat znajduje się w niniejszym materiale – pobierz plik pdf).
+
+
+Jak należy postępować po zakończeniu sprzedaży inwestycji?
+
+Rekomendujemy aby dostawca danych dodał do opisu zbiorów informację o zakończeniu sprzedaży inwestycji. Natomiast w przypadku automatycznego zasilania plikiem xml należy dokonać dodatkowych czynności (więcej informacji na ten temat znajduje się w niniejszym materiale – pobierz plik pdf).

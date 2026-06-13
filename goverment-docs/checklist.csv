@@ -1,0 +1,24 @@
+Kategoria,Zadanie do wykonania,Status
+1. STRONA INTERNETOWA,,
+,Posiadamy dedykowaną stronę lub podstronę dla każdego przedsięwzięcia.,FALSE
+,Na stronie opublikowano część ogólną prospektu informacyjnego.,FALSE
+,Na stronie znajdują się dane kontaktowe do dewelopera,FALSE
+,Na stronie znajduje się adres biura sprzedaży dewelopera,FALSE
+,Na stronie znajduje się adres przedsięwzięcia deweloperskiego,FALSE
+2. PUBLIKACJA CEN,,
+,Opublikowano powierzchnię użytkową każdego lokalu,FALSE
+,"Opublikowano cenę za m² każdego lokalu - pamiętaj, że ma być to cena za m2 powierzchni użytkowej",FALSE
+,Opublikowano cenę całkowitą każdego lokalu (cena za m2 x powierzchnia użytkowa),FALSE
+,"Opublikowano ceny pomieszczeń przynależnych (parking, komórka).",FALSE
+,Opisano jakie pomieszczenie przynależne są uwzględnione w cenie (np. garaż w domu),FALSE
+,Wyszczególniono wszystkie inne opłaty na rzecz dewelopera (jeżeli istnieją),FALSE
+,"Sprawdzono, czy wszystkie ceny zawierają podatek VAT.",FALSE
+3. PROCESY I AKTUALIZACJE,,
+,Strona archiwizuje i wyświetla historię cen wraz z datami zmian.,FALSE
+,Wyznaczono osobę/narzędzie do codziennego raportowania cen do portalu rządowego.,FALSE
+,"Przeszkolono zespół sprzedaży z zasady ""ceny najkorzystniejszej dla nabywcy"".",FALSE
+,Założono konto na portalu dane.gov.pl,FALSE
+,Zarejestrowano firmę jako dostawcę danych oraz dodano użytkowników - edytorów  ,FALSE
+4. MARKETING I REKLAMA,,
+,Sprawdzono wszystkie aktywne reklamy i ogłoszenia.,FALSE
+,Do wszystkich materiałów dodano adres strony z cennikiem.,FALSE

@@ -3,7 +3,6 @@ import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import Header from '../../../../components/Header.astro';
 import Footer from '../../../../components/Footer.astro';
 import Banner from '../../../../components/Banner.astro';
-import { brand } from '../../../../config/brand';
 import { mockInvestment } from '../../../../data/mock-investments';
 import { Image } from 'astro:assets';
 
@@ -18,7 +17,7 @@ export function getStaticPaths() {
       unit,
       investmentName: investment.name,
       investmentSlug: investment.slug,
-    }
+    },
   }));
 }
 
@@ -26,14 +25,13 @@ const { unit, investmentName, investmentSlug } = Astro.props;
 const currentPrice = unit.priceHistory[unit.priceHistory.length - 1];
 ---
 
-<BaseLayout title={`Lokal ${unit.unitNumber} - ${investmentName}`} description={unit.shortDescription}>
+<BaseLayout title={`Dom ${unit.unitNumber} - ${investmentName}`} description={unit.shortDescription}>
   <Header slot="header" />
 
-  <Banner title={`Lokal ${unit.unitNumber}`} />
+  <Banner title={`Dom ${unit.unitNumber}`} />
 
   <section class="py-section">
     <div class="mx-auto max-w-site px-4 sm:px-6">
-      <!-- Breadcrumb -->
       <nav class="mb-8 text-sm" aria-label="Breadcrumb">
         <ol class="flex items-center gap-2 text-text-muted">
           <li><a href="/" class="hover:text-primary transition-colors">Główna</a></li>
@@ -42,18 +40,16 @@ const currentPrice = unit.priceHistory[unit.priceHistory.length - 1];
           <li>/</li>
           <li><a href={`/inwestycje/${investmentSlug}/`} class="hover:text-primary transition-colors">{investmentName}</a></li>
           <li>/</li>
-          <li class="font-semibold text-text">Lokal {unit.unitNumber}</li>
+          <li class="font-semibold text-text">Dom {unit.unitNumber}</li>
         </ol>
       </nav>
 
-      <div class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14 items-start">
-        
-        <!-- Unit Image -->
+      <div class="grid grid-cols-1 gap-8 items-start lg:grid-cols-2 lg:gap-14">
         <div class="space-y-4">
           <div class="overflow-hidden rounded-lg shadow-lg">
             <Image
               src={unit.mainImage}
-              alt={`Lokal ${unit.unitNumber}`}
+              alt={`Dom ${unit.unitNumber}`}
               width={800}
               height={600}
               class="w-full object-cover"
@@ -61,15 +57,14 @@ const currentPrice = unit.priceHistory[unit.priceHistory.length - 1];
           </div>
         </div>
 
-        <!-- Unit details -->
         <div class="space-y-6">
           <div class="flex items-baseline justify-between border-b border-border pb-4">
             <div>
               <span class="text-topper font-bold uppercase tracking-widest text-accent">{investmentName}</span>
-              <h2 class="font-heading text-h2 font-bold uppercase text-text">Lokal {unit.unitNumber}</h2>
+              <h2 class="font-heading text-h2 font-bold uppercase text-text">Dom {unit.unitNumber}</h2>
             </div>
             <span class:list={[
-              'text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full text-white',
+              'rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white',
               unit.status === 'available' ? 'bg-green-600' :
               unit.status === 'reserved' ? 'bg-amber-600' : 'bg-red-600'
             ]}>
@@ -78,11 +73,10 @@ const currentPrice = unit.priceHistory[unit.priceHistory.length - 1];
             </span>
           </div>
 
-          <!-- Attributes Grid -->
           <div class="grid grid-cols-2 gap-4 border-b border-border pb-6">
             <div>
               <p class="text-xs uppercase tracking-wider text-text-muted">Typ nieruchomości</p>
-              <p class="text-base font-semibold text-text capitalize">{unit.propertyType}</p>
+              <p class="text-base font-semibold text-text">{unit.propertyType}</p>
             </div>
             <div>
               <p class="text-xs uppercase tracking-wider text-text-muted">Powierzchnia użytkowa</p>
@@ -92,21 +86,22 @@ const currentPrice = unit.priceHistory[unit.priceHistory.length - 1];
               <p class="text-xs uppercase tracking-wider text-text-muted">Liczba pokoi</p>
               <p class="text-base font-semibold text-text">{unit.rooms}</p>
             </div>
-            <div>
-              <p class="text-xs uppercase tracking-wider text-text-muted">Piętro</p>
-              <p class="text-base font-semibold text-text">{unit.floor === 0 ? 'Parter' : unit.floor}</p>
-            </div>
+            {unit.plotAreaM2 && (
+              <div>
+                <p class="text-xs uppercase tracking-wider text-text-muted">Działka</p>
+                <p class="text-base font-semibold text-text">{unit.plotAreaM2} m²</p>
+              </div>
+            )}
           </div>
 
           <div class="space-y-2">
-            <h3 class="font-heading text-lg font-bold text-text uppercase tracking-wide">Opis lokalu</h3>
-            <p class="text-sm text-text-muted leading-relaxed">{unit.description}</p>
+            <h3 class="font-heading text-lg font-bold uppercase tracking-wide text-text">Opis domu</h3>
+            <p class="text-sm leading-relaxed text-text-muted">{unit.description}</p>
           </div>
 
-          <!-- Current price panel -->
           <div class="rounded-lg border border-border bg-surface p-6">
-            <p class="text-xs uppercase tracking-wider text-text-muted mb-1">Cena ofertowa</p>
-            <div class="text-2xl font-bold text-text mb-2">
+            <p class="mb-1 text-xs uppercase tracking-wider text-text-muted">Cena ofertowa</p>
+            <div class="mb-2 text-2xl font-bold text-text">
               {currentPrice ? `${currentPrice.baseTotalPrice.toLocaleString('pl-PL')} zł` : 'Cena na zapytanie'}
             </div>
             {currentPrice && (
@@ -114,50 +109,54 @@ const currentPrice = unit.priceHistory[unit.priceHistory.length - 1];
                 Cena za m²: <strong class="text-text">{currentPrice.pricePerM2.toLocaleString('pl-PL')} zł/m²</strong> (w tym VAT)
               </p>
             )}
-            <div class="mt-4 pt-4 border-t border-border flex justify-between items-center">
+            <div class="mt-4 pt-4 border-t border-border">
               <a
                 href="/kontakt/"
-                class="inline-flex min-h-[44px] items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-bold text-accent-fg shadow-sm transition-opacity hover:opacity-90 w-full text-center"
+                class="inline-flex min-h-[44px] w-full items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-bold text-accent-fg shadow-sm transition-opacity hover:opacity-90"
               >
-                Zapytaj o ten lokal
+                Zapytaj o ten dom
               </a>
             </div>
           </div>
-
         </div>
-
       </div>
 
-      <!-- Price History display -->
-      <div class="border-t border-border mt-16 pt-12">
-        <h3 class="font-heading text-h3 font-bold uppercase text-text mb-6">Historia Ceny Ofertowej</h3>
+      <div class="mt-16 border-t border-border pt-12">
+        <h3 class="mb-6 font-heading text-h3 font-bold uppercase text-text">Historia ceny ofertowej</h3>
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse border border-border">
+          <table class="w-full border-collapse border border-border text-left">
             <thead>
               <tr class="bg-surface">
-                <th class="border border-border px-4 py-3 text-xs uppercase tracking-wider font-semibold text-text">Data obowiązywania</th>
-                <th class="border border-border px-4 py-3 text-xs uppercase tracking-wider font-semibold text-text">Cena za m²</th>
-                <th class="border border-border px-4 py-3 text-xs uppercase tracking-wider font-semibold text-text">Cena całkowita</th>
-                <th class="border border-border px-4 py-3 text-xs uppercase tracking-wider font-semibold text-text">Uwagi</th>
+                <th class="border border-border px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text">Data obowiązywania</th>
+                <th class="border border-border px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text">Cena za m²</th>
+                <th class="border border-border px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text">Cena całkowita</th>
+                <th class="border border-border px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text">Uwagi</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-border text-sm text-text-muted">
-              {unit.priceHistory.slice().reverse().map((entry) => (
+              {unit.priceHistory.length > 0 ? (
+                unit.priceHistory.slice().reverse().map((entry) => (
+                  <tr>
+                    <td class="border border-border px-4 py-3 font-medium text-text">{entry.validFrom}</td>
+                    <td class="border border-border px-4 py-3">{entry.pricePerM2.toLocaleString('pl-PL')} zł/m²</td>
+                    <td class="border border-border px-4 py-3 font-semibold text-text">{entry.baseTotalPrice.toLocaleString('pl-PL')} zł</td>
+                    <td class="border border-border px-4 py-3 text-xs italic">{entry.note || 'Brak uwag'}</td>
+                  </tr>
+                ))
+              ) : (
                 <tr>
-                  <td class="border border-border px-4 py-3 text-text font-medium">{entry.validFrom}</td>
-                  <td class="border border-border px-4 py-3">{entry.pricePerM2.toLocaleString('pl-PL')} zł/m²</td>
-                  <td class="border border-border px-4 py-3 text-text font-semibold">{entry.baseTotalPrice.toLocaleString('pl-PL')} zł</td>
-                  <td class="border border-border px-4 py-3 italic text-xs">{entry.note || 'Brak uwag'}</td>
+                  <td class="border border-border px-4 py-3" colspan="4">
+                    Cena i historia cenowa nie zostały jeszcze opublikowane dla tej inwestycji.
+                  </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
-        <p class="text-xs text-text-muted mt-3">
-          * Zgodnie z wymogami prawnymi prezentujemy historyczne ceny ofertowe powyższego lokalu mieszkalnego.
+        <p class="mt-3 text-xs text-text-muted">
+          * Zgodnie z wymogami prawnymi prezentujemy historyczne ceny ofertowe powyższego domu.
         </p>
       </div>
-
     </div>
   </section>
 

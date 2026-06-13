@@ -3,18 +3,17 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import Banner from '../../../components/Banner.astro';
-import { brand } from '../../../config/brand';
 import { mockInvestment } from '../../../data/mock-investments';
 import { Image } from 'astro:assets';
 
 export function getStaticPaths() {
   return [
-    { params: { investmentSlug: mockInvestment.slug } }
+    { params: { investmentSlug: mockInvestment.slug } },
   ];
 }
 
 const { investmentSlug } = Astro.params;
-const investment = mockInvestment; // In v1 we only have one mock investment
+const investment = mockInvestment;
 ---
 
 <BaseLayout title={investment.name} description={investment.summary}>
@@ -24,9 +23,7 @@ const investment = mockInvestment; // In v1 we only have one mock investment
 
   <section class="py-section">
     <div class="mx-auto max-w-site px-4 sm:px-6">
-      
-      <!-- Investment Details Header -->
-      <div class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14 mb-16 items-start">
+      <div class="mb-16 grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-14">
         <div class="overflow-hidden rounded-lg shadow-lg">
           <Image
             src={investment.heroImage}
@@ -36,16 +33,18 @@ const investment = mockInvestment; // In v1 we only have one mock investment
             class="w-full object-cover"
           />
         </div>
+
         <div class="space-y-6">
           <span class="text-topper font-bold uppercase tracking-widest text-accent">Inwestycja</span>
           <h2 class="font-heading text-h2 font-bold uppercase text-text">{investment.name}</h2>
-          <p class="text-sm text-text-muted flex items-center gap-1">
+          <p class="flex items-center gap-1 text-sm text-text-muted">
             <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
             {investment.locationAddress}
           </p>
-          <div class="prose text-text-muted text-sm leading-relaxed max-w-none">
+          <div class="prose max-w-none text-sm leading-relaxed text-text-muted">
             <p>{investment.description}</p>
           </div>
           {investment.prospectusUrl && (
@@ -54,43 +53,41 @@ const investment = mockInvestment; // In v1 we only have one mock investment
                 href={investment.prospectusUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex min-h-[44px] items-center gap-2 rounded-md border border-border bg-surface px-5 py-2.5 text-sm font-semibold text-text hover:bg-border transition-colors"
+                class="inline-flex min-h-[44px] items-center gap-2 rounded-md border border-border bg-surface px-5 py-2.5 text-sm font-semibold text-text transition-colors hover:bg-border"
               >
                 <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                Pobierz Prospekt Informacyjny (PDF)
+                Pobierz prospekt informacyjny (PDF)
               </a>
             </div>
           )}
         </div>
       </div>
 
-      <!-- Unit List Header -->
       <div class="border-t border-border pt-12">
         <div class="mb-8">
-          <h3 class="font-heading text-h3 font-bold uppercase text-text">Lista Dostępnych Lokali</h3>
-          <p class="text-sm text-text-muted">Przeglądaj dostępne mieszkania w tej inwestycji.</p>
+          <h3 class="font-heading text-h3 font-bold uppercase text-text">Lista dostępnych domów</h3>
+          <p class="text-sm text-text-muted">Przeglądaj dostępne segmenty w tej inwestycji.</p>
         </div>
 
-        <!-- Unit Cards Grid -->
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {investment.units.map((unit) => {
             const currentPrice = unit.priceHistory[unit.priceHistory.length - 1];
             return (
-              <div class="overflow-hidden rounded-lg bg-background border border-border shadow-sm flex flex-col justify-between">
+              <div class="flex flex-col justify-between overflow-hidden rounded-lg border border-border bg-background shadow-sm">
                 <div>
                   <div class="relative h-48 overflow-hidden">
                     <Image
                       src={unit.mainImage}
-                      alt={`Lokal ${unit.unitNumber}`}
+                      alt={`Dom ${unit.unitNumber}`}
                       width={400}
                       height={300}
                       class="size-full object-cover"
                     />
-                    <div class="absolute top-3 left-3">
+                    <div class="absolute left-3 top-3">
                       <span class:list={[
-                        'text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full text-white',
+                        'rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white',
                         unit.status === 'available' ? 'bg-green-600' :
                         unit.status === 'reserved' ? 'bg-amber-600' : 'bg-red-600'
                       ]}>
@@ -100,25 +97,26 @@ const investment = mockInvestment; // In v1 we only have one mock investment
                     </div>
                   </div>
                   <div class="p-5">
-                    <div class="flex items-baseline justify-between mb-2">
-                      <h4 class="font-heading text-xl font-bold text-text">Lokal {unit.unitNumber}</h4>
-                      <span class="text-xs uppercase text-text-muted font-semibold">{unit.propertyType}</span>
+                    <div class="mb-2 flex items-baseline justify-between">
+                      <h4 class="font-heading text-xl font-bold text-text">Dom {unit.unitNumber}</h4>
+                      <span class="text-xs font-semibold uppercase text-text-muted">{unit.propertyType}</span>
                     </div>
-                    <ul class="space-y-1.5 text-sm text-text-muted mb-4">
+                    <ul class="mb-4 space-y-1.5 text-sm text-text-muted">
                       <li><strong>Liczba pokoi:</strong> {unit.rooms}</li>
-                      <li><strong>Metraż:</strong> {unit.usableAreaM2} m²</li>
-                      <li><strong>Piętro:</strong> {unit.floor === 0 ? 'Parter' : unit.floor}</li>
+                      <li><strong>Powierzchnia:</strong> {unit.usableAreaM2} m²</li>
+                      {unit.plotAreaM2 && <li><strong>Działka:</strong> {unit.plotAreaM2} m²</li>}
                     </ul>
                     <p class="text-xs text-text-muted line-clamp-2">{unit.shortDescription}</p>
                   </div>
                 </div>
-                <div class="p-5 pt-0 border-t border-border mt-4 flex items-center justify-between">
+
+                <div class="mt-4 flex items-center justify-between border-t border-border p-5 pt-0">
                   <div class="text-sm font-bold text-text">
                     {currentPrice ? `${currentPrice.baseTotalPrice.toLocaleString('pl-PL')} zł` : 'Zapytaj o cenę'}
                   </div>
                   <a
                     href={`/inwestycje/${investmentSlug}/${unit.slug}/`}
-                    class="inline-flex min-h-[36px] items-center rounded bg-primary px-3 py-1.5 text-xs font-semibold text-primary-fg shadow-sm hover:opacity-90 transition-opacity"
+                    class="inline-flex min-h-[36px] items-center rounded bg-primary px-3 py-1.5 text-xs font-semibold text-primary-fg shadow-sm transition-opacity hover:opacity-90"
                   >
                     Szczegóły
                   </a>
@@ -128,7 +126,6 @@ const investment = mockInvestment; // In v1 we only have one mock investment
           })}
         </div>
       </div>
-
     </div>
   </section>
 

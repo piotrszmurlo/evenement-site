@@ -3,16 +3,20 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import Banner from '../../../components/Banner.astro';
-import { mockInvestment } from '../../../data/mock-investments';
 import { Image } from 'astro:assets';
+import { getInvestments } from '../../../lib/content';
 
-export function getStaticPaths() {
-  return [{ params: { investmentSlug: mockInvestment.slug } }];
+export async function getStaticPaths() {
+  const investments = await getInvestments();
+  return investments.map((investment) => ({
+    params: { investmentSlug: investment.slug },
+    props: { investment },
+  }));
 }
 
 const { investmentSlug } = Astro.params;
-const investment = mockInvestment;
-const galleryImages = investment.gallery?.length ? investment.gallery : [investment.heroImage];
+const { investment } = Astro.props;
+const galleryImages = investment.gallery;
 ---
 
 <BaseLayout title={investment.name} description={investment.summary}>
@@ -169,14 +173,14 @@ const galleryImages = investment.gallery?.length ? investment.gallery : [investm
                     <th scope="col" class="px-4 py-3">Pow. budynku</th>
                     <th scope="col" class="px-4 py-3">Pow. działki</th>
                     <th scope="col" class="px-4 py-3">Status</th>
-                    <th scope="col" class="px-4 py-3">Cena z VAT (brutto)</th>
-                    <th scope="col" class="px-4 py-3">Cena za metr (z VAT) brutto</th>
+                    <th scope="col" class="px-4 py-3">Cena brutto</th>
+                    <th scope="col" class="px-4 py-3">Cena za m²</th>
                     <th scope="col" class="px-4 py-3">Rzuty</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-border bg-background">
                   {investment.units.map((unit) => {
-                    const currentPrice = unit.priceHistory[unit.priceHistory.length - 1];
+                    const currentPrice = unit.currentPrice;
                     const statusLabel =
                       unit.status === 'available'
                         ? 'Dostępny'
@@ -193,9 +197,7 @@ const galleryImages = investment.gallery?.length ? investment.gallery : [investm
                           </div>
                         </td>
                         <td class="px-4 py-4 text-text-muted">{unit.usableAreaM2.toLocaleString('pl-PL')} m²</td>
-                        <td class="px-4 py-4 text-text-muted">
-                          {unit.plotAreaM2 ? `${unit.plotAreaM2.toLocaleString('pl-PL')} m²` : '—'}
-                        </td>
+                        <td class="px-4 py-4 text-text-muted">{unit.plotAreaM2.toLocaleString('pl-PL')} m²</td>
                         <td class="px-4 py-4">
                           <span class:list={[
                             'inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white',
@@ -209,7 +211,7 @@ const galleryImages = investment.gallery?.length ? investment.gallery : [investm
                           </span>
                         </td>
                         <td class="px-4 py-4 font-semibold text-text">
-                          {currentPrice ? `${currentPrice.totalPriceWithComponents.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
+                          {currentPrice ? `${currentPrice.totalPrice.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
                         </td>
                         <td class="px-4 py-4 font-semibold text-text">
                           {currentPrice ? `${currentPrice.pricePerM2.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
@@ -229,7 +231,7 @@ const galleryImages = investment.gallery?.length ? investment.gallery : [investm
                                 rel="noopener noreferrer"
                                 class="inline-flex items-center gap-2 text-xs font-medium text-primary transition-colors hover:text-primaryLight"
                               >
-                                <span aria-hidden="true">ℹ️</span>
+                                <span aria-hidden="true">i</span>
                                 Karta SK2
                               </a>
                             ) : (

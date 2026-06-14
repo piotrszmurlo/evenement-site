@@ -4,8 +4,10 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import Banner from '../../components/Banner.astro';
 import { brand } from '../../config/brand';
-import { mockInvestment } from '../../data/mock-investments';
 import { Image } from 'astro:assets';
+import { getInvestments } from '../../lib/content';
+
+const investments = await getInvestments();
 ---
 
 <BaseLayout title="Inwestycje" description={`Zobacz aktualne inwestycje mieszkaniowe realizowane przez dewelopera ${brand.name}.`}>
@@ -21,45 +23,50 @@ import { Image } from 'astro:assets';
       </div>
 
       <div class="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-2">
-        <div class="flex flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
-          <div class="relative h-64 overflow-hidden">
-            <Image
-              src={mockInvestment.heroImage}
-              alt={mockInvestment.name}
-              width={800}
-              height={450}
-              class="size-full object-cover transition-transform duration-300 hover:scale-105"
-            />
-            <span class="absolute right-4 top-4 rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary-fg">
-              W sprzedaży
-            </span>
-          </div>
-
-          <div class="flex flex-1 flex-col justify-between p-6">
-            <div>
-              <h3 class="mb-2 font-heading text-h3 font-bold text-text">{mockInvestment.name}</h3>
-              <p class="mb-4 flex items-center gap-1 text-sm text-text-muted">
-                <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                {mockInvestment.locationAddress}
-              </p>
-              <p class="mb-6 text-sm leading-relaxed text-text-muted">
-                {mockInvestment.summary}
-              </p>
+        {investments.map((investment) => (
+          <div class="flex flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
+            <div class="relative h-64 overflow-hidden">
+              <Image
+                src={investment.coverImage}
+                alt={investment.name}
+                width={800}
+                height={450}
+                class="size-full object-cover transition-transform duration-300 hover:scale-105"
+              />
+              <span class:list={[
+                'absolute right-4 top-4 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary-fg',
+                investment.salesStatus === 'active' ? 'bg-primary' : 'bg-stone-600',
+              ]}>
+                {investment.salesStatus === 'active' ? 'W sprzedaży' : 'Zakończona'}
+              </span>
             </div>
 
-            <div>
-              <a
-                href={`/inwestycje/${mockInvestment.slug}/`}
-                class="inline-flex min-h-[44px] items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-bold text-accent-fg shadow-sm transition-opacity hover:opacity-90"
-              >
-                Zobacz szczegóły inwestycji
-              </a>
+            <div class="flex flex-1 flex-col justify-between p-6">
+              <div>
+                <h3 class="mb-2 font-heading text-h3 font-bold text-text">{investment.name}</h3>
+                <p class="mb-4 flex items-center gap-1 text-sm text-text-muted">
+                  <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  {investment.locationAddress}
+                </p>
+                <p class="mb-6 text-sm leading-relaxed text-text-muted">
+                  {investment.summary}
+                </p>
+              </div>
+
+              <div>
+                <a
+                  href={`/inwestycje/${investment.slug}/`}
+                  class="inline-flex min-h-[44px] items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-bold text-accent-fg shadow-sm transition-opacity hover:opacity-90"
+                >
+                  Zobacz szczegóły inwestycji
+                </a>
+              </div>
             </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   </section>

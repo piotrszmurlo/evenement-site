@@ -1,140 +1,305 @@
-# BaseHub CMS Handoff
+# BaseHub CMS Wiring Handoff
 
 ## Objective
 
-Replace the current mock investment data with BaseHub-backed content and assets while keeping the site static, easy to edit, and safe to run locally.
+Replace the current mock investment data with BaseHub-backed investment, unit, price, and asset content.
 
-## Confirmed Decisions
+Keep the site static, preserve the current route structure, and keep the implementation intentionally simple.
 
-- BaseHub is the source of truth for structured content and assets.
-- Use one BaseHub environment only for v1.
-- Local development should fetch live BaseHub content when credentials are available.
-- Public pages should show all units, including available, reserved, and sold.
-- Keep a local fixture only for tests and offline fallback, not as the primary dev source.
+## Final Product Decisions
+
+- BaseHub owns investment/unit content and assets.
+- Company/developer data stays in code for v1, primarily `src/data/client.ts`.
+- Brand/site identity stays in `src/config/brand.ts`.
+- Government/export-specific fields are postponed.
+- Public pages show all published investments.
+- `/inwestycje/` should show both active and ended investments; ended investments should be labeled.
+- Public pages show all published units with statuses: available, reserved, sold.
+- There is no CMS-level hidden/draft field. BaseHub publish controls visibility.
+- Prospectus file is optional for all investments in v1.
+- Descriptions are plain text, not rich text.
+- Galleries support multiple images.
+- Current price means the latest price history row by `validFrom`, with no future-date filtering.
+- Unit detail pages display full price history.
+- Investment detail unit tables show only the latest/current price.
 
 ## Current Repo State
 
-The current mock content is concentrated in:
+Mock investment content is still in:
 
-- [`src/data/mock-investments.ts`](/C:/Users/weron/Documents/dev/evenement/evenement-app/src/data/mock-investments.ts)
+- `src/data/mock-investments.ts`
 
-The current route structure is already in place and should be preserved:
+Mock data is currently imported by:
 
-- [`src/pages/inwestycje/index.astro`](/C:/Users/weron/Documents/dev/evenement/evenement-app/src/pages/inwestycje/index.astro)
-- [`src/pages/inwestycje/[investmentSlug]/index.astro`](/C:/Users/weron/Documents/dev/evenement/evenement-app/src/pages/inwestycje/[investmentSlug]/index.astro)
-- [`src/pages/inwestycje/[investmentSlug]/[unitSlug]/index.astro`](/C:/Users/weron/Documents/dev/evenement/evenement-app/src/pages/inwestycje/[investmentSlug]/[unitSlug]/index.astro)
+- `src/pages/index.astro`
+- `src/pages/inwestycje/index.astro`
+- `src/pages/inwestycje/[investmentSlug]/index.astro`
+- `src/pages/inwestycje/[investmentSlug]/[unitSlug]/index.astro`
 
-There is also existing client copy in:
+Preserve the current public route structure:
 
-- [`src/data/client.ts`](/C:/Users/weron/Documents/dev/evenement/evenement-app/src/data/client.ts)
+- `/inwestycje/`
+- `/inwestycje/{investmentSlug}/`
+- `/inwestycje/{investmentSlug}/{unitSlug}/`
 
-And the current Astro content config is still a stub:
+BaseHub is already installed:
 
-- [`src/content.config.ts`](/C:/Users/weron/Documents/dev/evenement/evenement-app/src/content.config.ts)
+- `basehub` dependency exists in `package.json`
+- `basehub.config.ts` exists
+- `basehub-types.d.ts` has been regenerated from the final schema
 
-Use the CMS data model note as the canonical content design reference:
+## Final BaseHub Schema
 
-- [`docs/cms-data-model.md`](/C:/Users/weron/Documents/dev/evenement/evenement-app/docs/cms-data-model.md)
+Root query:
 
-## What Needs To Be Built
+```text
+content
+  investments
+```
 
-### 1. BaseHub schema
+Investment item:
 
-Create content models for:
+```text
+name
+slug
+summary
+description
+locationAddress
+gallery
+  image
+prospectusFile
+salesStatus: active | ended
+units
+```
 
-- developer
-- investment
-- unit
-- price history entry
+Unit item:
 
-Include asset fields for:
+```text
+unitNumber
+slug
+propertyType: dom jednorodzinny | dom w zabudowie szeregowej | lokal mieszkalny
+status: available | reserved | sold
+usableAreaM2
+plotAreaM2
+rooms
+shortDescription
+description
+gallery
+  image
+priceHistory
+```
 
-- logo
-- hero image
-- gallery images
-- unit main image
-- prospectus PDF
+Price history item:
 
-Recommended relationships:
+```text
+validFrom
+totalPrice
+```
 
-- one developer can own multiple investments
-- one investment can contain multiple units
-- one unit can contain multiple price history entries
+## Generated Type Shape To Use
 
-### 2. Content access layer
+`basehub-types.d.ts` confirms galleries are list-backed:
 
-Add a shared CMS loader in the app, for example:
+```ts
+investment.gallery.items.map((item) => item.image)
+unit.gallery.items.map((item) => item.image)
+```
 
-- `src/lib/basehub.ts`
-- or `src/lib/content.ts`
+Investment gallery type:
 
-That layer should:
+```ts
+InvestmentsItem {
+  gallery: Gallery_1
+}
 
-- fetch from BaseHub
-- normalize BaseHub records into the app's current shapes
-- expose a single data source for pages
-- support local dev, build, and test usage
+Gallery_1 {
+  items: GalleryItem_1[]
+}
 
-### 3. Page migration
+GalleryItem_1 {
+  image: BlockImage
+}
+```
 
-Replace all direct mock-data imports with the CMS loader.
+Unit gallery type:
 
-Update pages so they:
+```ts
+UnitsItem {
+  gallery: Gallery
+}
 
-- render the investment list from BaseHub
-- render investment detail pages from BaseHub
-- render unit detail pages from BaseHub
-- continue showing reserved and sold units
+Gallery {
+  items: GalleryItem[]
+}
 
-### 4. Local dev behavior
+GalleryItem {
+  image: BlockImage
+}
+```
 
-Local dev should work in this order:
+Price history type:
 
-1. Fetch live BaseHub data when env vars are present.
-2. Fall back to fixture data if needed for tests or offline runs.
+```ts
+PriceHistory {
+  items: PriceHistoryItem[]
+}
 
-Do not make the fixture the default path unless BaseHub is unavailable.
+PriceHistoryItem {
+  validFrom: string
+  totalPrice: number
+}
+```
 
-### 5. Assets
+## Recommended App-Side Normalized Shape
 
-Since BaseHub will store assets too, decide how the app consumes them:
+The CMS shape should stay minimal, but the loader should derive ergonomic fields for pages:
 
-- direct asset URLs from BaseHub
-- or BaseHub asset references resolved in the loader
+```ts
+investment.coverImage = investment.gallery[0]
+unit.coverImage = unit.gallery[0]
+unit.currentPrice = latest priceHistory entry by validFrom
+priceEntry.pricePerM2 = priceEntry.totalPrice / unit.usableAreaM2
+```
 
-The loader should hide that detail from the page components.
+Pages should not know whether assets came from BaseHub media objects or a fixture.
 
-### 6. Validation and safety
+## Content Loader
 
-Add checks for required fields before rendering or exporting:
+Create a shared loader, preferably:
 
-- slugs
-- required contact fields
-- prospectus URL/file
-- unit pricing history
-- image presence where required
+```text
+src/lib/content.ts
+```
 
-Fail early with clear errors if BaseHub content is incomplete.
+It should expose functions similar to:
+
+```ts
+getInvestments()
+getInvestmentBySlug(slug)
+getUnitBySlug(investmentSlug, unitSlug)
+```
+
+The loader should:
+
+- query BaseHub when configured to do so
+- normalize BaseHub records into one app-facing type
+- support fixture fallback
+- validate content before pages render
+- collect all validation errors and throw once with a readable message
+
+## Environment Behavior
+
+Add:
+
+```text
+CONTENT_SOURCE=auto | basehub | fixture
+```
+
+Recommended behavior:
+
+```text
+local dev:
+  auto = try BaseHub if credentials exist, fallback to fixture
+
+tests:
+  use fixture explicitly
+
+production build:
+  use BaseHub only, fail if unavailable or invalid
+```
+
+Existing BaseHub env examples are in `.env.example`.
+
+## Fixture
+
+Create:
+
+```text
+fixtures/sample-content.json
+```
+
+Fixture should mirror the simplified CMS shape exactly, not the normalized app shape.
+
+Include:
+
+- at least one active investment
+- at least three units
+- available, reserved, and sold examples
+- at least one unit with two price history entries
+- gallery arrays for every investment and unit
+
+Derived fields like `coverImage`, `currentPrice`, and `pricePerM2` should never be stored in the fixture.
+
+## Validation Rules
+
+Use hand-written TypeScript validation for now.
+
+Investment required fields:
+
+- `name`
+- `slug`
+- `summary`
+- `description`
+- `locationAddress`
+- `salesStatus` in `active | ended`
+- at least one gallery image
+- units array
+
+Unit required fields:
+
+- `unitNumber`
+- `slug`
+- `propertyType` in allowed values
+- `status` in `available | reserved | sold`
+- positive `usableAreaM2`
+- positive `plotAreaM2`
+- positive `rooms`
+- `shortDescription`
+- `description`
+- at least one gallery image
+- at least one price history entry
+
+Price history required fields:
+
+- valid/date-like `validFrom`
+- positive `totalPrice`
+
+Also validate:
+
+- investment slugs are unique
+- unit slugs are unique within an investment
+
+## Page Migration Notes
+
+Replace all imports from `src/data/mock-investments.ts`.
+
+Update:
+
+- homepage investment highlight in `src/pages/index.astro`
+- investment listing in `src/pages/inwestycje/index.astro`
+- investment detail static paths and render data
+- unit detail static paths and render data
+
+Keep table/list behavior:
+
+- investment table shows latest total price
+- calculate latest price per m2 from `totalPrice / usableAreaM2`
+- unit detail page shows full price history newest-first
+- show prospectus link only when `prospectusFile` exists
 
 ## Suggested Build Order
 
-1. Define or confirm the BaseHub schema.
-2. Add BaseHub environment variables and client setup.
-3. Build the content loader and types.
-4. Wire the three investment pages to the loader.
-5. Add fixture fallback for tests and offline use.
-6. Move assets to BaseHub and verify rendering.
-7. Remove the old mock data file once unused.
+1. Add app content types and fixture shape.
+2. Add `src/lib/content.ts` with BaseHub query, fixture loading, normalization, and validation.
+3. Wire homepage and investment pages to the loader.
+4. Run `astro check` / build.
+5. Remove `src/data/mock-investments.ts` only after no imports remain and the build passes.
 
-## Notes For The Next Agent
+## Important Non-Goals For This Pass
 
-- Treat the existing mock file as a migration map, not as the final architecture.
-- Keep the public UI showing all units.
-- Keep the implementation simple enough that BaseHub publish can be the only content editing workflow.
-- Preserve the current route structure unless there is a strong reason to change it.
-
-## Open Questions
-
-- Which BaseHub query/client package should we use in this repo?
-- Should the local fixture live in `fixtures/` or under `src/data/`?
-- Do we want a small validation script for BaseHub content shape, or should validation live only in the loader?
+- Do not add developer/company CMS model.
+- Do not add government export fields.
+- Do not add price components.
+- Do not add hidden/draft visibility fields.
+- Do not add rich text rendering.
+- Do not add Zod unless the implementation grows beyond the current simple validation needs.

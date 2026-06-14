@@ -15,9 +15,9 @@
 export const brand = {
   // ── Site Identity ──────────────────────────────────────────────────────────
   name: 'Evenement',
-  tagline: 'Nowoczesne inwestycje mieszkaniowe.',
+  tagline: 'Nowoczesne inwestycje deweloperskie.',
   description:
-    'Kameralne i funkcjonalne domy oraz mieszkania dopasowane do Twoich potrzeb. Poznaj nowe inwestycje od Evenement.',
+    'Kameralne i funkcjonalne nieruchomości dopasowane do Twoich potrzeb. Poznaj nowe inwestycje od Evenement.',
   url: 'https://evenement.pl',
   locale: 'pl_PL',
 

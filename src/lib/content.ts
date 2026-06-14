@@ -200,6 +200,14 @@ export async function getUnitBySlug(investmentSlug: string, unitSlug: string) {
   };
 }
 
+export function formatPropertyTypeLabel(propertyType: PropertyType): string {
+  if (propertyType === 'lokal mieszkalny') {
+    return 'nieruchomość mieszkalna';
+  }
+
+  return propertyType;
+}
+
 async function loadInvestments(): Promise<Investment[]> {
   const content = await loadSiteContent();
   return normalizeAndValidate(content, content._sourceLabel);

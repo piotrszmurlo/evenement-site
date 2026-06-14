@@ -10,7 +10,7 @@ import { getInvestments } from '../../lib/content';
 const investments = await getInvestments();
 ---
 
-<BaseLayout title="Inwestycje" description={`Zobacz aktualne inwestycje mieszkaniowe realizowane przez dewelopera ${brand.name}.`}>
+<BaseLayout title="Inwestycje" description={`Zobacz aktualne inwestycje realizowane przez dewelopera ${brand.name}.`}>
   <Header slot="header" />
 
   <Banner title="Inwestycje" />
@@ -19,7 +19,7 @@ const investments = await getInvestments();
     <div class="mx-auto max-w-site px-4 sm:px-6">
       <div class="mx-auto mb-10 max-w-2xl text-center">
         <span class="text-topper font-bold uppercase tracking-widest text-accent">Nasze inwestycje</span>
-        <h2 class="mt-2 font-heading text-h2 font-bold uppercase text-text">Aktualne projekty mieszkaniowe</h2>
+        <h2 class="mt-2 font-heading text-h2 font-bold uppercase text-text">Aktualne inwestycje</h2>
       </div>
 
       <div class="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-2">

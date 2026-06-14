@@ -4,7 +4,7 @@ import Header from '../../../../components/Header.astro';
 import Footer from '../../../../components/Footer.astro';
 import Banner from '../../../../components/Banner.astro';
 import { Image } from 'astro:assets';
-import { getInvestments } from '../../../../lib/content';
+import { formatPropertyTypeLabel, getInvestments } from '../../../../lib/content';
 
 export async function getStaticPaths() {
   const investments = await getInvestments();
@@ -27,12 +27,14 @@ export async function getStaticPaths() {
 const { unit, investmentCoverImage, investmentName, investmentSlug } = Astro.props;
 const currentPrice = unit.currentPrice;
 const heroImage = unit.coverImage ?? investmentCoverImage;
+const propertyTypeLabel = formatPropertyTypeLabel(unit.propertyType);
+const offerLabel = 'Nieruchomość';
 ---
 
-<BaseLayout title={`Dom ${unit.unitNumber} - ${investmentName}`} description={unit.shortDescription}>
+<BaseLayout title={`${offerLabel} ${unit.unitNumber} - ${investmentName}`} description={unit.shortDescription}>
   <Header slot="header" />
 
-  <Banner title={`Dom ${unit.unitNumber}`} />
+  <Banner title={`${offerLabel} ${unit.unitNumber}`} />
 
   <section class="py-section">
     <div class="mx-auto max-w-site px-4 sm:px-6">
@@ -44,7 +46,7 @@ const heroImage = unit.coverImage ?? investmentCoverImage;
           <li>/</li>
           <li><a href={`/inwestycje/${investmentSlug}/`} class="transition-colors hover:text-primary">{investmentName}</a></li>
           <li>/</li>
-          <li class="font-semibold text-text">Dom {unit.unitNumber}</li>
+          <li class="font-semibold text-text">{offerLabel} {unit.unitNumber}</li>
         </ol>
       </nav>
 
@@ -53,7 +55,7 @@ const heroImage = unit.coverImage ?? investmentCoverImage;
           <div class="overflow-hidden rounded-lg shadow-lg">
             <Image
               src={heroImage}
-              alt={`Dom ${unit.unitNumber}`}
+              alt={`${offerLabel} ${unit.unitNumber}`}
               width={800}
               height={600}
               class="w-full object-cover"
@@ -65,7 +67,7 @@ const heroImage = unit.coverImage ?? investmentCoverImage;
           <div class="flex items-baseline justify-between border-b border-border pb-4">
             <div>
               <span class="text-topper font-bold uppercase tracking-widest text-accent">{investmentName}</span>
-              <h2 class="font-heading text-h2 font-bold uppercase text-text">Dom {unit.unitNumber}</h2>
+              <h2 class="font-heading text-h2 font-bold uppercase text-text">{offerLabel} {unit.unitNumber}</h2>
             </div>
             <span class:list={[
               'rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white',
@@ -78,7 +80,7 @@ const heroImage = unit.coverImage ?? investmentCoverImage;
           <div class="grid grid-cols-2 gap-4 border-b border-border pb-6">
             <div>
               <p class="text-xs uppercase tracking-wider text-text-muted">Typ nieruchomości</p>
-              <p class="text-base font-semibold text-text">{unit.propertyType}</p>
+              <p class="text-base font-semibold text-text">{propertyTypeLabel}</p>
             </div>
             <div>
               <p class="text-xs uppercase tracking-wider text-text-muted">Powierzchnia użytkowa</p>
@@ -95,7 +97,7 @@ const heroImage = unit.coverImage ?? investmentCoverImage;
           </div>
 
           <div class="space-y-2">
-            <h3 class="font-heading text-lg font-bold uppercase tracking-wide text-text">Opis domu</h3>
+            <h3 class="font-heading text-lg font-bold uppercase tracking-wide text-text">Opis nieruchomości</h3>
             <p class="text-sm leading-relaxed text-text-muted">{unit.description}</p>
           </div>
 
@@ -114,7 +116,7 @@ const heroImage = unit.coverImage ?? investmentCoverImage;
                 href="/kontakt/"
                 class="inline-flex min-h-[44px] w-full items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-bold text-accent-fg shadow-sm transition-opacity hover:opacity-90"
               >
-                Zapytaj o ten dom
+                Zapytaj o tę ofertę
               </a>
             </div>
           </div>
@@ -152,7 +154,7 @@ const heroImage = unit.coverImage ?? investmentCoverImage;
           </table>
         </div>
         <p class="mt-3 text-xs text-text-muted">
-          * Zgodnie z wymogami prawnymi prezentujemy historyczne ceny ofertowe powyższego domu.
+          * Zgodnie z wymogami prawnymi prezentujemy historyczne ceny ofertowe tej nieruchomości.
         </p>
       </div>
     </div>

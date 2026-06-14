@@ -165,8 +165,7 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
 
         <div class="border-t border-border pt-12">
           <div class="mb-8">
-            <h3 class="font-heading text-h3 font-bold uppercase text-text">Lista dostępnych domów</h3>
-            <p class="text-sm text-text-muted">Przeglądaj dostępne segmenty w tej inwestycji.</p>
+            <h3 class="font-heading text-h3 font-bold uppercase text-text">Lista dostępnych nieruchomości</h3>
           </div>
 
           <div class="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
@@ -180,8 +179,8 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
                     <th scope="col" class="px-4 py-3">Status</th>
                     <th scope="col" class="px-4 py-3">Cena brutto</th>
                     <th scope="col" class="px-4 py-3">Cena za m²</th>
-                    <th scope="col" class="px-4 py-3">Szczegóły</th>
                     <th scope="col" class="px-4 py-3">Rzuty</th>
+                    <th scope="col" class="px-4 py-3">Szczegóły</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-border bg-background">
@@ -218,14 +217,6 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
                           {currentPrice ? `${currentPrice.pricePerM2.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
                         </td>
                         <td class="px-4 py-4">
-                          <a
-                            href={`/inwestycje/${investmentSlug}/${unit.slug}/`}
-                            class="inline-flex w-fit items-center rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
-                          >
-                            Szczegóły
-                          </a>
-                        </td>
-                        <td class="px-4 py-4">
                           <div class="flex flex-col gap-3">
                             {unit.slug === 'a2' && investment.prospectusUrl ? (
                               <a
@@ -241,6 +232,14 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
                               <span class="text-xs text-text-muted">—</span>
                             )}
                           </div>
+                        </td>
+                                                <td class="px-4 py-4">
+                          <a
+                            href={`/inwestycje/${investmentSlug}/${unit.slug}/`}
+                            class="inline-flex w-fit items-center rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
+                          >
+                            Szczegóły
+                          </a>
                         </td>
                       </tr>
                     );

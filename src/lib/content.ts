@@ -448,10 +448,6 @@ function normalizeAndValidate(content: SiteContent, label: string): Investment[]
       };
     });
 
-    if (units.length === 0) {
-      errors.push(`${investmentPath}.units must contain at least one unit.`);
-    }
-
     return {
       name: investment.name,
       slug: investment.slug,

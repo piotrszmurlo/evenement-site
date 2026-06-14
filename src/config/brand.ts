@@ -17,7 +17,7 @@ export const brand = {
   name: 'Evenement',
   tagline: 'Nowoczesne inwestycje deweloperskie.',
   description:
-    'Kameralne i funkcjonalne nieruchomości dopasowane do Twoich potrzeb. Poznaj nowe inwestycje od Evenement.',
+    'Kameralne i funkcjonalne nieruchomości dopasowane do Twoich potrzeb.',
   url: 'https://evenement.pl',
   locale: 'pl_PL',
 

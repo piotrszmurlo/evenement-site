@@ -1,6 +1,5 @@
 import { basehub } from 'basehub';
 
-type ContentSource = 'auto' | 'basehub' | 'fixture';
 type SalesStatus = 'active' | 'ended';
 type UnitStatus = 'available' | 'reserved' | 'sold';
 type PropertyType = 'dom jednorodzinny' | 'dom w zabudowie szeregowej' | 'lokal mieszkalny';
@@ -53,7 +52,7 @@ interface CmsInvestment {
   units: CmsUnit[];
 }
 
-interface FixtureContent {
+interface SiteContent {
   investments: CmsInvestment[];
 }
 
@@ -171,6 +170,7 @@ const SITE_CONTENT_QUERY = {
 
 let investmentsPromise: Promise<Investment[]> | undefined;
 let homepageContentPromise: Promise<HomepageContent> | undefined;
+let siteContentPromise: Promise<(SiteContent & CmsHomepageContent & { _sourceLabel: string })> | undefined;
 
 export async function getInvestments(): Promise<Investment[]> {
   investmentsPromise ??= loadInvestments();
@@ -209,64 +209,35 @@ export function formatPropertyTypeLabel(propertyType: PropertyType): string {
 }
 
 async function loadInvestments(): Promise<Investment[]> {
-  const content = await loadSiteContent();
+  const content = await getSiteContent();
   return normalizeAndValidate(content, content._sourceLabel);
 }
 
 async function loadHomepageContent(): Promise<HomepageContent> {
-  const content = await loadSiteContent();
+  const content = await getSiteContent();
 
   return {
     homepageGallery: normalizeHomepageImages(content),
   };
 }
 
-async function loadSiteContent(): Promise<FixtureContent & CmsHomepageContent & { _sourceLabel: string }> {
-  const source = resolveContentSource();
-  debugLog('Resolved content source', {
-    source,
-    hasBasehubCredentials: hasBasehubCredentials(),
-  });
-
-  if (source === 'fixture') {
-    debugLog('Loading fixture content because CONTENT_SOURCE=fixture');
-    return { ...(await loadFixtureContent()), _sourceLabel: 'fixture' };
-  }
-
-  if (source === 'basehub') {
-    debugLog('Loading BaseHub content because CONTENT_SOURCE=basehub');
-    return { ...(await loadBasehubContent()), _sourceLabel: 'BaseHub' };
-  }
-
-  try {
-    if (hasBasehubCredentials()) {
-      debugLog('Loading BaseHub content in auto mode');
-      return { ...(await loadBasehubContent()), _sourceLabel: 'BaseHub' };
-    }
-  } catch (error) {
-    debugLog('BaseHub load failed in auto mode, falling back to fixture', {
-      error: error instanceof Error ? error.message : String(error),
-    });
-    if (import.meta.env.PROD) {
-      throw error;
-    }
-  }
-
-  debugLog('Falling back to fixture content');
-  return { ...(await loadFixtureContent()), _sourceLabel: 'fixture' };
+async function getSiteContent(): Promise<SiteContent & CmsHomepageContent & { _sourceLabel: string }> {
+  siteContentPromise ??= loadSiteContent();
+  return siteContentPromise;
 }
 
-function resolveContentSource(): ContentSource {
-  const value = import.meta.env.CONTENT_SOURCE;
-  if (value === 'basehub' || value === 'fixture' || value === 'auto') {
-    return value;
+async function loadSiteContent(): Promise<SiteContent & CmsHomepageContent & { _sourceLabel: string }> {
+  if (!hasBasehubCredentials()) {
+    throw new Error(
+      'BaseHub content is required, but no BaseHub credentials were found. Set BASEHUB_URL or BASEHUB_TEAM and BASEHUB_REPO, plus BASEHUB_TOKEN if needed.',
+    );
   }
 
-  if (import.meta.env.PROD) {
-    return 'basehub';
-  }
+  debugLog('Loading BaseHub content', {
+    hasBasehubCredentials: true,
+  });
 
-  return 'auto';
+  return { ...(await loadBasehubContent()), _sourceLabel: 'BaseHub' };
 }
 
 function hasBasehubCredentials(): boolean {
@@ -277,15 +248,7 @@ function hasBasehubCredentials(): boolean {
   );
 }
 
-async function loadFixtureContent(): Promise<FixtureContent> {
-  const module = await import('../../fixtures/sample-content.json');
-  debugLog('Fixture content loaded', {
-    investmentCount: module.default?.investments?.length ?? 0,
-  });
-  return module.default;
-}
-
-async function loadBasehubContent(): Promise<FixtureContent & CmsHomepageContent> {
+async function loadBasehubContent(): Promise<SiteContent & CmsHomepageContent> {
   const config = getBasehubConfig();
   debugLog('Querying BaseHub', {
     hasToken: Boolean(config.token),
@@ -376,7 +339,7 @@ function getBasehubConfig() {
   return token ? { token } : {};
 }
 
-function normalizeAndValidate(content: FixtureContent, label: string): Investment[] {
+function normalizeAndValidate(content: SiteContent, label: string): Investment[] {
   const errors: string[] = [];
   const seenInvestmentSlugs = new Set<string>();
 

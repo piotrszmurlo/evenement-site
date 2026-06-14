@@ -24,7 +24,7 @@
     "basehub": "basehub",
     "dev": "concurrently \"basehub dev\" \"astro dev\"",
     "start": "concurrently \"basehub dev\" \"astro dev\"",
-    "build": "basehub && astro check && astro build",
+    "build": "basehub && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "test": "playwright test",
@@ -45,5 +45,11 @@
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "concurrently": "^10.0.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
   }
 }

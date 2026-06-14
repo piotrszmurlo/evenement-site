@@ -3,6 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import Banner from '../../../components/Banner.astro';
+import ImagePlaceholder from '../../../components/ImagePlaceholder.astro';
 import { Image } from 'astro:assets';
 import { getInvestments } from '../../../lib/content';
 import { renderBasehubRichText } from '../../../lib/basehub-rich-text';
@@ -30,6 +31,7 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
     <div class="mx-auto max-w-site px-4 sm:px-6">
       <div class="space-y-12">
         <div class="overflow-hidden rounded-2xl border border-border bg-background shadow-lg">
+          {galleryImages.length > 0 ? (
           <div class="embla" data-embla>
             <div class="relative">
               <div class="embla__viewport overflow-hidden" data-embla-viewport>
@@ -103,6 +105,9 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
               </div>
             )}
           </div>
+          ) : (
+            <ImagePlaceholder label="Galeria inwestycji pojawi się po dodaniu zdjęć" class="aspect-[1400/780] w-full" />
+          )}
         </div>
 
         <div class="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-start">

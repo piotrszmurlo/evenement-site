@@ -3,11 +3,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import Banner from '../../components/Banner.astro';
+import ImagePlaceholder from '../../components/ImagePlaceholder.astro';
 import { brand } from '../../config/brand';
 import { Image } from 'astro:assets';
 import { getInvestments } from '../../lib/content';
 
 const investments = await getInvestments();
+const activeInvestments = investments.filter((investment) => investment.salesStatus === 'active');
+const completedInvestments = investments.filter((investment) => investment.salesStatus !== 'active');
 ---
 
 <BaseLayout title="Inwestycje" description={`Zobacz aktualne inwestycje realizowane przez dewelopera ${brand.name}.`}>
@@ -18,21 +21,24 @@ const investments = await getInvestments();
   <section class="py-section">
     <div class="mx-auto max-w-site px-4 sm:px-6">
       <div class="mx-auto mb-10 max-w-2xl text-center">
-        <span class="text-topper font-bold uppercase tracking-widest text-accent">Nasze inwestycje</span>
-        <h2 class="mt-2 font-heading text-h2 font-bold uppercase text-text">Aktualne inwestycje</h2>
+        <h2 class="font-heading text-h2 font-bold uppercase text-text">Aktualne inwestycje</h2>
       </div>
 
-      <div class="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-2">
-        {investments.map((investment) => (
-          <div class="flex flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
+      <div class="mx-auto grid max-w-4xl grid-cols-1 justify-items-center gap-8 md:grid-cols-2 md:justify-items-stretch">
+        {activeInvestments.map((investment) => (
+          <div class="flex w-full max-w-xl flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
             <div class="relative h-64 overflow-hidden">
-              <Image
-                src={investment.coverImage}
-                alt={investment.name}
-                width={800}
-                height={450}
-                class="size-full object-cover transition-transform duration-300 hover:scale-105"
-              />
+              {investment.coverImage ? (
+                <Image
+                  src={investment.coverImage}
+                  alt={investment.name}
+                  width={800}
+                  height={450}
+                  class="size-full object-cover transition-transform duration-300 hover:scale-105"
+                />
+              ) : (
+                <ImagePlaceholder label="Placeholder inwestycji do uzupełnienia" class="size-full" />
+              )}
               <span class:list={[
                 'absolute right-4 top-4 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary-fg',
                 investment.salesStatus === 'active' ? 'bg-primary' : 'bg-stone-600',
@@ -68,6 +74,65 @@ const investments = await getInvestments();
           </div>
         ))}
       </div>
+
+      {completedInvestments.length > 0 && (
+        <>
+          <div class="mx-auto mb-10 mt-16 max-w-2xl text-center">
+            <h2 class="font-heading text-h2 font-bold uppercase text-text">Zakończone inwestycje</h2>
+          </div>
+
+          <div class="mx-auto grid max-w-4xl grid-cols-1 justify-items-center gap-8 md:grid-cols-2 md:justify-items-stretch">
+            {completedInvestments.map((investment) => (
+              <div class="flex w-full max-w-xl flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
+                <div class="relative h-64 overflow-hidden">
+                  {investment.coverImage ? (
+                    <Image
+                      src={investment.coverImage}
+                      alt={investment.name}
+                      width={800}
+                      height={450}
+                      class="size-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                  ) : (
+                    <ImagePlaceholder label="Placeholder inwestycji do uzupełnienia" class="size-full" />
+                  )}
+                  <span class:list={[
+                    'absolute right-4 top-4 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary-fg',
+                    investment.salesStatus === 'active' ? 'bg-primary' : 'bg-stone-600',
+                  ]}>
+                    {investment.salesStatus === 'active' ? 'W sprzedaży' : 'Zakończona'}
+                  </span>
+                </div>
+
+                <div class="flex flex-1 flex-col justify-between p-6">
+                  <div>
+                    <h3 class="mb-2 font-heading text-h3 font-bold text-text">{investment.name}</h3>
+                    <p class="mb-4 flex items-center gap-1 text-sm text-text-muted">
+                      <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      {investment.locationAddress}
+                    </p>
+                    <p class="mb-6 text-sm leading-relaxed text-text-muted">
+                      {investment.summary}
+                    </p>
+                  </div>
+
+                  <div>
+                    <a
+                      href={`/inwestycje/${investment.slug}/`}
+                      class="inline-flex min-h-[44px] items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-bold text-accent-fg shadow-sm transition-opacity hover:opacity-90"
+                    >
+                      Zobacz szczegóły inwestycji
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   </section>
 

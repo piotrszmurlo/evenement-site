@@ -3,6 +3,7 @@ import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import Header from '../../../../components/Header.astro';
 import Footer from '../../../../components/Footer.astro';
 import Banner from '../../../../components/Banner.astro';
+import ImagePlaceholder from '../../../../components/ImagePlaceholder.astro';
 import { Image } from 'astro:assets';
 import { formatPropertyTypeLabel, getInvestments } from '../../../../lib/content';
 
@@ -53,13 +54,17 @@ const offerLabel = 'Nieruchomość';
       <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-14">
         <div class="space-y-4">
           <div class="overflow-hidden rounded-lg shadow-lg">
-            <Image
-              src={heroImage}
-              alt={`${offerLabel} ${unit.unitNumber}`}
-              width={800}
-              height={600}
-              class="w-full object-cover"
-            />
+            {heroImage ? (
+              <Image
+                src={heroImage}
+                alt={`${offerLabel} ${unit.unitNumber}`}
+                width={800}
+                height={600}
+                class="w-full object-cover"
+              />
+            ) : (
+              <ImagePlaceholder label="Zdjęcie oferty pojawi się po dodaniu galerii" class="min-h-[320px] w-full" />
+            )}
           </div>
         </div>
 

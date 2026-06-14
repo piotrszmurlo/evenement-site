@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Hero from '../components/Hero.astro';
 import CTA from '../components/CTA.astro';
+import ImagePlaceholder from '../components/ImagePlaceholder.astro';
 import { brand } from '../config/brand';
 import { client } from '../data/client';
 import { Image } from 'astro:assets';
@@ -53,13 +54,17 @@ const heroGallery =
 
         <div class="mx-auto grid max-w-5xl grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-14">
           <div class="overflow-hidden rounded-lg shadow-lg">
-            <Image
-              src={featuredInvestment.coverImage}
-              alt={featuredInvestment.name}
-              width={800}
-              height={500}
-              class="w-full object-cover transition-transform duration-300 hover:scale-105"
-            />
+            {featuredInvestment.coverImage ? (
+              <Image
+                src={featuredInvestment.coverImage}
+                alt={featuredInvestment.name}
+                width={800}
+                height={500}
+                class="w-full object-cover transition-transform duration-300 hover:scale-105"
+              />
+            ) : (
+              <ImagePlaceholder label="Placeholder inwestycji do uzupełnienia" class="min-h-[320px] w-full" />
+            )}
           </div>
           <div class="space-y-6">
             <h3 class="font-heading text-h3 font-bold uppercase tracking-wide text-text">{featuredInvestment.name}</h3>

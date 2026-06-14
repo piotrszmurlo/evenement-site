@@ -88,7 +88,7 @@ export interface Investment {
   prospectusUrl?: string;
   salesStatus: SalesStatus;
   gallery: string[];
-  coverImage: string;
+  coverImage?: string;
   units: Unit[];
 }
 
@@ -365,7 +365,15 @@ function normalizeAndValidate(content: SiteContent, label: string): Investment[]
     }
     seenInvestmentSlugs.add(investment.slug);
 
-    const gallery = normalizeGallery(investment.gallery, `${investmentPath}.gallery`, errors);
+    const gallery = normalizeGallery(investment.gallery, `${investmentPath}.gallery`, errors, false);
+    if (gallery.length === 0) {
+      warnLog('Investment is missing gallery images', {
+        source: label,
+        investmentSlug: investment.slug,
+        investmentName: investment.name,
+        path: `${investmentPath}.gallery`,
+      });
+    }
     const seenUnitSlugs = new Set<string>();
 
     const units = investment.units.map((unit, unitIndex) => {
@@ -398,6 +406,15 @@ function normalizeAndValidate(content: SiteContent, label: string): Investment[]
         errors,
         false,
       );
+      if (unitGallery.length === 0) {
+        warnLog('Unit is missing gallery images', {
+          source: label,
+          investmentSlug: investment.slug,
+          unitSlug: unit.slug,
+          unitNumber: unit.unitNumber,
+          path: `${unitPath}.gallery`,
+        });
+      }
       const priceHistory = unit.priceHistory
         .map((entry, entryIndex) => {
           const entryPath = `${unitPath}.priceHistory[${entryIndex}]`;
@@ -450,7 +467,7 @@ function normalizeAndValidate(content: SiteContent, label: string): Investment[]
       prospectusUrl: investment.prospectusFile?.url || undefined,
       salesStatus: investment.salesStatus,
       gallery,
-      coverImage: gallery[0] ?? '',
+      coverImage: gallery[0],
       units,
     };
   });
@@ -471,8 +488,9 @@ function normalizeGallery(
   const urls = gallery
     .map((item, index) => {
       const entryPath = `${path}[${index}].image.url`;
-      validateRequiredString(errors, entryPath, item?.image?.url);
-      return item?.image?.url ?? '';
+      const rawUrl = item?.image?.url;
+      validateRequiredString(errors, entryPath, rawUrl);
+      return typeof rawUrl === 'string' ? rawUrl.trim() : '';
     })
     .filter(Boolean);
 
@@ -533,4 +551,8 @@ function debugLog(message: string, details?: Record<string, unknown>) {
   }
 
   console.log('[content]', message, details ?? {});
+}
+
+function warnLog(message: string, details?: Record<string, unknown>) {
+  console.warn('[content]', message, details ?? {});
 }

@@ -7,11 +7,16 @@ import CTA from '../components/CTA.astro';
 import { brand } from '../config/brand';
 import { client } from '../data/client';
 import { Image } from 'astro:assets';
-import { getInvestments } from '../lib/content';
+import { getHomepageContent, getInvestments } from '../lib/content';
 
+const homepageContent = await getHomepageContent();
 const investments = await getInvestments();
 const featuredInvestment =
   investments.find((investment) => investment.salesStatus === 'active') ?? investments[0];
+const heroGallery =
+  homepageContent.homepageGallery.length > 0
+    ? homepageContent.homepageGallery
+    : featuredInvestment?.gallery ?? [];
 ---
 
 <BaseLayout
@@ -36,7 +41,7 @@ const featuredInvestment =
 >
   <Header slot="header" />
 
-  <Hero />
+  <Hero imageGallery={heroGallery} imageAlt={featuredInvestment?.name ?? 'Nowoczesne budynki mieszkalne'} />
 
   {featuredInvestment && (
     <section class="py-section bg-surface">

@@ -204,6 +204,11 @@ export interface Content {
     _slugPath: Scalars['String']
     _sys: BlockDocumentSys
     _title: Scalars['String']
+    homepageImage1: (BlockImage | null)
+    homepageImage2: (BlockImage | null)
+    homepageImage3: (BlockImage | null)
+    homepageImage4: (BlockImage | null)
+    homepageImage5: (BlockImage | null)
     investments: Investments
     __typename: 'Content'
 }
@@ -948,6 +953,11 @@ export interface ContentGenqlSelection{
     _slugPath?: boolean | number
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
+    homepageImage1?: BlockImageGenqlSelection
+    homepageImage2?: BlockImageGenqlSelection
+    homepageImage3?: BlockImageGenqlSelection
+    homepageImage4?: BlockImageGenqlSelection
+    homepageImage5?: BlockImageGenqlSelection
     investments?: (InvestmentsGenqlSelection & { __args?: {
     /** Filter by a field. */
     filter?: (InvestmentsItemFilterInput | null), 

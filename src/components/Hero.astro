@@ -1,6 +1,4 @@
 ---
-import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
 import { brand } from '../config/brand';
 import { client } from '../data/client';
 import { heroImage as localHeroImage } from '../config/images';
@@ -17,7 +15,8 @@ interface Props {
   ctaHref?: string;
   secondaryLabel?: string;
   secondaryHref?: string;
-  imageSrc?: ImageMetadata | string;
+  imageSrc?: string;
+  imageGallery?: string[];
   imageAlt?: string;
 }
 
@@ -29,9 +28,20 @@ const {
   ctaHref = '/inwestycje',
   secondaryLabel = 'O nas',
   secondaryHref = '/o-nas',
-  imageSrc = 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&q=80',
+  imageSrc,
+  imageGallery = [],
   imageAlt = 'Nowoczesne budynki mieszkalne',
 } = Astro.props;
+
+const fallbackImage =
+  typeof localHeroImage === 'string'
+    ? localHeroImage
+    : localHeroImage?.src ?? PLACEHOLDER;
+
+const galleryImages =
+  imageGallery.length > 0
+    ? imageGallery
+    : [imageSrc ?? fallbackImage];
 ---
 
 <section class="relative overflow-hidden bg-background py-12 sm:py-16 md:py-20 lg:py-24">
@@ -82,16 +92,69 @@ const {
     <div
       class="relative order-1 overflow-hidden rounded-lg shadow-xl aspect-4/3 lg:order-2"
       transition:name="hero-image"
+      data-hero-gallery-root
     >
-      <Image
-        src={imageSrc}
-        alt={imageAlt}
-        width={800}
-        height={600}
-        loading="eager"
-        decoding="async"
-        class="size-full object-cover"
-      />
+      <div class="embla h-full" data-hero-gallery>
+        <div class="embla__viewport h-full overflow-hidden" data-hero-gallery-viewport>
+          <div class="embla__container flex h-full touch-pan-y">
+            {galleryImages.map((src, index) => (
+              <div class="embla__slide min-w-0 flex-[0_0_100%]">
+                <img
+                  src={src}
+                  alt={imageAlt}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  class="size-full object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<script>
+  import EmblaCarousel from 'embla-carousel';
+
+  const AUTOPLAY_DELAY_MS = 4500;
+
+  const initHeroGallery = () => {
+    const root = document.querySelector('[data-hero-gallery]');
+    const viewport = root?.querySelector('[data-hero-gallery-viewport]');
+
+    if (!root || !viewport) return;
+
+    const slideCount = root.querySelectorAll('.embla__slide').length;
+    if (slideCount <= 1) return;
+
+    const embla = EmblaCarousel(viewport, {
+      loop: true,
+      align: 'start',
+      skipSnaps: false,
+      containScroll: false,
+      watchDrag: true,
+    });
+
+    let autoplayId = window.setInterval(() => {
+      embla.scrollNext();
+    }, AUTOPLAY_DELAY_MS);
+
+    const restartAutoplay = () => {
+      window.clearInterval(autoplayId);
+      autoplayId = window.setInterval(() => {
+        embla.scrollNext();
+      }, AUTOPLAY_DELAY_MS);
+    };
+
+    embla.on('pointerDown', restartAutoplay);
+    embla.on('settle', restartAutoplay);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeroGallery, { once: true });
+  } else {
+    initHeroGallery();
+  }
+</script>

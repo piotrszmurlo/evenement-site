@@ -14,6 +14,14 @@ interface CmsGalleryItem {
   image: CmsAsset;
 }
 
+interface CmsHomepageContent {
+  homepageImage1?: CmsAsset | null;
+  homepageImage2?: CmsAsset | null;
+  homepageImage3?: CmsAsset | null;
+  homepageImage4?: CmsAsset | null;
+  homepageImage5?: CmsAsset | null;
+}
+
 interface CmsPriceHistoryEntry {
   validFrom: string;
   totalPrice: number;
@@ -84,8 +92,32 @@ export interface Investment {
   units: Unit[];
 }
 
-const INVESTMENTS_QUERY = {
+export interface HomepageContent {
+  homepageGallery: string[];
+}
+
+const SITE_CONTENT_QUERY = {
   content: {
+    homepageImage1: {
+      url: true,
+      alt: true,
+    },
+    homepageImage2: {
+      url: true,
+      alt: true,
+    },
+    homepageImage3: {
+      url: true,
+      alt: true,
+    },
+    homepageImage4: {
+      url: true,
+      alt: true,
+    },
+    homepageImage5: {
+      url: true,
+      alt: true,
+    },
     investments: {
       items: {
         name: true,
@@ -138,10 +170,16 @@ const INVESTMENTS_QUERY = {
 } as const;
 
 let investmentsPromise: Promise<Investment[]> | undefined;
+let homepageContentPromise: Promise<HomepageContent> | undefined;
 
 export async function getInvestments(): Promise<Investment[]> {
   investmentsPromise ??= loadInvestments();
   return investmentsPromise;
+}
+
+export async function getHomepageContent(): Promise<HomepageContent> {
+  homepageContentPromise ??= loadHomepageContent();
+  return homepageContentPromise;
 }
 
 export async function getInvestmentBySlug(slug: string): Promise<Investment | undefined> {
@@ -163,6 +201,19 @@ export async function getUnitBySlug(investmentSlug: string, unitSlug: string) {
 }
 
 async function loadInvestments(): Promise<Investment[]> {
+  const content = await loadSiteContent();
+  return normalizeAndValidate(content, content._sourceLabel);
+}
+
+async function loadHomepageContent(): Promise<HomepageContent> {
+  const content = await loadSiteContent();
+
+  return {
+    homepageGallery: normalizeHomepageImages(content),
+  };
+}
+
+async function loadSiteContent(): Promise<FixtureContent & CmsHomepageContent & { _sourceLabel: string }> {
   const source = resolveContentSource();
   debugLog('Resolved content source', {
     source,
@@ -171,18 +222,18 @@ async function loadInvestments(): Promise<Investment[]> {
 
   if (source === 'fixture') {
     debugLog('Loading fixture content because CONTENT_SOURCE=fixture');
-    return normalizeAndValidate(await loadFixtureContent(), 'fixture');
+    return { ...(await loadFixtureContent()), _sourceLabel: 'fixture' };
   }
 
   if (source === 'basehub') {
     debugLog('Loading BaseHub content because CONTENT_SOURCE=basehub');
-    return normalizeAndValidate(await loadBasehubContent(), 'BaseHub');
+    return { ...(await loadBasehubContent()), _sourceLabel: 'BaseHub' };
   }
 
   try {
     if (hasBasehubCredentials()) {
       debugLog('Loading BaseHub content in auto mode');
-      return normalizeAndValidate(await loadBasehubContent(), 'BaseHub');
+      return { ...(await loadBasehubContent()), _sourceLabel: 'BaseHub' };
     }
   } catch (error) {
     debugLog('BaseHub load failed in auto mode, falling back to fixture', {
@@ -194,7 +245,7 @@ async function loadInvestments(): Promise<Investment[]> {
   }
 
   debugLog('Falling back to fixture content');
-  return normalizeAndValidate(await loadFixtureContent(), 'fixture');
+  return { ...(await loadFixtureContent()), _sourceLabel: 'fixture' };
 }
 
 function resolveContentSource(): ContentSource {
@@ -226,7 +277,7 @@ async function loadFixtureContent(): Promise<FixtureContent> {
   return module.default;
 }
 
-async function loadBasehubContent(): Promise<FixtureContent> {
+async function loadBasehubContent(): Promise<FixtureContent & CmsHomepageContent> {
   const config = getBasehubConfig();
   debugLog('Querying BaseHub', {
     hasToken: Boolean(config.token),
@@ -235,7 +286,7 @@ async function loadBasehubContent(): Promise<FixtureContent> {
     hasRepo: 'repo' in config && Boolean(config.repo),
   });
 
-  const data = await basehub(config).query(INVESTMENTS_QUERY);
+  const data = await basehub(config).query(SITE_CONTENT_QUERY as any);
   const investments = data.content?.investments?.items ?? [];
 
   debugLog('BaseHub response received', {
@@ -244,6 +295,21 @@ async function loadBasehubContent(): Promise<FixtureContent> {
   });
 
   return {
+    homepageImage1: data.content?.homepageImage1?.url
+      ? { url: data.content.homepageImage1.url, alt: data.content.homepageImage1.alt }
+      : null,
+    homepageImage2: data.content?.homepageImage2?.url
+      ? { url: data.content.homepageImage2.url, alt: data.content.homepageImage2.alt }
+      : null,
+    homepageImage3: data.content?.homepageImage3?.url
+      ? { url: data.content.homepageImage3.url, alt: data.content.homepageImage3.alt }
+      : null,
+    homepageImage4: data.content?.homepageImage4?.url
+      ? { url: data.content.homepageImage4.url, alt: data.content.homepageImage4.alt }
+      : null,
+    homepageImage5: data.content?.homepageImage5?.url
+      ? { url: data.content.homepageImage5.url, alt: data.content.homepageImage5.alt }
+      : null,
     investments: investments.map((investment) => ({
       name: investment.name,
       slug: investment.slug,
@@ -439,6 +505,16 @@ function normalizeGallery(
   }
 
   return urls;
+}
+
+function normalizeHomepageImages(content: CmsHomepageContent) {
+  return [
+    content.homepageImage1?.url,
+    content.homepageImage2?.url,
+    content.homepageImage3?.url,
+    content.homepageImage4?.url,
+    content.homepageImage5?.url,
+  ].filter((value): value is string => typeof value === 'string' && value.length > 0);
 }
 
 function validateRequiredString(errors: string[], path: string, value: unknown) {

@@ -1,4 +1,5 @@
 import { basehub } from 'basehub';
+import type { BasehubRichTextDocument } from './basehub-rich-text';
 
 type SalesStatus = 'active' | 'ended';
 type UnitStatus = 'available' | 'reserved' | 'sold';
@@ -44,7 +45,7 @@ interface CmsInvestment {
   name: string;
   slug: string;
   summary: string;
-  description: string;
+  description: BasehubRichTextDocument | null;
   locationAddress: string;
   prospectusFile?: CmsAsset | null;
   salesStatus: SalesStatus;
@@ -82,7 +83,7 @@ export interface Investment {
   name: string;
   slug: string;
   summary: string;
-  description: string;
+  description: BasehubRichTextDocument | null;
   locationAddress: string;
   prospectusUrl?: string;
   salesStatus: SalesStatus;
@@ -122,7 +123,11 @@ const SITE_CONTENT_QUERY = {
         name: true,
         slug: true,
         summary: true,
-        description: true,
+        description: {
+          json: {
+            content: true,
+          },
+        },
         locationAddress: true,
         prospectusFile: {
           url: true,
@@ -348,7 +353,7 @@ function normalizeAndValidate(content: SiteContent, label: string): Investment[]
     validateRequiredString(errors, `${investmentPath}.name`, investment.name);
     validateRequiredString(errors, `${investmentPath}.slug`, investment.slug);
     validateRequiredString(errors, `${investmentPath}.summary`, investment.summary);
-    validateRequiredString(errors, `${investmentPath}.description`, investment.description);
+    validateRichTextDocument(errors, `${investmentPath}.description`, investment.description);
     validateRequiredString(errors, `${investmentPath}.locationAddress`, investment.locationAddress);
 
     if (!isSalesStatus(investment.salesStatus)) {
@@ -491,6 +496,12 @@ function normalizeHomepageImages(content: CmsHomepageContent) {
 function validateRequiredString(errors: string[], path: string, value: unknown) {
   if (typeof value !== 'string' || value.trim().length === 0) {
     errors.push(`${path} is required.`);
+  }
+}
+
+function validateRichTextDocument(errors: string[], path: string, value: BasehubRichTextDocument | null) {
+  if (!Array.isArray(value?.json?.content) || value.json.content.length === 0) {
+    errors.push(`${path} must contain rich text content.`);
   }
 }
 

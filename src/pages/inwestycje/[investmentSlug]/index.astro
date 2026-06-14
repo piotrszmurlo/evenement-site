@@ -5,6 +5,7 @@ import Footer from '../../../components/Footer.astro';
 import Banner from '../../../components/Banner.astro';
 import { Image } from 'astro:assets';
 import { getInvestments } from '../../../lib/content';
+import { renderBasehubRichText } from '../../../lib/basehub-rich-text';
 
 export async function getStaticPaths() {
   const investments = await getInvestments();
@@ -17,6 +18,7 @@ export async function getStaticPaths() {
 const { investmentSlug } = Astro.params;
 const { investment } = Astro.props;
 const galleryImages = investment.gallery;
+const investmentDescriptionHtml = renderBasehubRichText(investment.description);
 ---
 
 <BaseLayout title={investment.name} description={investment.summary}>
@@ -114,9 +116,7 @@ const galleryImages = investment.gallery;
               </svg>
               {investment.locationAddress}
             </p>
-            <div class="prose prose-slate max-w-none text-sm leading-7 text-text-muted">
-              <p>{investment.description}</p>
-            </div>
+            <div class="prose prose-slate max-w-none text-sm leading-7 text-text-muted" set:html={investmentDescriptionHtml} />
           </div>
 
           <div class="rounded-2xl border border-border bg-surface p-6 shadow-sm">

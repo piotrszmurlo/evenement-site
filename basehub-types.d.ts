@@ -172,14 +172,7 @@ export interface BlockOgImage {
 
 
 /** Rich text block */
-export interface BlockRichText {
-    html: Scalars['String']
-    json: RichTextJson
-    markdown: Scalars['String']
-    plainText: Scalars['String']
-    readingTime: Scalars['Int']
-    __typename: string
-}
+export type BlockRichText = (Description) & { __isUnion?: true }
 
 export interface BlockVideo {
     aspectRatio: Scalars['String']
@@ -211,6 +204,21 @@ export interface Content {
     homepageImage5: (BlockImage | null)
     investments: Investments
     __typename: 'Content'
+}
+
+export interface Description {
+    html: Scalars['String']
+    json: DescriptionRichText
+    markdown: Scalars['String']
+    plainText: Scalars['String']
+    readingTime: Scalars['Int']
+    __typename: 'Description'
+}
+
+export interface DescriptionRichText {
+    content: Scalars['BSHBRichTextContentSchema']
+    toc: Scalars['BSHBRichTextTOCSchema']
+    __typename: 'DescriptionRichText'
 }
 
 export interface Gallery {
@@ -321,7 +329,7 @@ export interface InvestmentsItem {
     _slugPath: Scalars['String']
     _sys: BlockDocumentSys
     _title: Scalars['String']
-    description: Scalars['String']
+    description: Description
     gallery: Gallery_1
     locationAddress: Scalars['String']
     name: Scalars['String']
@@ -445,7 +453,7 @@ export interface RepoSys {
     __typename: 'RepoSys'
 }
 
-export type RichTextJson = (BaseRichTextJson) & { __isUnion?: true }
+export type RichTextJson = (BaseRichTextJson | DescriptionRichText) & { __isUnion?: true }
 
 export interface SearchHighlight {
     /** The field/path that was matched (e.g., "title", "body.content") */
@@ -919,6 +927,7 @@ export interface BlockRichTextGenqlSelection{
     readingTime?: { __args: {
     /** Words per minute, defaults to average 183wpm */
     wpm?: (Scalars['Int'] | null)} } | boolean | number
+    on_Description?: DescriptionGenqlSelection
     __typename?: boolean | number
     __fragmentOn?: "BlockRichText"
 }
@@ -974,6 +983,29 @@ export interface ContentGenqlSelection{
 }
 
 export interface DateFilter {eq?: (Scalars['DateTime'] | null),isAfter?: (Scalars['DateTime'] | null),isBefore?: (Scalars['DateTime'] | null),isNull?: (Scalars['Boolean'] | null),neq?: (Scalars['DateTime'] | null),onOrAfter?: (Scalars['DateTime'] | null),onOrBefore?: (Scalars['DateTime'] | null)}
+
+export interface DescriptionGenqlSelection{
+    html?: { __args: {
+    /** It automatically generates a unique id for each heading present in the HTML. Enabled by default. */
+    slugs?: (Scalars['Boolean'] | null), 
+    /** Inserts a table of contents at the beginning of the HTML. */
+    toc?: (Scalars['Boolean'] | null)} } | boolean | number
+    json?: DescriptionRichTextGenqlSelection
+    markdown?: boolean | number
+    plainText?: boolean | number
+    readingTime?: { __args: {
+    /** Words per minute, defaults to average 183wpm */
+    wpm?: (Scalars['Int'] | null)} } | boolean | number
+    __typename?: boolean | number
+    __fragmentOn?: "Description"
+}
+
+export interface DescriptionRichTextGenqlSelection{
+    content?: boolean | number
+    toc?: boolean | number
+    __typename?: boolean | number
+    __fragmentOn?: "DescriptionRichText"
+}
 
 export interface GalleryGenqlSelection{
     _analyticsKey?: { __args: {
@@ -1137,7 +1169,7 @@ export interface InvestmentsItemGenqlSelection{
     _slugPath?: boolean | number
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
-    description?: boolean | number
+    description?: DescriptionGenqlSelection
     gallery?: (Gallery_1GenqlSelection & { __args?: {
     /** Filter by a field. */
     filter?: (GalleryItem_1FilterInput | null), 
@@ -1170,7 +1202,7 @@ export interface InvestmentsItemGenqlSelection{
     __fragmentOn?: "InvestmentsItem"
 }
 
-export interface InvestmentsItemFilterInput {AND?: (InvestmentsItemFilterInput | null),OR?: (InvestmentsItemFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),description?: (StringFilter | null),gallery?: (ListFilter | null),locationAddress?: (StringFilter | null),name?: (StringFilter | null),salesStatus?: (SelectFilter | null),slug?: (StringFilter | null),summary?: (StringFilter | null),units?: (ListFilter | null)}
+export interface InvestmentsItemFilterInput {AND?: (InvestmentsItemFilterInput | null),OR?: (InvestmentsItemFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),gallery?: (ListFilter | null),locationAddress?: (StringFilter | null),name?: (StringFilter | null),salesStatus?: (SelectFilter | null),slug?: (StringFilter | null),summary?: (StringFilter | null),units?: (ListFilter | null)}
 
 export interface InvestmentsItemSearchInput {
 /** Searchable fields for query */
@@ -1380,6 +1412,7 @@ export interface RichTextJsonGenqlSelection{
     content?: boolean | number
     toc?: boolean | number
     on_BaseRichTextJson?: BaseRichTextJsonGenqlSelection
+    on_DescriptionRichText?: DescriptionRichTextGenqlSelection
     __typename?: boolean | number
     __fragmentOn?: "RichTextJson"
 }
@@ -1859,6 +1892,14 @@ export interface FragmentsMap {
   Content: {
     root: Content,
     selection: ContentGenqlSelection,
+}
+  Description: {
+    root: Description,
+    selection: DescriptionGenqlSelection,
+}
+  DescriptionRichText: {
+    root: DescriptionRichText,
+    selection: DescriptionRichTextGenqlSelection,
 }
   Gallery: {
     root: Gallery,

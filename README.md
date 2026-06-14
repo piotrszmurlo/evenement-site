@@ -26,6 +26,10 @@ npm install
 npm run dev
 # → http://localhost:4321
 
+# WSL: start Astro directly with Windows-accessible host binding
+npm run dev:wsl
+# → http://localhost:4321
+
 # 3. Build for production
 npm run build
 
@@ -34,6 +38,16 @@ npm run preview
 ```
 
 > **Note:** This project uses `npm`. Commit `package-lock.json` when dependencies change so deploys stay reproducible.
+
+### WSL dev server
+
+If `npm run dev` fails in WSL because of the extra `basehub dev` process, `pnpm`-style binary resolution, or the dev server only listening on loopback, use:
+
+```bash
+npm run dev:wsl
+```
+
+That command runs `astro dev` directly from `node_modules/.bin`, binds to `0.0.0.0`, and disables Astro telemetry writes to `~/.config` by default.
 
 ---
 

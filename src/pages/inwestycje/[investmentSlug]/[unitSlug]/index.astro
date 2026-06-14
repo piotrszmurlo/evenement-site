@@ -30,9 +30,10 @@ const currentPrice = unit.currentPrice;
 const heroImage = unit.coverImage ?? investmentCoverImage;
 const propertyTypeLabel = formatPropertyTypeLabel(unit.propertyType);
 const offerLabel = 'Nieruchomość';
+const pageDescription = `${offerLabel} ${unit.unitNumber} w inwestycji ${investmentName}. ${unit.usableAreaM2} m² powierzchni użytkowej, ${unit.rooms} pokoje, działka ${unit.plotAreaM2} m².`;
 ---
 
-<BaseLayout title={`${offerLabel} ${unit.unitNumber} - ${investmentName}`} description={unit.shortDescription}>
+<BaseLayout title={`${offerLabel} ${unit.unitNumber} - ${investmentName}`} description={pageDescription}>
   <Header slot="header" />
 
   <Banner title={`${offerLabel} ${unit.unitNumber}`} />

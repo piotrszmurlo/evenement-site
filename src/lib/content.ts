@@ -35,7 +35,6 @@ interface CmsUnit {
   usableAreaM2: number;
   plotAreaM2: number;
   rooms: number;
-  shortDescription: string;
   description: string;
   gallery: CmsGalleryItem[];
   priceHistory: CmsPriceHistoryEntry[];
@@ -71,7 +70,6 @@ export interface Unit {
   usableAreaM2: number;
   plotAreaM2: number;
   rooms: number;
-  shortDescription: string;
   description: string;
   gallery: string[];
   coverImage?: string;
@@ -150,7 +148,6 @@ const SITE_CONTENT_QUERY = {
             usableAreaM2: true,
             plotAreaM2: true,
             rooms: true,
-            shortDescription: true,
             description: true,
             gallery: {
               items: {
@@ -310,7 +307,6 @@ async function loadBasehubContent(): Promise<SiteContent & CmsHomepageContent> {
         usableAreaM2: unit.usableAreaM2,
         plotAreaM2: unit.plotAreaM2,
         rooms: unit.rooms,
-        shortDescription: unit.shortDescription,
         description: unit.description,
         gallery: unit.gallery.items.map((item) => ({
           image: {
@@ -380,7 +376,6 @@ function normalizeAndValidate(content: SiteContent, label: string): Investment[]
       const unitPath = `${investmentPath}.units[${unitIndex}]`;
       validateRequiredString(errors, `${unitPath}.unitNumber`, unit.unitNumber);
       validateRequiredString(errors, `${unitPath}.slug`, unit.slug);
-      validateRequiredString(errors, `${unitPath}.shortDescription`, unit.shortDescription);
       validateRequiredString(errors, `${unitPath}.description`, unit.description);
 
       if (!isPropertyType(unit.propertyType)) {
@@ -445,7 +440,6 @@ function normalizeAndValidate(content: SiteContent, label: string): Investment[]
         usableAreaM2: unit.usableAreaM2,
         plotAreaM2: unit.plotAreaM2,
         rooms: unit.rooms,
-        shortDescription: unit.shortDescription,
         description: unit.description,
         gallery: unitGallery,
         coverImage: unitGallery[0],

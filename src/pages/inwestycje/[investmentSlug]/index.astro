@@ -180,6 +180,7 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
                     <th scope="col" class="px-4 py-3">Status</th>
                     <th scope="col" class="px-4 py-3">Cena brutto</th>
                     <th scope="col" class="px-4 py-3">Cena za m²</th>
+                    <th scope="col" class="px-4 py-3">Szczegóły</th>
                     <th scope="col" class="px-4 py-3">Rzuty</th>
                   </tr>
                 </thead>
@@ -217,13 +218,15 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
                           {currentPrice ? `${currentPrice.pricePerM2.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
                         </td>
                         <td class="px-4 py-4">
+                          <a
+                            href={`/inwestycje/${investmentSlug}/${unit.slug}/`}
+                            class="inline-flex w-fit items-center rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
+                          >
+                            Szczegóły
+                          </a>
+                        </td>
+                        <td class="px-4 py-4">
                           <div class="flex flex-col gap-3">
-                            <a
-                              href={`/inwestycje/${investmentSlug}/${unit.slug}/`}
-                              class="inline-flex min-h-[36px] w-fit items-center rounded bg-primary px-3 py-1.5 text-xs font-semibold text-primary-fg shadow-sm transition-opacity hover:opacity-90"
-                            >
-                              Szczegóły
-                            </a>
                             {unit.slug === 'a2' && investment.prospectusUrl ? (
                               <a
                                 href={investment.prospectusUrl}
@@ -253,10 +256,18 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
 
   <script>
     import EmblaCarousel from 'embla-carousel';
+    const GALLERY_KEY = '__investmentGalleryCleanup';
+
+    const destroyGallery = () => {
+      const root = document.querySelector('[data-embla]');
+      const cleanup = root?.[GALLERY_KEY];
+      if (typeof cleanup === 'function') cleanup();
+    };
 
     const initGallery = () => {
       const root = document.querySelector('[data-embla]');
       if (!root) return;
+      destroyGallery();
 
       const viewport = root.querySelector('[data-embla-viewport]');
       const prevBtn = root.querySelector('[data-embla-prev]');
@@ -308,13 +319,16 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
       embla.on('select', setSelected);
       embla.on('reInit', setSelected);
       setSelected();
+
+      root[GALLERY_KEY] = () => {
+        embla.destroy();
+        delete root[GALLERY_KEY];
+      };
     };
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initGallery, { once: true });
-    } else {
-      initGallery();
-    }
+    initGallery();
+    document.addEventListener('astro:page-load', initGallery);
+    document.addEventListener('astro:before-swap', destroyGallery);
   </script>
 
   <Footer slot="footer" />

@@ -183,7 +183,7 @@ const currentPath = Astro.url.pathname;
 </header>
 
 <script>
-  (() => {
+  const initHeaderMenu = () => {
     const headerEl = document.querySelector("header");
     const btnEl = document.getElementById("menu-toggle");
     const menuEl = document.getElementById("mobile-menu");
@@ -197,8 +197,6 @@ const currentPath = Astro.url.pathname;
     const menu = /** @type {HTMLElement} */ (menuEl);
     const iconOpen = /** @type {HTMLElement} */ (iconOpenEl);
     const iconClose = /** @type {HTMLElement} */ (iconCloseEl);
-    if (header.dataset.menuInit === "true") return;
-    header.dataset.menuInit = "true";
 
     const activeClasses = ["bg-primary/10", "text-primary"];
     const inactiveDesktop = ["text-text-muted", "hover:text-text"];
@@ -210,8 +208,7 @@ const currentPath = Astro.url.pathname;
 
     const isDesktop = () => window.matchMedia("(min-width: 1024px)").matches;
 
-    const setMenuOpen = (nextOpen: boolean) => {
-      // Hard stop: hamburger/drawer behavior is mobile-only.
+    const setMenuOpen = (nextOpen) => {
       if (isDesktop()) nextOpen = false;
       btn.setAttribute("aria-expanded", String(nextOpen));
       menu.classList.toggle("hidden", !nextOpen);
@@ -219,7 +216,7 @@ const currentPath = Astro.url.pathname;
       iconClose.classList.toggle("hidden", !nextOpen);
     };
 
-    function syncActiveLinks() {
+    const syncActiveLinks = () => {
       const path = window.location.pathname;
       const desktopLinks = header.querySelectorAll(
         'nav[aria-label="Primary navigation"] a',
@@ -250,32 +247,38 @@ const currentPath = Astro.url.pathname;
         if (isActive) link.setAttribute("aria-current", "page");
         else link.removeAttribute("aria-current");
       });
+    };
+
+    if (header.dataset.menuInit !== "true") {
+      header.dataset.menuInit = "true";
+
+      btn.addEventListener("click", () => {
+        if (isDesktop()) return;
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        setMenuOpen(!isOpen);
+      });
+
+      menu.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        if (target.closest("a[href]")) setMenuOpen(false);
+      });
+
+      document.addEventListener("astro:before-preparation", () =>
+        setMenuOpen(false),
+      );
+      document.addEventListener("astro:after-swap", () => {
+        setMenuOpen(false);
+        syncActiveLinks();
+      });
+
+      window.addEventListener("resize", () => setMenuOpen(false));
     }
-
-    btn.addEventListener("click", () => {
-      if (isDesktop()) return;
-      const isOpen = btn.getAttribute("aria-expanded") === "true";
-      setMenuOpen(!isOpen);
-    });
-
-    menu.addEventListener("click", (event) => {
-      const target = event.target;
-      if (!(target instanceof Element)) return;
-      if (target.closest("a[href]")) setMenuOpen(false);
-    });
-
-    document.addEventListener("astro:before-preparation", () =>
-      setMenuOpen(false),
-    );
-    document.addEventListener("astro:after-swap", () => {
-      setMenuOpen(false);
-      syncActiveLinks();
-    });
-
-    // Ensure mobile drawer can't stay open if viewport changes to desktop.
-    window.addEventListener("resize", () => setMenuOpen(false));
 
     setMenuOpen(false);
     syncActiveLinks();
-  })();
+  };
+
+  initHeaderMenu();
+  document.addEventListener("astro:page-load", initHeaderMenu);
 </script>

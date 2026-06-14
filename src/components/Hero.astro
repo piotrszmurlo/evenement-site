@@ -119,12 +119,20 @@ const galleryImages =
   import EmblaCarousel from 'embla-carousel';
 
   const AUTOPLAY_DELAY_MS = 4500;
+  const HERO_GALLERY_KEY = '__heroGalleryCleanup';
+
+  const destroyHeroGallery = () => {
+    const root = document.querySelector('[data-hero-gallery]');
+    const cleanup = root?.[HERO_GALLERY_KEY];
+    if (typeof cleanup === 'function') cleanup();
+  };
 
   const initHeroGallery = () => {
     const root = document.querySelector('[data-hero-gallery]');
     const viewport = root?.querySelector('[data-hero-gallery-viewport]');
 
     if (!root || !viewport) return;
+    destroyHeroGallery();
 
     const slideCount = root.querySelectorAll('.embla__slide').length;
     if (slideCount <= 1) return;
@@ -150,11 +158,14 @@ const galleryImages =
 
     embla.on('pointerDown', restartAutoplay);
     embla.on('settle', restartAutoplay);
+    root[HERO_GALLERY_KEY] = () => {
+      window.clearInterval(autoplayId);
+      embla.destroy();
+      delete root[HERO_GALLERY_KEY];
+    };
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHeroGallery, { once: true });
-  } else {
-    initHeroGallery();
-  }
+  initHeroGallery();
+  document.addEventListener('astro:page-load', initHeroGallery);
+  document.addEventListener('astro:before-swap', destroyHeroGallery);
 </script>

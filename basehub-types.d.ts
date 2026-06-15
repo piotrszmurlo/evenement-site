@@ -50,9 +50,9 @@ export interface Scalars {
 }))[],
     BSHBRichTextContentSchema: RichTextNode[],
     BSHBRichTextTOCSchema: RichTextTocNode[],
-    BSHBSelect__1096114087: 'available' | 'reserved' | 'sold',
-    BSHBSelect__147284365: 'dom jednorodzinny' | 'dom w zabudowie szeregowej' | 'lokal mieszkalny',
-    BSHBSelect__1495163201: 'active' | 'ended',
+    BSHBSelect_426015504: 'available' | 'reserved' | 'sold',
+    BSHBSelect__320691785: 'active' | 'ended',
+    BSHBSelect__45995339: 'dom jednorodzinny' | 'dom w zabudowie szeregowej' | 'lokal mieszkalny',
     Boolean: boolean,
     CodeSnippetLanguage: B_Language,
     DateTime: any,
@@ -61,6 +61,26 @@ export interface Scalars {
     Int: number,
     JSON: any,
     String: string,
+    bshb_workflow_1797056592: `bshb_workflow_1797056592:${string}`,
+    schema_bshb_workflow_1797056592: { timestamp: string, type: 'commit.created', data: {
+  id: string;
+  deletedAt?: string;
+  branchId: string;
+  branchLineage?: {
+    checkoutAt: string;
+    branchId: string;
+    lastSyncedAt: string
+  }[];
+  message: string;
+  createdAt: string;
+  authorId: string;
+  parentCommitId: string;
+  contributors?: string[];
+  mergeParentCommitId?: string;
+  rootBlockId: string;
+  repoId: string;
+  playgroundId?: string
+} },
 }
 
 export type AnalyticsKeyScope = 'query' | 'send'
@@ -102,7 +122,7 @@ export interface BlockColor {
     __typename: 'BlockColor'
 }
 
-export type BlockDocument = (Content | Gallery | Gallery_1 | Investments | InwestycjaComponent | LokalComponent | PriceHistory | Units | WpisCenyComponent | ZdjCieInwestycjiComponent | ZdjCieLokaluComponent | _AgentStart | inwestycjaComponent_AsList | lokalComponent_AsList | wpisCenyComponent_AsList | zdjCieInwestycjiComponent_AsList | zdjCieLokaluComponent_AsList) & { __isUnion?: true }
+export type BlockDocument = (CloudflareWebhook | Content | DeveloperComponent | ElementGaleriiComponent | Gallery | GalleryItem | Gallery_1 | InvestmentAddressComponent | Investments | InwestycjaComponent | LokalDomComponent | PriceHistory | RegisteredAddressComponent | SalesOfficeAddressComponent | Units | WpisHistoriiCenyComponent | _AgentStart | developerComponent_AsList | elementGaleriiComponent_AsList | galleryItem_AsList | investmentAddressComponent_AsList | inwestycjaComponent_AsList | lokalDomComponent_AsList | registeredAddressComponent_AsList | salesOfficeAddressComponent_AsList | wpisHistoriiCenyComponent_AsList) & { __isUnion?: true }
 
 export interface BlockDocumentSys {
     apiNamePath: Scalars['String']
@@ -161,7 +181,7 @@ export interface BlockImage {
     __typename: 'BlockImage'
 }
 
-export type BlockList = (Gallery | Gallery_1 | Investments | PriceHistory | Units | inwestycjaComponent_AsList | lokalComponent_AsList | wpisCenyComponent_AsList | zdjCieInwestycjiComponent_AsList | zdjCieLokaluComponent_AsList) & { __isUnion?: true }
+export type BlockList = (Gallery | Gallery_1 | Investments | PriceHistory | Units | developerComponent_AsList | elementGaleriiComponent_AsList | galleryItem_AsList | investmentAddressComponent_AsList | inwestycjaComponent_AsList | lokalDomComponent_AsList | registeredAddressComponent_AsList | salesOfficeAddressComponent_AsList | wpisHistoriiCenyComponent_AsList) & { __isUnion?: true }
 
 export interface BlockOgImage {
     height: Scalars['Int']
@@ -188,6 +208,19 @@ export interface BlockVideo {
     __typename: 'BlockVideo'
 }
 
+export interface CloudflareWebhook {
+    _analyticsKey: Scalars['String']
+    _dashboardUrl: Scalars['String']
+    _id: Scalars['String']
+    _idPath: Scalars['String']
+    _slug: Scalars['String']
+    _slugPath: Scalars['String']
+    _sys: BlockDocumentSys
+    _title: Scalars['String']
+    untitled: Untitled
+    __typename: 'CloudflareWebhook'
+}
+
 export interface Content {
     _analyticsKey: Scalars['String']
     _dashboardUrl: Scalars['String']
@@ -197,6 +230,7 @@ export interface Content {
     _slugPath: Scalars['String']
     _sys: BlockDocumentSys
     _title: Scalars['String']
+    developer: DeveloperComponent
     homepageImage1: (BlockImage | null)
     homepageImage2: (BlockImage | null)
     homepageImage3: (BlockImage | null)
@@ -221,6 +255,53 @@ export interface DescriptionRichText {
     __typename: 'DescriptionRichText'
 }
 
+export interface DeveloperComponent {
+    _analyticsKey: Scalars['String']
+    _dashboardUrl: Scalars['String']
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight: (SearchHighlight[] | null)
+    _id: Scalars['String']
+    _idPath: Scalars['String']
+    _slug: Scalars['String']
+    _slugPath: Scalars['String']
+    _sys: BlockDocumentSys
+    _title: Scalars['String']
+    additionalSalesLocations: (Scalars['String'] | null)
+    buyerContactMethod: (Scalars['String'] | null)
+    ceidgNumber: (Scalars['String'] | null)
+    email: Scalars['String']
+    fax: (Scalars['String'] | null)
+    krsNumber: (Scalars['String'] | null)
+    legalForm: (Scalars['String'] | null)
+    name: Scalars['String']
+    nip: (Scalars['String'] | null)
+    phone: Scalars['String']
+    registeredAddress: RegisteredAddressComponent
+    regon: (Scalars['String'] | null)
+    salesOfficeAddress: SalesOfficeAddressComponent
+    websiteUrl: (Scalars['String'] | null)
+    __typename: 'DeveloperComponent'
+}
+
+export type DeveloperComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'additionalSalesLocations__ASC' | 'additionalSalesLocations__DESC' | 'buyerContactMethod__ASC' | 'buyerContactMethod__DESC' | 'ceidgNumber__ASC' | 'ceidgNumber__DESC' | 'email__ASC' | 'email__DESC' | 'fax__ASC' | 'fax__DESC' | 'krsNumber__ASC' | 'krsNumber__DESC' | 'legalForm__ASC' | 'legalForm__DESC' | 'name__ASC' | 'name__DESC' | 'nip__ASC' | 'nip__DESC' | 'phone__ASC' | 'phone__DESC' | 'registeredAddress__ASC' | 'registeredAddress__DESC' | 'regon__ASC' | 'regon__DESC' | 'salesOfficeAddress__ASC' | 'salesOfficeAddress__DESC' | 'untitled__ASC' | 'untitled__DESC' | 'websiteUrl__ASC' | 'websiteUrl__DESC'
+
+export interface ElementGaleriiComponent {
+    _analyticsKey: Scalars['String']
+    _dashboardUrl: Scalars['String']
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight: (SearchHighlight[] | null)
+    _id: Scalars['String']
+    _idPath: Scalars['String']
+    _slug: Scalars['String']
+    _slugPath: Scalars['String']
+    _sys: BlockDocumentSys
+    _title: Scalars['String']
+    image: BlockImage
+    __typename: 'ElementGaleriiComponent'
+}
+
+export type ElementGaleriiComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'image__ASC' | 'image__DESC'
+
 export interface Gallery {
     _analyticsKey: Scalars['String']
     _dashboardUrl: Scalars['String']
@@ -234,11 +315,28 @@ export interface Gallery {
     _sys: BlockDocumentSys
     _title: Scalars['String']
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item: (ZdjCieLokaluComponent | null)
+    item: (GalleryItem | null)
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items: ZdjCieLokaluComponent[]
+    items: GalleryItem[]
     __typename: 'Gallery'
 }
+
+export interface GalleryItem {
+    _analyticsKey: Scalars['String']
+    _dashboardUrl: Scalars['String']
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight: (SearchHighlight[] | null)
+    _id: Scalars['String']
+    _idPath: Scalars['String']
+    _slug: Scalars['String']
+    _slugPath: Scalars['String']
+    _sys: BlockDocumentSys
+    _title: Scalars['String']
+    image: BlockImage
+    __typename: 'GalleryItem'
+}
+
+export type GalleryItemOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'image__ASC' | 'image__DESC'
 
 export interface Gallery_1 {
     _analyticsKey: Scalars['String']
@@ -253,9 +351,9 @@ export interface Gallery_1 {
     _sys: BlockDocumentSys
     _title: Scalars['String']
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item: (ZdjCieInwestycjiComponent | null)
+    item: (ElementGaleriiComponent | null)
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items: ZdjCieInwestycjiComponent[]
+    items: ElementGaleriiComponent[]
     __typename: 'Gallery_1'
 }
 
@@ -264,6 +362,30 @@ export interface GetUploadSignedURL {
     uploadURL: Scalars['String']
     __typename: 'GetUploadSignedURL'
 }
+
+export interface InvestmentAddressComponent {
+    _analyticsKey: Scalars['String']
+    _dashboardUrl: Scalars['String']
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight: (SearchHighlight[] | null)
+    _id: Scalars['String']
+    _idPath: Scalars['String']
+    _slug: Scalars['String']
+    _slugPath: Scalars['String']
+    _sys: BlockDocumentSys
+    _title: Scalars['String']
+    buildingNumber: Scalars['String']
+    city: Scalars['String']
+    county: Scalars['String']
+    municipality: Scalars['String']
+    postalCode: Scalars['String']
+    street: Scalars['String']
+    unitNumber: (Scalars['String'] | null)
+    voivodeship: Scalars['String']
+    __typename: 'InvestmentAddressComponent'
+}
+
+export type InvestmentAddressComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'buildingNumber__ASC' | 'buildingNumber__DESC' | 'city__ASC' | 'city__DESC' | 'county__ASC' | 'county__DESC' | 'municipality__ASC' | 'municipality__DESC' | 'postalCode__ASC' | 'postalCode__DESC' | 'street__ASC' | 'street__DESC' | 'unitNumber__ASC' | 'unitNumber__DESC' | 'voivodeship__ASC' | 'voivodeship__DESC'
 
 export interface Investments {
     _analyticsKey: Scalars['String']
@@ -296,18 +418,26 @@ export interface InwestycjaComponent {
     _sys: BlockDocumentSys
     _title: Scalars['String']
     description: Description
-    gallery: Gallery_1
+    gallery: Gallery
+    governmentDatasetDescription: (Scalars['String'] | null)
+    governmentDatasetExtIdent: (Scalars['String'] | null)
+    governmentDatasetTitle: (Scalars['String'] | null)
+    investmentAddress: InvestmentAddressComponent
+    isReportedToGovernment: Scalars['Boolean']
     locationAddress: Scalars['String']
     name: Scalars['String']
     prospectusFile: (BlockFile | null)
-    salesStatus: Scalars['BSHBSelect__1495163201']
+    /** ISO 8601 date string. */
+    salesEndedAt: (Scalars['String'] | null)
+    salesEndedNote: (Scalars['String'] | null)
+    salesStatus: Scalars['BSHBSelect__320691785']
     slug: Scalars['String']
     summary: Scalars['String']
     units: Units
     __typename: 'InwestycjaComponent'
 }
 
-export type InwestycjaComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'description__ASC' | 'description__DESC' | 'gallery__ASC' | 'gallery__DESC' | 'locationAddress__ASC' | 'locationAddress__DESC' | 'name__ASC' | 'name__DESC' | 'prospectusFile__ASC' | 'prospectusFile__DESC' | 'salesStatus__ASC' | 'salesStatus__DESC' | 'slug__ASC' | 'slug__DESC' | 'summary__ASC' | 'summary__DESC' | 'units__ASC' | 'units__DESC'
+export type InwestycjaComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'description__ASC' | 'description__DESC' | 'gallery__ASC' | 'gallery__DESC' | 'governmentDatasetDescription__ASC' | 'governmentDatasetDescription__DESC' | 'governmentDatasetExtIdent__ASC' | 'governmentDatasetExtIdent__DESC' | 'governmentDatasetTitle__ASC' | 'governmentDatasetTitle__DESC' | 'investmentAddress__ASC' | 'investmentAddress__DESC' | 'isReportedToGovernment__ASC' | 'isReportedToGovernment__DESC' | 'locationAddress__ASC' | 'locationAddress__DESC' | 'name__ASC' | 'name__DESC' | 'prospectusFile__ASC' | 'prospectusFile__DESC' | 'salesEndedAt__ASC' | 'salesEndedAt__DESC' | 'salesEndedNote__ASC' | 'salesEndedNote__DESC' | 'salesStatus__ASC' | 'salesStatus__DESC' | 'slug__ASC' | 'slug__DESC' | 'summary__ASC' | 'summary__DESC' | 'units__ASC' | 'units__DESC'
 
 export interface ListMeta {
     /** Number of items after applying filters but before pagination */
@@ -317,7 +447,7 @@ export interface ListMeta {
     __typename: 'ListMeta'
 }
 
-export interface LokalComponent {
+export interface LokalDomComponent {
     _analyticsKey: Scalars['String']
     _dashboardUrl: Scalars['String']
     /** Array of search highlight information with field names and HTML markup */
@@ -329,20 +459,23 @@ export interface LokalComponent {
     _sys: BlockDocumentSys
     _title: Scalars['String']
     description: Scalars['String']
-    gallery: Gallery
+    floor: (Scalars['Float'] | null)
+    gallery: Gallery_1
+    governmentReportingEnabled: Scalars['Boolean']
+    includedInPriceNotes: (Scalars['String'] | null)
     plotAreaM2: Scalars['Float']
     priceHistory: PriceHistory
-    propertyType: Scalars['BSHBSelect__147284365']
+    propertyType: Scalars['BSHBSelect__45995339']
     rooms: Scalars['Float']
     shortDescription: Scalars['String']
     slug: Scalars['String']
-    status: Scalars['BSHBSelect__1096114087']
+    status: Scalars['BSHBSelect_426015504']
     unitNumber: Scalars['String']
     usableAreaM2: Scalars['Float']
-    __typename: 'LokalComponent'
+    __typename: 'LokalDomComponent'
 }
 
-export type LokalComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'description__ASC' | 'description__DESC' | 'gallery__ASC' | 'gallery__DESC' | 'plotAreaM2__ASC' | 'plotAreaM2__DESC' | 'priceHistory__ASC' | 'priceHistory__DESC' | 'propertyType__ASC' | 'propertyType__DESC' | 'rooms__ASC' | 'rooms__DESC' | 'shortDescription__ASC' | 'shortDescription__DESC' | 'slug__ASC' | 'slug__DESC' | 'status__ASC' | 'status__DESC' | 'unitNumber__ASC' | 'unitNumber__DESC' | 'usableAreaM2__ASC' | 'usableAreaM2__DESC'
+export type LokalDomComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'description__ASC' | 'description__DESC' | 'floor__ASC' | 'floor__DESC' | 'gallery__ASC' | 'gallery__DESC' | 'governmentReportingEnabled__ASC' | 'governmentReportingEnabled__DESC' | 'includedInPriceNotes__ASC' | 'includedInPriceNotes__DESC' | 'plotAreaM2__ASC' | 'plotAreaM2__DESC' | 'priceHistory__ASC' | 'priceHistory__DESC' | 'propertyType__ASC' | 'propertyType__DESC' | 'rooms__ASC' | 'rooms__DESC' | 'shortDescription__ASC' | 'shortDescription__DESC' | 'slug__ASC' | 'slug__DESC' | 'status__ASC' | 'status__DESC' | 'unitNumber__ASC' | 'unitNumber__DESC' | 'usableAreaM2__ASC' | 'usableAreaM2__DESC'
 
 export type MediaBlock = (BlockAudio | BlockFile | BlockImage | BlockVideo) & { __isUnion?: true }
 
@@ -394,9 +527,9 @@ export interface PriceHistory {
     _sys: BlockDocumentSys
     _title: Scalars['String']
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item: (WpisCenyComponent | null)
+    item: (WpisHistoriiCenyComponent | null)
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items: WpisCenyComponent[]
+    items: WpisHistoriiCenyComponent[]
     __typename: 'PriceHistory'
 }
 
@@ -411,9 +544,34 @@ export interface Query {
     /** The structure of the repository. Used by START. */
     _structure: Scalars['JSON']
     _sys: RepoSys
+    cloudflareWebhook: CloudflareWebhook
     content: Content
     __typename: 'Query'
 }
+
+export interface RegisteredAddressComponent {
+    _analyticsKey: Scalars['String']
+    _dashboardUrl: Scalars['String']
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight: (SearchHighlight[] | null)
+    _id: Scalars['String']
+    _idPath: Scalars['String']
+    _slug: Scalars['String']
+    _slugPath: Scalars['String']
+    _sys: BlockDocumentSys
+    _title: Scalars['String']
+    buildingNumber: Scalars['String']
+    city: Scalars['String']
+    county: Scalars['String']
+    municipality: Scalars['String']
+    postalCode: Scalars['String']
+    street: Scalars['String']
+    unitNumber: (Scalars['String'] | null)
+    voivodeship: Scalars['String']
+    __typename: 'RegisteredAddressComponent'
+}
+
+export type RegisteredAddressComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'buildingNumber__ASC' | 'buildingNumber__DESC' | 'city__ASC' | 'city__DESC' | 'county__ASC' | 'county__DESC' | 'municipality__ASC' | 'municipality__DESC' | 'postalCode__ASC' | 'postalCode__DESC' | 'street__ASC' | 'street__DESC' | 'unitNumber__ASC' | 'unitNumber__DESC' | 'voivodeship__ASC' | 'voivodeship__DESC'
 
 export interface RepoSys {
     branches: _Branches
@@ -428,6 +586,30 @@ export interface RepoSys {
 }
 
 export type RichTextJson = (BaseRichTextJson | DescriptionRichText) & { __isUnion?: true }
+
+export interface SalesOfficeAddressComponent {
+    _analyticsKey: Scalars['String']
+    _dashboardUrl: Scalars['String']
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight: (SearchHighlight[] | null)
+    _id: Scalars['String']
+    _idPath: Scalars['String']
+    _slug: Scalars['String']
+    _slugPath: Scalars['String']
+    _sys: BlockDocumentSys
+    _title: Scalars['String']
+    buildingNumber: Scalars['String']
+    city: Scalars['String']
+    county: Scalars['String']
+    municipality: Scalars['String']
+    postalCode: Scalars['String']
+    street: Scalars['String']
+    unitNumber: (Scalars['String'] | null)
+    voivodeship: Scalars['String']
+    __typename: 'SalesOfficeAddressComponent'
+}
+
+export type SalesOfficeAddressComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'buildingNumber__ASC' | 'buildingNumber__DESC' | 'city__ASC' | 'city__DESC' | 'county__ASC' | 'county__DESC' | 'municipality__ASC' | 'municipality__DESC' | 'postalCode__ASC' | 'postalCode__DESC' | 'street__ASC' | 'street__DESC' | 'unitNumber__ASC' | 'unitNumber__DESC' | 'voivodeship__ASC' | 'voivodeship__DESC'
 
 export interface SearchHighlight {
     /** The field/path that was matched (e.g., "title", "body.content") */
@@ -463,10 +645,16 @@ export interface Units {
     _sys: BlockDocumentSys
     _title: Scalars['String']
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item: (LokalComponent | null)
+    item: (LokalDomComponent | null)
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items: LokalComponent[]
+    items: LokalDomComponent[]
     __typename: 'Units'
+}
+
+export interface Untitled {
+    /** The `webhookSecret` is used to verify the authenticity of the webhook request, and also to type the payload. */
+    webhookSecret: Scalars['bshb_workflow_1797056592']
+    __typename: 'Untitled'
 }
 
 export interface Variant {
@@ -478,7 +666,7 @@ export interface Variant {
     __typename: 'Variant'
 }
 
-export interface WpisCenyComponent {
+export interface WpisHistoriiCenyComponent {
     _analyticsKey: Scalars['String']
     _dashboardUrl: Scalars['String']
     /** Array of search highlight information with field names and HTML markup */
@@ -489,47 +677,18 @@ export interface WpisCenyComponent {
     _slugPath: Scalars['String']
     _sys: BlockDocumentSys
     _title: Scalars['String']
-    totalPrice: Scalars['Float']
+    baseTotalPrice: Scalars['Float']
+    correctionOfPreviousEntry: Scalars['Boolean']
+    note: (Scalars['String'] | null)
+    pricePerM2: Scalars['Float']
+    totalPriceWithComponents: (Scalars['Float'] | null)
     /** ISO 8601 date string. */
     validFrom: Scalars['String']
-    __typename: 'WpisCenyComponent'
+    vatIncluded: Scalars['Boolean']
+    __typename: 'WpisHistoriiCenyComponent'
 }
 
-export type WpisCenyComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'totalPrice__ASC' | 'totalPrice__DESC' | 'validFrom__ASC' | 'validFrom__DESC'
-
-export interface ZdjCieInwestycjiComponent {
-    _analyticsKey: Scalars['String']
-    _dashboardUrl: Scalars['String']
-    /** Array of search highlight information with field names and HTML markup */
-    _highlight: (SearchHighlight[] | null)
-    _id: Scalars['String']
-    _idPath: Scalars['String']
-    _slug: Scalars['String']
-    _slugPath: Scalars['String']
-    _sys: BlockDocumentSys
-    _title: Scalars['String']
-    image: BlockImage
-    __typename: 'ZdjCieInwestycjiComponent'
-}
-
-export type ZdjCieInwestycjiComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'image__ASC' | 'image__DESC'
-
-export interface ZdjCieLokaluComponent {
-    _analyticsKey: Scalars['String']
-    _dashboardUrl: Scalars['String']
-    /** Array of search highlight information with field names and HTML markup */
-    _highlight: (SearchHighlight[] | null)
-    _id: Scalars['String']
-    _idPath: Scalars['String']
-    _slug: Scalars['String']
-    _slugPath: Scalars['String']
-    _sys: BlockDocumentSys
-    _title: Scalars['String']
-    image: BlockImage
-    __typename: 'ZdjCieLokaluComponent'
-}
-
-export type ZdjCieLokaluComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'image__ASC' | 'image__DESC'
+export type WpisHistoriiCenyComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'baseTotalPrice__ASC' | 'baseTotalPrice__DESC' | 'correctionOfPreviousEntry__ASC' | 'correctionOfPreviousEntry__DESC' | 'note__ASC' | 'note__DESC' | 'pricePerM2__ASC' | 'pricePerM2__DESC' | 'totalPriceWithComponents__ASC' | 'totalPriceWithComponents__DESC' | 'validFrom__ASC' | 'validFrom__DESC' | 'vatIncluded__ASC' | 'vatIncluded__DESC'
 
 export interface _AgentStart {
     _agentKey: Scalars['String']
@@ -631,12 +790,92 @@ export interface _agents {
 }
 
 export interface _components {
+    developer: developerComponent_AsList
+    elementGalerii: elementGaleriiComponent_AsList
+    galleryItem: galleryItem_AsList
+    investmentAddress: investmentAddressComponent_AsList
     inwestycja: inwestycjaComponent_AsList
-    lokal: lokalComponent_AsList
-    wpisCeny: wpisCenyComponent_AsList
-    zdjCieInwestycji: zdjCieInwestycjiComponent_AsList
-    zdjCieLokalu: zdjCieLokaluComponent_AsList
+    lokalDom: lokalDomComponent_AsList
+    registeredAddress: registeredAddressComponent_AsList
+    salesOfficeAddress: salesOfficeAddressComponent_AsList
+    wpisHistoriiCeny: wpisHistoriiCenyComponent_AsList
     __typename: '_components'
+}
+
+export interface developerComponent_AsList {
+    _analyticsKey: Scalars['String']
+    _dashboardUrl: Scalars['String']
+    _id: Scalars['String']
+    _idPath: Scalars['String']
+    _meta: ListMeta
+    /** The key used to search from the frontend. */
+    _searchKey: Scalars['String']
+    _slug: Scalars['String']
+    _slugPath: Scalars['String']
+    _sys: BlockDocumentSys
+    _title: Scalars['String']
+    /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
+    item: (DeveloperComponent | null)
+    /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
+    items: DeveloperComponent[]
+    __typename: 'developerComponent_AsList'
+}
+
+export interface elementGaleriiComponent_AsList {
+    _analyticsKey: Scalars['String']
+    _dashboardUrl: Scalars['String']
+    _id: Scalars['String']
+    _idPath: Scalars['String']
+    _meta: ListMeta
+    /** The key used to search from the frontend. */
+    _searchKey: Scalars['String']
+    _slug: Scalars['String']
+    _slugPath: Scalars['String']
+    _sys: BlockDocumentSys
+    _title: Scalars['String']
+    /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
+    item: (ElementGaleriiComponent | null)
+    /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
+    items: ElementGaleriiComponent[]
+    __typename: 'elementGaleriiComponent_AsList'
+}
+
+export interface galleryItem_AsList {
+    _analyticsKey: Scalars['String']
+    _dashboardUrl: Scalars['String']
+    _id: Scalars['String']
+    _idPath: Scalars['String']
+    _meta: ListMeta
+    /** The key used to search from the frontend. */
+    _searchKey: Scalars['String']
+    _slug: Scalars['String']
+    _slugPath: Scalars['String']
+    _sys: BlockDocumentSys
+    _title: Scalars['String']
+    /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
+    item: (GalleryItem | null)
+    /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
+    items: GalleryItem[]
+    __typename: 'galleryItem_AsList'
+}
+
+export interface investmentAddressComponent_AsList {
+    _analyticsKey: Scalars['String']
+    _dashboardUrl: Scalars['String']
+    _id: Scalars['String']
+    _idPath: Scalars['String']
+    _meta: ListMeta
+    /** The key used to search from the frontend. */
+    _searchKey: Scalars['String']
+    _slug: Scalars['String']
+    _slugPath: Scalars['String']
+    _sys: BlockDocumentSys
+    _title: Scalars['String']
+    /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
+    item: (InvestmentAddressComponent | null)
+    /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
+    items: InvestmentAddressComponent[]
+    __typename: 'investmentAddressComponent_AsList'
 }
 
 export interface inwestycjaComponent_AsList {
@@ -658,7 +897,7 @@ export interface inwestycjaComponent_AsList {
     __typename: 'inwestycjaComponent_AsList'
 }
 
-export interface lokalComponent_AsList {
+export interface lokalDomComponent_AsList {
     _analyticsKey: Scalars['String']
     _dashboardUrl: Scalars['String']
     _id: Scalars['String']
@@ -671,13 +910,13 @@ export interface lokalComponent_AsList {
     _sys: BlockDocumentSys
     _title: Scalars['String']
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item: (LokalComponent | null)
+    item: (LokalDomComponent | null)
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items: LokalComponent[]
-    __typename: 'lokalComponent_AsList'
+    items: LokalDomComponent[]
+    __typename: 'lokalDomComponent_AsList'
 }
 
-export interface wpisCenyComponent_AsList {
+export interface registeredAddressComponent_AsList {
     _analyticsKey: Scalars['String']
     _dashboardUrl: Scalars['String']
     _id: Scalars['String']
@@ -690,13 +929,13 @@ export interface wpisCenyComponent_AsList {
     _sys: BlockDocumentSys
     _title: Scalars['String']
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item: (WpisCenyComponent | null)
+    item: (RegisteredAddressComponent | null)
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items: WpisCenyComponent[]
-    __typename: 'wpisCenyComponent_AsList'
+    items: RegisteredAddressComponent[]
+    __typename: 'registeredAddressComponent_AsList'
 }
 
-export interface zdjCieInwestycjiComponent_AsList {
+export interface salesOfficeAddressComponent_AsList {
     _analyticsKey: Scalars['String']
     _dashboardUrl: Scalars['String']
     _id: Scalars['String']
@@ -709,13 +948,13 @@ export interface zdjCieInwestycjiComponent_AsList {
     _sys: BlockDocumentSys
     _title: Scalars['String']
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item: (ZdjCieInwestycjiComponent | null)
+    item: (SalesOfficeAddressComponent | null)
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items: ZdjCieInwestycjiComponent[]
-    __typename: 'zdjCieInwestycjiComponent_AsList'
+    items: SalesOfficeAddressComponent[]
+    __typename: 'salesOfficeAddressComponent_AsList'
 }
 
-export interface zdjCieLokaluComponent_AsList {
+export interface wpisHistoriiCenyComponent_AsList {
     _analyticsKey: Scalars['String']
     _dashboardUrl: Scalars['String']
     _id: Scalars['String']
@@ -728,10 +967,10 @@ export interface zdjCieLokaluComponent_AsList {
     _sys: BlockDocumentSys
     _title: Scalars['String']
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item: (ZdjCieLokaluComponent | null)
+    item: (WpisHistoriiCenyComponent | null)
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items: ZdjCieLokaluComponent[]
-    __typename: 'zdjCieLokaluComponent_AsList'
+    items: WpisHistoriiCenyComponent[]
+    __typename: 'wpisHistoriiCenyComponent_AsList'
 }
 
 export interface BaseRichTextJsonGenqlSelection{
@@ -792,23 +1031,32 @@ export interface BlockDocumentGenqlSelection{
     _slugPath?: boolean | number
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
+    on_CloudflareWebhook?: CloudflareWebhookGenqlSelection
     on_Content?: ContentGenqlSelection
+    on_DeveloperComponent?: DeveloperComponentGenqlSelection
+    on_ElementGaleriiComponent?: ElementGaleriiComponentGenqlSelection
     on_Gallery?: GalleryGenqlSelection
+    on_GalleryItem?: GalleryItemGenqlSelection
     on_Gallery_1?: Gallery_1GenqlSelection
+    on_InvestmentAddressComponent?: InvestmentAddressComponentGenqlSelection
     on_Investments?: InvestmentsGenqlSelection
     on_InwestycjaComponent?: InwestycjaComponentGenqlSelection
-    on_LokalComponent?: LokalComponentGenqlSelection
+    on_LokalDomComponent?: LokalDomComponentGenqlSelection
     on_PriceHistory?: PriceHistoryGenqlSelection
+    on_RegisteredAddressComponent?: RegisteredAddressComponentGenqlSelection
+    on_SalesOfficeAddressComponent?: SalesOfficeAddressComponentGenqlSelection
     on_Units?: UnitsGenqlSelection
-    on_WpisCenyComponent?: WpisCenyComponentGenqlSelection
-    on_ZdjCieInwestycjiComponent?: ZdjCieInwestycjiComponentGenqlSelection
-    on_ZdjCieLokaluComponent?: ZdjCieLokaluComponentGenqlSelection
+    on_WpisHistoriiCenyComponent?: WpisHistoriiCenyComponentGenqlSelection
     on__AgentStart?: _AgentStartGenqlSelection
+    on_developerComponent_AsList?: developerComponent_AsListGenqlSelection
+    on_elementGaleriiComponent_AsList?: elementGaleriiComponent_AsListGenqlSelection
+    on_galleryItem_AsList?: galleryItem_AsListGenqlSelection
+    on_investmentAddressComponent_AsList?: investmentAddressComponent_AsListGenqlSelection
     on_inwestycjaComponent_AsList?: inwestycjaComponent_AsListGenqlSelection
-    on_lokalComponent_AsList?: lokalComponent_AsListGenqlSelection
-    on_wpisCenyComponent_AsList?: wpisCenyComponent_AsListGenqlSelection
-    on_zdjCieInwestycjiComponent_AsList?: zdjCieInwestycjiComponent_AsListGenqlSelection
-    on_zdjCieLokaluComponent_AsList?: zdjCieLokaluComponent_AsListGenqlSelection
+    on_lokalDomComponent_AsList?: lokalDomComponent_AsListGenqlSelection
+    on_registeredAddressComponent_AsList?: registeredAddressComponent_AsListGenqlSelection
+    on_salesOfficeAddressComponent_AsList?: salesOfficeAddressComponent_AsListGenqlSelection
+    on_wpisHistoriiCenyComponent_AsList?: wpisHistoriiCenyComponent_AsListGenqlSelection
     __typename?: boolean | number
     __fragmentOn?: "BlockDocument"
 }
@@ -896,11 +1144,15 @@ export interface BlockListGenqlSelection{
     on_Investments?: InvestmentsGenqlSelection
     on_PriceHistory?: PriceHistoryGenqlSelection
     on_Units?: UnitsGenqlSelection
+    on_developerComponent_AsList?: developerComponent_AsListGenqlSelection
+    on_elementGaleriiComponent_AsList?: elementGaleriiComponent_AsListGenqlSelection
+    on_galleryItem_AsList?: galleryItem_AsListGenqlSelection
+    on_investmentAddressComponent_AsList?: investmentAddressComponent_AsListGenqlSelection
     on_inwestycjaComponent_AsList?: inwestycjaComponent_AsListGenqlSelection
-    on_lokalComponent_AsList?: lokalComponent_AsListGenqlSelection
-    on_wpisCenyComponent_AsList?: wpisCenyComponent_AsListGenqlSelection
-    on_zdjCieInwestycjiComponent_AsList?: zdjCieInwestycjiComponent_AsListGenqlSelection
-    on_zdjCieLokaluComponent_AsList?: zdjCieLokaluComponent_AsListGenqlSelection
+    on_lokalDomComponent_AsList?: lokalDomComponent_AsListGenqlSelection
+    on_registeredAddressComponent_AsList?: registeredAddressComponent_AsListGenqlSelection
+    on_salesOfficeAddressComponent_AsList?: salesOfficeAddressComponent_AsListGenqlSelection
+    on_wpisHistoriiCenyComponent_AsList?: wpisHistoriiCenyComponent_AsListGenqlSelection
     __typename?: boolean | number
     __fragmentOn?: "BlockList"
 }
@@ -947,6 +1199,26 @@ export interface BlockVideoGenqlSelection{
     __fragmentOn?: "BlockVideo"
 }
 
+export interface CloudflareWebhookGenqlSelection{
+    _analyticsKey?: { __args: {
+    /**
+     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
+     * 
+     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
+     */
+    scope?: (AnalyticsKeyScope | null)} } | boolean | number
+    _dashboardUrl?: boolean | number
+    _id?: boolean | number
+    _idPath?: boolean | number
+    _slug?: boolean | number
+    _slugPath?: boolean | number
+    _sys?: BlockDocumentSysGenqlSelection
+    _title?: boolean | number
+    untitled?: UntitledGenqlSelection
+    __typename?: boolean | number
+    __fragmentOn?: "CloudflareWebhook"
+}
+
 export interface ContentGenqlSelection{
     _analyticsKey?: { __args: {
     /**
@@ -962,6 +1234,7 @@ export interface ContentGenqlSelection{
     _slugPath?: boolean | number
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
+    developer?: DeveloperComponentGenqlSelection
     homepageImage1?: BlockImageGenqlSelection
     homepageImage2?: BlockImageGenqlSelection
     homepageImage3?: BlockImageGenqlSelection
@@ -1007,6 +1280,83 @@ export interface DescriptionRichTextGenqlSelection{
     __fragmentOn?: "DescriptionRichText"
 }
 
+export interface DeveloperComponentGenqlSelection{
+    _analyticsKey?: { __args: {
+    /**
+     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
+     * 
+     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
+     */
+    scope?: (AnalyticsKeyScope | null)} } | boolean | number
+    _dashboardUrl?: boolean | number
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight?: SearchHighlightGenqlSelection
+    _id?: boolean | number
+    _idPath?: boolean | number
+    _slug?: boolean | number
+    _slugPath?: boolean | number
+    _sys?: BlockDocumentSysGenqlSelection
+    _title?: boolean | number
+    additionalSalesLocations?: boolean | number
+    buyerContactMethod?: boolean | number
+    ceidgNumber?: boolean | number
+    email?: boolean | number
+    fax?: boolean | number
+    krsNumber?: boolean | number
+    legalForm?: boolean | number
+    name?: boolean | number
+    nip?: boolean | number
+    phone?: boolean | number
+    registeredAddress?: RegisteredAddressComponentGenqlSelection
+    regon?: boolean | number
+    salesOfficeAddress?: SalesOfficeAddressComponentGenqlSelection
+    websiteUrl?: boolean | number
+    __typename?: boolean | number
+    __fragmentOn?: "DeveloperComponent"
+}
+
+export interface DeveloperComponentFilterInput {AND?: (DeveloperComponentFilterInput | null),OR?: (DeveloperComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),additionalSalesLocations?: (StringFilter | null),buyerContactMethod?: (StringFilter | null),ceidgNumber?: (StringFilter | null),email?: (StringFilter | null),fax?: (StringFilter | null),krsNumber?: (StringFilter | null),legalForm?: (StringFilter | null),name?: (StringFilter | null),nip?: (StringFilter | null),phone?: (StringFilter | null),registeredAddress?: (DeveloperComponentFilterInput__registeredAddress | null),regon?: (StringFilter | null),salesOfficeAddress?: (DeveloperComponentFilterInput__salesOfficeAddress | null),websiteUrl?: (StringFilter | null)}
+
+export interface DeveloperComponentFilterInput__registeredAddress {_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),buildingNumber?: (StringFilter | null),city?: (StringFilter | null),county?: (StringFilter | null),municipality?: (StringFilter | null),postalCode?: (StringFilter | null),street?: (StringFilter | null),unitNumber?: (StringFilter | null),voivodeship?: (StringFilter | null)}
+
+export interface DeveloperComponentFilterInput__salesOfficeAddress {_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),buildingNumber?: (StringFilter | null),city?: (StringFilter | null),county?: (StringFilter | null),municipality?: (StringFilter | null),postalCode?: (StringFilter | null),street?: (StringFilter | null),unitNumber?: (StringFilter | null),voivodeship?: (StringFilter | null)}
+
+export interface DeveloperComponentSearchInput {
+/** Searchable fields for query */
+by?: (Scalars['String'][] | null),
+/** Search query */
+q?: (Scalars['String'] | null)}
+
+export interface ElementGaleriiComponentGenqlSelection{
+    _analyticsKey?: { __args: {
+    /**
+     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
+     * 
+     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
+     */
+    scope?: (AnalyticsKeyScope | null)} } | boolean | number
+    _dashboardUrl?: boolean | number
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight?: SearchHighlightGenqlSelection
+    _id?: boolean | number
+    _idPath?: boolean | number
+    _slug?: boolean | number
+    _slugPath?: boolean | number
+    _sys?: BlockDocumentSysGenqlSelection
+    _title?: boolean | number
+    image?: BlockImageGenqlSelection
+    __typename?: boolean | number
+    __fragmentOn?: "ElementGaleriiComponent"
+}
+
+export interface ElementGaleriiComponentFilterInput {AND?: (ElementGaleriiComponentFilterInput | null),OR?: (ElementGaleriiComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null)}
+
+export interface ElementGaleriiComponentSearchInput {
+/** Searchable fields for query */
+by?: (Scalars['String'][] | null),
+/** Search query */
+q?: (Scalars['String'] | null)}
+
 export interface GalleryGenqlSelection{
     _analyticsKey?: { __args: {
     /**
@@ -1026,12 +1376,42 @@ export interface GalleryGenqlSelection{
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item?: ZdjCieLokaluComponentGenqlSelection
+    item?: GalleryItemGenqlSelection
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items?: ZdjCieLokaluComponentGenqlSelection
+    items?: GalleryItemGenqlSelection
     __typename?: boolean | number
     __fragmentOn?: "Gallery"
 }
+
+export interface GalleryItemGenqlSelection{
+    _analyticsKey?: { __args: {
+    /**
+     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
+     * 
+     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
+     */
+    scope?: (AnalyticsKeyScope | null)} } | boolean | number
+    _dashboardUrl?: boolean | number
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight?: SearchHighlightGenqlSelection
+    _id?: boolean | number
+    _idPath?: boolean | number
+    _slug?: boolean | number
+    _slugPath?: boolean | number
+    _sys?: BlockDocumentSysGenqlSelection
+    _title?: boolean | number
+    image?: BlockImageGenqlSelection
+    __typename?: boolean | number
+    __fragmentOn?: "GalleryItem"
+}
+
+export interface GalleryItemFilterInput {AND?: (GalleryItemFilterInput | null),OR?: (GalleryItemFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null)}
+
+export interface GalleryItemSearchInput {
+/** Searchable fields for query */
+by?: (Scalars['String'][] | null),
+/** Search query */
+q?: (Scalars['String'] | null)}
 
 export interface Gallery_1GenqlSelection{
     _analyticsKey?: { __args: {
@@ -1052,9 +1432,9 @@ export interface Gallery_1GenqlSelection{
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item?: ZdjCieInwestycjiComponentGenqlSelection
+    item?: ElementGaleriiComponentGenqlSelection
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items?: ZdjCieInwestycjiComponentGenqlSelection
+    items?: ElementGaleriiComponentGenqlSelection
     __typename?: boolean | number
     __fragmentOn?: "Gallery_1"
 }
@@ -1065,6 +1445,43 @@ export interface GetUploadSignedURLGenqlSelection{
     __typename?: boolean | number
     __fragmentOn?: "GetUploadSignedURL"
 }
+
+export interface InvestmentAddressComponentGenqlSelection{
+    _analyticsKey?: { __args: {
+    /**
+     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
+     * 
+     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
+     */
+    scope?: (AnalyticsKeyScope | null)} } | boolean | number
+    _dashboardUrl?: boolean | number
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight?: SearchHighlightGenqlSelection
+    _id?: boolean | number
+    _idPath?: boolean | number
+    _slug?: boolean | number
+    _slugPath?: boolean | number
+    _sys?: BlockDocumentSysGenqlSelection
+    _title?: boolean | number
+    buildingNumber?: boolean | number
+    city?: boolean | number
+    county?: boolean | number
+    municipality?: boolean | number
+    postalCode?: boolean | number
+    street?: boolean | number
+    unitNumber?: boolean | number
+    voivodeship?: boolean | number
+    __typename?: boolean | number
+    __fragmentOn?: "InvestmentAddressComponent"
+}
+
+export interface InvestmentAddressComponentFilterInput {AND?: (InvestmentAddressComponentFilterInput | null),OR?: (InvestmentAddressComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),buildingNumber?: (StringFilter | null),city?: (StringFilter | null),county?: (StringFilter | null),municipality?: (StringFilter | null),postalCode?: (StringFilter | null),street?: (StringFilter | null),unitNumber?: (StringFilter | null),voivodeship?: (StringFilter | null)}
+
+export interface InvestmentAddressComponentSearchInput {
+/** Searchable fields for query */
+by?: (Scalars['String'][] | null),
+/** Search query */
+q?: (Scalars['String'] | null)}
 
 export interface InvestmentsGenqlSelection{
     _analyticsKey?: { __args: {
@@ -1110,39 +1527,49 @@ export interface InwestycjaComponentGenqlSelection{
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
     description?: DescriptionGenqlSelection
-    gallery?: (Gallery_1GenqlSelection & { __args?: {
+    gallery?: (GalleryGenqlSelection & { __args?: {
     /** Filter by a field. */
-    filter?: (ZdjCieInwestycjiComponentFilterInput | null), 
+    filter?: (GalleryItemFilterInput | null), 
     /** Limit the number of items returned. Defaults to 500. */
     first?: (Scalars['Int'] | null), 
     /** Order by a field. */
-    orderBy?: (ZdjCieInwestycjiComponentOrderByEnum | null), 
+    orderBy?: (GalleryItemOrderByEnum | null), 
     /** Search configuration */
-    search?: (ZdjCieInwestycjiComponentSearchInput | null), 
+    search?: (GalleryItemSearchInput | null), 
     /** Skip the first n items. */
     skip?: (Scalars['Int'] | null)} })
+    governmentDatasetDescription?: boolean | number
+    governmentDatasetExtIdent?: boolean | number
+    governmentDatasetTitle?: boolean | number
+    investmentAddress?: InvestmentAddressComponentGenqlSelection
+    isReportedToGovernment?: boolean | number
     locationAddress?: boolean | number
     name?: boolean | number
     prospectusFile?: BlockFileGenqlSelection
+    /** ISO 8601 date string. */
+    salesEndedAt?: boolean | number
+    salesEndedNote?: boolean | number
     salesStatus?: boolean | number
     slug?: boolean | number
     summary?: boolean | number
     units?: (UnitsGenqlSelection & { __args?: {
     /** Filter by a field. */
-    filter?: (LokalComponentFilterInput | null), 
+    filter?: (LokalDomComponentFilterInput | null), 
     /** Limit the number of items returned. Defaults to 500. */
     first?: (Scalars['Int'] | null), 
     /** Order by a field. */
-    orderBy?: (LokalComponentOrderByEnum | null), 
+    orderBy?: (LokalDomComponentOrderByEnum | null), 
     /** Search configuration */
-    search?: (LokalComponentSearchInput | null), 
+    search?: (LokalDomComponentSearchInput | null), 
     /** Skip the first n items. */
     skip?: (Scalars['Int'] | null)} })
     __typename?: boolean | number
     __fragmentOn?: "InwestycjaComponent"
 }
 
-export interface InwestycjaComponentFilterInput {AND?: (InwestycjaComponentFilterInput | null),OR?: (InwestycjaComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),gallery?: (ListFilter | null),locationAddress?: (StringFilter | null),name?: (StringFilter | null),salesStatus?: (SelectFilter | null),slug?: (StringFilter | null),summary?: (StringFilter | null),units?: (ListFilter | null)}
+export interface InwestycjaComponentFilterInput {AND?: (InwestycjaComponentFilterInput | null),OR?: (InwestycjaComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),gallery?: (ListFilter | null),governmentDatasetDescription?: (StringFilter | null),governmentDatasetExtIdent?: (StringFilter | null),governmentDatasetTitle?: (StringFilter | null),investmentAddress?: (InwestycjaComponentFilterInput__investmentAddress | null),isReportedToGovernment?: (Scalars['Boolean'] | null),locationAddress?: (StringFilter | null),name?: (StringFilter | null),salesEndedAt?: (DateFilter | null),salesEndedNote?: (StringFilter | null),salesStatus?: (SelectFilter | null),slug?: (StringFilter | null),summary?: (StringFilter | null),units?: (ListFilter | null)}
+
+export interface InwestycjaComponentFilterInput__investmentAddress {_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),buildingNumber?: (StringFilter | null),city?: (StringFilter | null),county?: (StringFilter | null),municipality?: (StringFilter | null),postalCode?: (StringFilter | null),street?: (StringFilter | null),unitNumber?: (StringFilter | null),voivodeship?: (StringFilter | null)}
 
 export interface InwestycjaComponentSearchInput {
 /** Searchable fields for query */
@@ -1161,7 +1588,7 @@ export interface ListMetaGenqlSelection{
     __fragmentOn?: "ListMeta"
 }
 
-export interface LokalComponentGenqlSelection{
+export interface LokalDomComponentGenqlSelection{
     _analyticsKey?: { __args: {
     /**
      * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
@@ -1179,27 +1606,30 @@ export interface LokalComponentGenqlSelection{
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
     description?: boolean | number
-    gallery?: (GalleryGenqlSelection & { __args?: {
+    floor?: boolean | number
+    gallery?: (Gallery_1GenqlSelection & { __args?: {
     /** Filter by a field. */
-    filter?: (ZdjCieLokaluComponentFilterInput | null), 
+    filter?: (ElementGaleriiComponentFilterInput | null), 
     /** Limit the number of items returned. Defaults to 500. */
     first?: (Scalars['Int'] | null), 
     /** Order by a field. */
-    orderBy?: (ZdjCieLokaluComponentOrderByEnum | null), 
+    orderBy?: (ElementGaleriiComponentOrderByEnum | null), 
     /** Search configuration */
-    search?: (ZdjCieLokaluComponentSearchInput | null), 
+    search?: (ElementGaleriiComponentSearchInput | null), 
     /** Skip the first n items. */
     skip?: (Scalars['Int'] | null)} })
+    governmentReportingEnabled?: boolean | number
+    includedInPriceNotes?: boolean | number
     plotAreaM2?: boolean | number
     priceHistory?: (PriceHistoryGenqlSelection & { __args?: {
     /** Filter by a field. */
-    filter?: (WpisCenyComponentFilterInput | null), 
+    filter?: (WpisHistoriiCenyComponentFilterInput | null), 
     /** Limit the number of items returned. Defaults to 500. */
     first?: (Scalars['Int'] | null), 
     /** Order by a field. */
-    orderBy?: (WpisCenyComponentOrderByEnum | null), 
+    orderBy?: (WpisHistoriiCenyComponentOrderByEnum | null), 
     /** Search configuration */
-    search?: (WpisCenyComponentSearchInput | null), 
+    search?: (WpisHistoriiCenyComponentSearchInput | null), 
     /** Skip the first n items. */
     skip?: (Scalars['Int'] | null)} })
     propertyType?: boolean | number
@@ -1210,12 +1640,12 @@ export interface LokalComponentGenqlSelection{
     unitNumber?: boolean | number
     usableAreaM2?: boolean | number
     __typename?: boolean | number
-    __fragmentOn?: "LokalComponent"
+    __fragmentOn?: "LokalDomComponent"
 }
 
-export interface LokalComponentFilterInput {AND?: (LokalComponentFilterInput | null),OR?: (LokalComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),description?: (StringFilter | null),gallery?: (ListFilter | null),plotAreaM2?: (NumberFilter | null),priceHistory?: (ListFilter | null),propertyType?: (SelectFilter | null),rooms?: (NumberFilter | null),shortDescription?: (StringFilter | null),slug?: (StringFilter | null),status?: (SelectFilter | null),unitNumber?: (StringFilter | null),usableAreaM2?: (NumberFilter | null)}
+export interface LokalDomComponentFilterInput {AND?: (LokalDomComponentFilterInput | null),OR?: (LokalDomComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),description?: (StringFilter | null),floor?: (NumberFilter | null),gallery?: (ListFilter | null),governmentReportingEnabled?: (Scalars['Boolean'] | null),includedInPriceNotes?: (StringFilter | null),plotAreaM2?: (NumberFilter | null),priceHistory?: (ListFilter | null),propertyType?: (SelectFilter | null),rooms?: (NumberFilter | null),shortDescription?: (StringFilter | null),slug?: (StringFilter | null),status?: (SelectFilter | null),unitNumber?: (StringFilter | null),usableAreaM2?: (NumberFilter | null)}
 
-export interface LokalComponentSearchInput {
+export interface LokalDomComponentSearchInput {
 /** Searchable fields for query */
 by?: (Scalars['String'][] | null),
 /** Search query */
@@ -1324,9 +1754,9 @@ export interface PriceHistoryGenqlSelection{
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item?: WpisCenyComponentGenqlSelection
+    item?: WpisHistoriiCenyComponentGenqlSelection
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items?: WpisCenyComponentGenqlSelection
+    items?: WpisHistoriiCenyComponentGenqlSelection
     __typename?: boolean | number
     __fragmentOn?: "PriceHistory"
 }
@@ -1358,10 +1788,48 @@ export interface QueryGenqlSelection{
     /** Whether to include type options in the structure. */
     withTypeOptions?: (Scalars['Boolean'] | null)} } | boolean | number
     _sys?: RepoSysGenqlSelection
+    cloudflareWebhook?: CloudflareWebhookGenqlSelection
     content?: ContentGenqlSelection
     __typename?: boolean | number
     __fragmentOn?: "Query"
 }
+
+export interface RegisteredAddressComponentGenqlSelection{
+    _analyticsKey?: { __args: {
+    /**
+     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
+     * 
+     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
+     */
+    scope?: (AnalyticsKeyScope | null)} } | boolean | number
+    _dashboardUrl?: boolean | number
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight?: SearchHighlightGenqlSelection
+    _id?: boolean | number
+    _idPath?: boolean | number
+    _slug?: boolean | number
+    _slugPath?: boolean | number
+    _sys?: BlockDocumentSysGenqlSelection
+    _title?: boolean | number
+    buildingNumber?: boolean | number
+    city?: boolean | number
+    county?: boolean | number
+    municipality?: boolean | number
+    postalCode?: boolean | number
+    street?: boolean | number
+    unitNumber?: boolean | number
+    voivodeship?: boolean | number
+    __typename?: boolean | number
+    __fragmentOn?: "RegisteredAddressComponent"
+}
+
+export interface RegisteredAddressComponentFilterInput {AND?: (RegisteredAddressComponentFilterInput | null),OR?: (RegisteredAddressComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),buildingNumber?: (StringFilter | null),city?: (StringFilter | null),county?: (StringFilter | null),municipality?: (StringFilter | null),postalCode?: (StringFilter | null),street?: (StringFilter | null),unitNumber?: (StringFilter | null),voivodeship?: (StringFilter | null)}
+
+export interface RegisteredAddressComponentSearchInput {
+/** Searchable fields for query */
+by?: (Scalars['String'][] | null),
+/** Search query */
+q?: (Scalars['String'] | null)}
 
 export interface RepoSysGenqlSelection{
     branches?: (_BranchesGenqlSelection & { __args?: {limit?: (Scalars['Int'] | null), offset?: (Scalars['Int'] | null)} })
@@ -1384,6 +1852,43 @@ export interface RichTextJsonGenqlSelection{
     __typename?: boolean | number
     __fragmentOn?: "RichTextJson"
 }
+
+export interface SalesOfficeAddressComponentGenqlSelection{
+    _analyticsKey?: { __args: {
+    /**
+     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
+     * 
+     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
+     */
+    scope?: (AnalyticsKeyScope | null)} } | boolean | number
+    _dashboardUrl?: boolean | number
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight?: SearchHighlightGenqlSelection
+    _id?: boolean | number
+    _idPath?: boolean | number
+    _slug?: boolean | number
+    _slugPath?: boolean | number
+    _sys?: BlockDocumentSysGenqlSelection
+    _title?: boolean | number
+    buildingNumber?: boolean | number
+    city?: boolean | number
+    county?: boolean | number
+    municipality?: boolean | number
+    postalCode?: boolean | number
+    street?: boolean | number
+    unitNumber?: boolean | number
+    voivodeship?: boolean | number
+    __typename?: boolean | number
+    __fragmentOn?: "SalesOfficeAddressComponent"
+}
+
+export interface SalesOfficeAddressComponentFilterInput {AND?: (SalesOfficeAddressComponentFilterInput | null),OR?: (SalesOfficeAddressComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),buildingNumber?: (StringFilter | null),city?: (StringFilter | null),county?: (StringFilter | null),municipality?: (StringFilter | null),postalCode?: (StringFilter | null),street?: (StringFilter | null),unitNumber?: (StringFilter | null),voivodeship?: (StringFilter | null)}
+
+export interface SalesOfficeAddressComponentSearchInput {
+/** Searchable fields for query */
+by?: (Scalars['String'][] | null),
+/** Search query */
+q?: (Scalars['String'] | null)}
 
 export interface SearchHighlightGenqlSelection{
     /** The field/path that was matched (e.g., "title", "body.content") */
@@ -1433,11 +1938,18 @@ export interface UnitsGenqlSelection{
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item?: LokalComponentGenqlSelection
+    item?: LokalDomComponentGenqlSelection
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items?: LokalComponentGenqlSelection
+    items?: LokalDomComponentGenqlSelection
     __typename?: boolean | number
     __fragmentOn?: "Units"
+}
+
+export interface UntitledGenqlSelection{
+    /** The `webhookSecret` is used to verify the authenticity of the webhook request, and also to type the payload. */
+    webhookSecret?: boolean | number
+    __typename?: boolean | number
+    __fragmentOn?: "Untitled"
 }
 
 export interface VariantGenqlSelection{
@@ -1450,7 +1962,7 @@ export interface VariantGenqlSelection{
     __fragmentOn?: "Variant"
 }
 
-export interface WpisCenyComponentGenqlSelection{
+export interface WpisHistoriiCenyComponentGenqlSelection{
     _analyticsKey?: { __args: {
     /**
      * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
@@ -1467,76 +1979,21 @@ export interface WpisCenyComponentGenqlSelection{
     _slugPath?: boolean | number
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
-    totalPrice?: boolean | number
+    baseTotalPrice?: boolean | number
+    correctionOfPreviousEntry?: boolean | number
+    note?: boolean | number
+    pricePerM2?: boolean | number
+    totalPriceWithComponents?: boolean | number
     /** ISO 8601 date string. */
     validFrom?: boolean | number
+    vatIncluded?: boolean | number
     __typename?: boolean | number
-    __fragmentOn?: "WpisCenyComponent"
+    __fragmentOn?: "WpisHistoriiCenyComponent"
 }
 
-export interface WpisCenyComponentFilterInput {AND?: (WpisCenyComponentFilterInput | null),OR?: (WpisCenyComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),totalPrice?: (NumberFilter | null),validFrom?: (DateFilter | null)}
+export interface WpisHistoriiCenyComponentFilterInput {AND?: (WpisHistoriiCenyComponentFilterInput | null),OR?: (WpisHistoriiCenyComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),baseTotalPrice?: (NumberFilter | null),correctionOfPreviousEntry?: (Scalars['Boolean'] | null),note?: (StringFilter | null),pricePerM2?: (NumberFilter | null),totalPriceWithComponents?: (NumberFilter | null),validFrom?: (DateFilter | null),vatIncluded?: (Scalars['Boolean'] | null)}
 
-export interface WpisCenyComponentSearchInput {
-/** Searchable fields for query */
-by?: (Scalars['String'][] | null),
-/** Search query */
-q?: (Scalars['String'] | null)}
-
-export interface ZdjCieInwestycjiComponentGenqlSelection{
-    _analyticsKey?: { __args: {
-    /**
-     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
-     * 
-     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
-     */
-    scope?: (AnalyticsKeyScope | null)} } | boolean | number
-    _dashboardUrl?: boolean | number
-    /** Array of search highlight information with field names and HTML markup */
-    _highlight?: SearchHighlightGenqlSelection
-    _id?: boolean | number
-    _idPath?: boolean | number
-    _slug?: boolean | number
-    _slugPath?: boolean | number
-    _sys?: BlockDocumentSysGenqlSelection
-    _title?: boolean | number
-    image?: BlockImageGenqlSelection
-    __typename?: boolean | number
-    __fragmentOn?: "ZdjCieInwestycjiComponent"
-}
-
-export interface ZdjCieInwestycjiComponentFilterInput {AND?: (ZdjCieInwestycjiComponentFilterInput | null),OR?: (ZdjCieInwestycjiComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null)}
-
-export interface ZdjCieInwestycjiComponentSearchInput {
-/** Searchable fields for query */
-by?: (Scalars['String'][] | null),
-/** Search query */
-q?: (Scalars['String'] | null)}
-
-export interface ZdjCieLokaluComponentGenqlSelection{
-    _analyticsKey?: { __args: {
-    /**
-     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
-     * 
-     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
-     */
-    scope?: (AnalyticsKeyScope | null)} } | boolean | number
-    _dashboardUrl?: boolean | number
-    /** Array of search highlight information with field names and HTML markup */
-    _highlight?: SearchHighlightGenqlSelection
-    _id?: boolean | number
-    _idPath?: boolean | number
-    _slug?: boolean | number
-    _slugPath?: boolean | number
-    _sys?: BlockDocumentSysGenqlSelection
-    _title?: boolean | number
-    image?: BlockImageGenqlSelection
-    __typename?: boolean | number
-    __fragmentOn?: "ZdjCieLokaluComponent"
-}
-
-export interface ZdjCieLokaluComponentFilterInput {AND?: (ZdjCieLokaluComponentFilterInput | null),OR?: (ZdjCieLokaluComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null)}
-
-export interface ZdjCieLokaluComponentSearchInput {
+export interface WpisHistoriiCenyComponentSearchInput {
 /** Searchable fields for query */
 by?: (Scalars['String'][] | null),
 /** Search query */
@@ -1651,6 +2108,50 @@ export interface _agentsGenqlSelection{
 }
 
 export interface _componentsGenqlSelection{
+    developer?: (developerComponent_AsListGenqlSelection & { __args?: {
+    /** Filter by a field. */
+    filter?: (DeveloperComponentFilterInput | null), 
+    /** Limit the number of items returned. Defaults to 500. */
+    first?: (Scalars['Int'] | null), 
+    /** Order by a field. */
+    orderBy?: (DeveloperComponentOrderByEnum | null), 
+    /** Search configuration */
+    search?: (DeveloperComponentSearchInput | null), 
+    /** Skip the first n items. */
+    skip?: (Scalars['Int'] | null)} })
+    elementGalerii?: (elementGaleriiComponent_AsListGenqlSelection & { __args?: {
+    /** Filter by a field. */
+    filter?: (ElementGaleriiComponentFilterInput | null), 
+    /** Limit the number of items returned. Defaults to 500. */
+    first?: (Scalars['Int'] | null), 
+    /** Order by a field. */
+    orderBy?: (ElementGaleriiComponentOrderByEnum | null), 
+    /** Search configuration */
+    search?: (ElementGaleriiComponentSearchInput | null), 
+    /** Skip the first n items. */
+    skip?: (Scalars['Int'] | null)} })
+    galleryItem?: (galleryItem_AsListGenqlSelection & { __args?: {
+    /** Filter by a field. */
+    filter?: (GalleryItemFilterInput | null), 
+    /** Limit the number of items returned. Defaults to 500. */
+    first?: (Scalars['Int'] | null), 
+    /** Order by a field. */
+    orderBy?: (GalleryItemOrderByEnum | null), 
+    /** Search configuration */
+    search?: (GalleryItemSearchInput | null), 
+    /** Skip the first n items. */
+    skip?: (Scalars['Int'] | null)} })
+    investmentAddress?: (investmentAddressComponent_AsListGenqlSelection & { __args?: {
+    /** Filter by a field. */
+    filter?: (InvestmentAddressComponentFilterInput | null), 
+    /** Limit the number of items returned. Defaults to 500. */
+    first?: (Scalars['Int'] | null), 
+    /** Order by a field. */
+    orderBy?: (InvestmentAddressComponentOrderByEnum | null), 
+    /** Search configuration */
+    search?: (InvestmentAddressComponentSearchInput | null), 
+    /** Skip the first n items. */
+    skip?: (Scalars['Int'] | null)} })
     inwestycja?: (inwestycjaComponent_AsListGenqlSelection & { __args?: {
     /** Filter by a field. */
     filter?: (InwestycjaComponentFilterInput | null), 
@@ -1662,52 +2163,156 @@ export interface _componentsGenqlSelection{
     search?: (InwestycjaComponentSearchInput | null), 
     /** Skip the first n items. */
     skip?: (Scalars['Int'] | null)} })
-    lokal?: (lokalComponent_AsListGenqlSelection & { __args?: {
+    lokalDom?: (lokalDomComponent_AsListGenqlSelection & { __args?: {
     /** Filter by a field. */
-    filter?: (LokalComponentFilterInput | null), 
+    filter?: (LokalDomComponentFilterInput | null), 
     /** Limit the number of items returned. Defaults to 500. */
     first?: (Scalars['Int'] | null), 
     /** Order by a field. */
-    orderBy?: (LokalComponentOrderByEnum | null), 
+    orderBy?: (LokalDomComponentOrderByEnum | null), 
     /** Search configuration */
-    search?: (LokalComponentSearchInput | null), 
+    search?: (LokalDomComponentSearchInput | null), 
     /** Skip the first n items. */
     skip?: (Scalars['Int'] | null)} })
-    wpisCeny?: (wpisCenyComponent_AsListGenqlSelection & { __args?: {
+    registeredAddress?: (registeredAddressComponent_AsListGenqlSelection & { __args?: {
     /** Filter by a field. */
-    filter?: (WpisCenyComponentFilterInput | null), 
+    filter?: (RegisteredAddressComponentFilterInput | null), 
     /** Limit the number of items returned. Defaults to 500. */
     first?: (Scalars['Int'] | null), 
     /** Order by a field. */
-    orderBy?: (WpisCenyComponentOrderByEnum | null), 
+    orderBy?: (RegisteredAddressComponentOrderByEnum | null), 
     /** Search configuration */
-    search?: (WpisCenyComponentSearchInput | null), 
+    search?: (RegisteredAddressComponentSearchInput | null), 
     /** Skip the first n items. */
     skip?: (Scalars['Int'] | null)} })
-    zdjCieInwestycji?: (zdjCieInwestycjiComponent_AsListGenqlSelection & { __args?: {
+    salesOfficeAddress?: (salesOfficeAddressComponent_AsListGenqlSelection & { __args?: {
     /** Filter by a field. */
-    filter?: (ZdjCieInwestycjiComponentFilterInput | null), 
+    filter?: (SalesOfficeAddressComponentFilterInput | null), 
     /** Limit the number of items returned. Defaults to 500. */
     first?: (Scalars['Int'] | null), 
     /** Order by a field. */
-    orderBy?: (ZdjCieInwestycjiComponentOrderByEnum | null), 
+    orderBy?: (SalesOfficeAddressComponentOrderByEnum | null), 
     /** Search configuration */
-    search?: (ZdjCieInwestycjiComponentSearchInput | null), 
+    search?: (SalesOfficeAddressComponentSearchInput | null), 
     /** Skip the first n items. */
     skip?: (Scalars['Int'] | null)} })
-    zdjCieLokalu?: (zdjCieLokaluComponent_AsListGenqlSelection & { __args?: {
+    wpisHistoriiCeny?: (wpisHistoriiCenyComponent_AsListGenqlSelection & { __args?: {
     /** Filter by a field. */
-    filter?: (ZdjCieLokaluComponentFilterInput | null), 
+    filter?: (WpisHistoriiCenyComponentFilterInput | null), 
     /** Limit the number of items returned. Defaults to 500. */
     first?: (Scalars['Int'] | null), 
     /** Order by a field. */
-    orderBy?: (ZdjCieLokaluComponentOrderByEnum | null), 
+    orderBy?: (WpisHistoriiCenyComponentOrderByEnum | null), 
     /** Search configuration */
-    search?: (ZdjCieLokaluComponentSearchInput | null), 
+    search?: (WpisHistoriiCenyComponentSearchInput | null), 
     /** Skip the first n items. */
     skip?: (Scalars['Int'] | null)} })
     __typename?: boolean | number
     __fragmentOn?: "_components"
+}
+
+export interface developerComponent_AsListGenqlSelection{
+    _analyticsKey?: { __args: {
+    /**
+     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
+     * 
+     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
+     */
+    scope?: (AnalyticsKeyScope | null)} } | boolean | number
+    _dashboardUrl?: boolean | number
+    _id?: boolean | number
+    _idPath?: boolean | number
+    _meta?: ListMetaGenqlSelection
+    /** The key used to search from the frontend. */
+    _searchKey?: boolean | number
+    _slug?: boolean | number
+    _slugPath?: boolean | number
+    _sys?: BlockDocumentSysGenqlSelection
+    _title?: boolean | number
+    /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
+    item?: DeveloperComponentGenqlSelection
+    /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
+    items?: DeveloperComponentGenqlSelection
+    __typename?: boolean | number
+    __fragmentOn?: "developerComponent_AsList"
+}
+
+export interface elementGaleriiComponent_AsListGenqlSelection{
+    _analyticsKey?: { __args: {
+    /**
+     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
+     * 
+     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
+     */
+    scope?: (AnalyticsKeyScope | null)} } | boolean | number
+    _dashboardUrl?: boolean | number
+    _id?: boolean | number
+    _idPath?: boolean | number
+    _meta?: ListMetaGenqlSelection
+    /** The key used to search from the frontend. */
+    _searchKey?: boolean | number
+    _slug?: boolean | number
+    _slugPath?: boolean | number
+    _sys?: BlockDocumentSysGenqlSelection
+    _title?: boolean | number
+    /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
+    item?: ElementGaleriiComponentGenqlSelection
+    /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
+    items?: ElementGaleriiComponentGenqlSelection
+    __typename?: boolean | number
+    __fragmentOn?: "elementGaleriiComponent_AsList"
+}
+
+export interface galleryItem_AsListGenqlSelection{
+    _analyticsKey?: { __args: {
+    /**
+     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
+     * 
+     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
+     */
+    scope?: (AnalyticsKeyScope | null)} } | boolean | number
+    _dashboardUrl?: boolean | number
+    _id?: boolean | number
+    _idPath?: boolean | number
+    _meta?: ListMetaGenqlSelection
+    /** The key used to search from the frontend. */
+    _searchKey?: boolean | number
+    _slug?: boolean | number
+    _slugPath?: boolean | number
+    _sys?: BlockDocumentSysGenqlSelection
+    _title?: boolean | number
+    /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
+    item?: GalleryItemGenqlSelection
+    /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
+    items?: GalleryItemGenqlSelection
+    __typename?: boolean | number
+    __fragmentOn?: "galleryItem_AsList"
+}
+
+export interface investmentAddressComponent_AsListGenqlSelection{
+    _analyticsKey?: { __args: {
+    /**
+     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
+     * 
+     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
+     */
+    scope?: (AnalyticsKeyScope | null)} } | boolean | number
+    _dashboardUrl?: boolean | number
+    _id?: boolean | number
+    _idPath?: boolean | number
+    _meta?: ListMetaGenqlSelection
+    /** The key used to search from the frontend. */
+    _searchKey?: boolean | number
+    _slug?: boolean | number
+    _slugPath?: boolean | number
+    _sys?: BlockDocumentSysGenqlSelection
+    _title?: boolean | number
+    /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
+    item?: InvestmentAddressComponentGenqlSelection
+    /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
+    items?: InvestmentAddressComponentGenqlSelection
+    __typename?: boolean | number
+    __fragmentOn?: "investmentAddressComponent_AsList"
 }
 
 export interface inwestycjaComponent_AsListGenqlSelection{
@@ -1736,7 +2341,7 @@ export interface inwestycjaComponent_AsListGenqlSelection{
     __fragmentOn?: "inwestycjaComponent_AsList"
 }
 
-export interface lokalComponent_AsListGenqlSelection{
+export interface lokalDomComponent_AsListGenqlSelection{
     _analyticsKey?: { __args: {
     /**
      * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
@@ -1755,14 +2360,14 @@ export interface lokalComponent_AsListGenqlSelection{
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item?: LokalComponentGenqlSelection
+    item?: LokalDomComponentGenqlSelection
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items?: LokalComponentGenqlSelection
+    items?: LokalDomComponentGenqlSelection
     __typename?: boolean | number
-    __fragmentOn?: "lokalComponent_AsList"
+    __fragmentOn?: "lokalDomComponent_AsList"
 }
 
-export interface wpisCenyComponent_AsListGenqlSelection{
+export interface registeredAddressComponent_AsListGenqlSelection{
     _analyticsKey?: { __args: {
     /**
      * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
@@ -1781,14 +2386,14 @@ export interface wpisCenyComponent_AsListGenqlSelection{
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item?: WpisCenyComponentGenqlSelection
+    item?: RegisteredAddressComponentGenqlSelection
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items?: WpisCenyComponentGenqlSelection
+    items?: RegisteredAddressComponentGenqlSelection
     __typename?: boolean | number
-    __fragmentOn?: "wpisCenyComponent_AsList"
+    __fragmentOn?: "registeredAddressComponent_AsList"
 }
 
-export interface zdjCieInwestycjiComponent_AsListGenqlSelection{
+export interface salesOfficeAddressComponent_AsListGenqlSelection{
     _analyticsKey?: { __args: {
     /**
      * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
@@ -1807,14 +2412,14 @@ export interface zdjCieInwestycjiComponent_AsListGenqlSelection{
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item?: ZdjCieInwestycjiComponentGenqlSelection
+    item?: SalesOfficeAddressComponentGenqlSelection
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items?: ZdjCieInwestycjiComponentGenqlSelection
+    items?: SalesOfficeAddressComponentGenqlSelection
     __typename?: boolean | number
-    __fragmentOn?: "zdjCieInwestycjiComponent_AsList"
+    __fragmentOn?: "salesOfficeAddressComponent_AsList"
 }
 
-export interface zdjCieLokaluComponent_AsListGenqlSelection{
+export interface wpisHistoriiCenyComponent_AsListGenqlSelection{
     _analyticsKey?: { __args: {
     /**
      * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
@@ -1833,11 +2438,11 @@ export interface zdjCieLokaluComponent_AsListGenqlSelection{
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
     /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item?: ZdjCieLokaluComponentGenqlSelection
+    item?: WpisHistoriiCenyComponentGenqlSelection
     /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items?: ZdjCieLokaluComponentGenqlSelection
+    items?: WpisHistoriiCenyComponentGenqlSelection
     __typename?: boolean | number
-    __fragmentOn?: "zdjCieLokaluComponent_AsList"
+    __fragmentOn?: "wpisHistoriiCenyComponent_AsList"
 }
 
 export interface FragmentsMap {
@@ -1889,6 +2494,10 @@ export interface FragmentsMap {
     root: BlockVideo,
     selection: BlockVideoGenqlSelection,
 }
+  CloudflareWebhook: {
+    root: CloudflareWebhook,
+    selection: CloudflareWebhookGenqlSelection,
+}
   Content: {
     root: Content,
     selection: ContentGenqlSelection,
@@ -1901,9 +2510,21 @@ export interface FragmentsMap {
     root: DescriptionRichText,
     selection: DescriptionRichTextGenqlSelection,
 }
+  DeveloperComponent: {
+    root: DeveloperComponent,
+    selection: DeveloperComponentGenqlSelection,
+}
+  ElementGaleriiComponent: {
+    root: ElementGaleriiComponent,
+    selection: ElementGaleriiComponentGenqlSelection,
+}
   Gallery: {
     root: Gallery,
     selection: GalleryGenqlSelection,
+}
+  GalleryItem: {
+    root: GalleryItem,
+    selection: GalleryItemGenqlSelection,
 }
   Gallery_1: {
     root: Gallery_1,
@@ -1912,6 +2533,10 @@ export interface FragmentsMap {
   GetUploadSignedURL: {
     root: GetUploadSignedURL,
     selection: GetUploadSignedURLGenqlSelection,
+}
+  InvestmentAddressComponent: {
+    root: InvestmentAddressComponent,
+    selection: InvestmentAddressComponentGenqlSelection,
 }
   Investments: {
     root: Investments,
@@ -1925,9 +2550,9 @@ export interface FragmentsMap {
     root: ListMeta,
     selection: ListMetaGenqlSelection,
 }
-  LokalComponent: {
-    root: LokalComponent,
-    selection: LokalComponentGenqlSelection,
+  LokalDomComponent: {
+    root: LokalDomComponent,
+    selection: LokalDomComponentGenqlSelection,
 }
   MediaBlock: {
     root: MediaBlock,
@@ -1945,6 +2570,10 @@ export interface FragmentsMap {
     root: Query,
     selection: QueryGenqlSelection,
 }
+  RegisteredAddressComponent: {
+    root: RegisteredAddressComponent,
+    selection: RegisteredAddressComponentGenqlSelection,
+}
   RepoSys: {
     root: RepoSys,
     selection: RepoSysGenqlSelection,
@@ -1952,6 +2581,10 @@ export interface FragmentsMap {
   RichTextJson: {
     root: RichTextJson,
     selection: RichTextJsonGenqlSelection,
+}
+  SalesOfficeAddressComponent: {
+    root: SalesOfficeAddressComponent,
+    selection: SalesOfficeAddressComponentGenqlSelection,
 }
   SearchHighlight: {
     root: SearchHighlight,
@@ -1965,21 +2598,17 @@ export interface FragmentsMap {
     root: Units,
     selection: UnitsGenqlSelection,
 }
+  Untitled: {
+    root: Untitled,
+    selection: UntitledGenqlSelection,
+}
   Variant: {
     root: Variant,
     selection: VariantGenqlSelection,
 }
-  WpisCenyComponent: {
-    root: WpisCenyComponent,
-    selection: WpisCenyComponentGenqlSelection,
-}
-  ZdjCieInwestycjiComponent: {
-    root: ZdjCieInwestycjiComponent,
-    selection: ZdjCieInwestycjiComponentGenqlSelection,
-}
-  ZdjCieLokaluComponent: {
-    root: ZdjCieLokaluComponent,
-    selection: ZdjCieLokaluComponentGenqlSelection,
+  WpisHistoriiCenyComponent: {
+    root: WpisHistoriiCenyComponent,
+    selection: WpisHistoriiCenyComponentGenqlSelection,
 }
   _AgentStart: {
     root: _AgentStart,
@@ -2013,24 +2642,40 @@ export interface FragmentsMap {
     root: _components,
     selection: _componentsGenqlSelection,
 }
+  developerComponent_AsList: {
+    root: developerComponent_AsList,
+    selection: developerComponent_AsListGenqlSelection,
+}
+  elementGaleriiComponent_AsList: {
+    root: elementGaleriiComponent_AsList,
+    selection: elementGaleriiComponent_AsListGenqlSelection,
+}
+  galleryItem_AsList: {
+    root: galleryItem_AsList,
+    selection: galleryItem_AsListGenqlSelection,
+}
+  investmentAddressComponent_AsList: {
+    root: investmentAddressComponent_AsList,
+    selection: investmentAddressComponent_AsListGenqlSelection,
+}
   inwestycjaComponent_AsList: {
     root: inwestycjaComponent_AsList,
     selection: inwestycjaComponent_AsListGenqlSelection,
 }
-  lokalComponent_AsList: {
-    root: lokalComponent_AsList,
-    selection: lokalComponent_AsListGenqlSelection,
+  lokalDomComponent_AsList: {
+    root: lokalDomComponent_AsList,
+    selection: lokalDomComponent_AsListGenqlSelection,
 }
-  wpisCenyComponent_AsList: {
-    root: wpisCenyComponent_AsList,
-    selection: wpisCenyComponent_AsListGenqlSelection,
+  registeredAddressComponent_AsList: {
+    root: registeredAddressComponent_AsList,
+    selection: registeredAddressComponent_AsListGenqlSelection,
 }
-  zdjCieInwestycjiComponent_AsList: {
-    root: zdjCieInwestycjiComponent_AsList,
-    selection: zdjCieInwestycjiComponent_AsListGenqlSelection,
+  salesOfficeAddressComponent_AsList: {
+    root: salesOfficeAddressComponent_AsList,
+    selection: salesOfficeAddressComponent_AsListGenqlSelection,
 }
-  zdjCieLokaluComponent_AsList: {
-    root: zdjCieLokaluComponent_AsList,
-    selection: zdjCieLokaluComponent_AsListGenqlSelection,
+  wpisHistoriiCenyComponent_AsList: {
+    root: wpisHistoriiCenyComponent_AsList,
+    selection: wpisHistoriiCenyComponent_AsListGenqlSelection,
 }
 }

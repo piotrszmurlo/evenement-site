@@ -22,6 +22,24 @@ interface CmsHomepageContent {
   homepageImage5?: CmsAsset | null;
 }
 
+interface CmsAddress {
+  city: string;
+  street: string;
+  buildingNumber: string;
+  unitNumber?: string | null;
+  postalCode: string;
+}
+
+interface CmsDeveloperContact {
+  name: string;
+  phone: string;
+  email: string;
+  legalForm?: string | null;
+  nip?: string | null;
+  regon?: string | null;
+  registeredAddress: CmsAddress;
+}
+
 interface CmsPriceHistoryEntry {
   validFrom: string;
   pricePerM2: number;
@@ -55,6 +73,7 @@ interface CmsInvestment {
 
 interface SiteContent {
   investments: CmsInvestment[];
+  developer: CmsDeveloperContact;
 }
 
 export interface PriceHistoryEntry {
@@ -95,6 +114,20 @@ export interface HomepageContent {
   homepageGallery: string[];
 }
 
+export interface DeveloperContact {
+  name: string;
+  phone: string;
+  phoneHref: string;
+  email: string;
+  legalForm?: string;
+  nip?: string;
+  regon?: string;
+  registeredAddress: {
+    lineOne: string;
+    lineTwo?: string;
+  };
+}
+
 const SITE_CONTENT_QUERY = {
   content: {
     homepageImage1: {
@@ -116,6 +149,21 @@ const SITE_CONTENT_QUERY = {
     homepageImage5: {
       url: true,
       alt: true,
+    },
+    developer: {
+      name: true,
+      phone: true,
+      email: true,
+      legalForm: true,
+      nip: true,
+      regon: true,
+      registeredAddress: {
+        city: true,
+        street: true,
+        buildingNumber: true,
+        unitNumber: true,
+        postalCode: true,
+      },
     },
     investments: {
       items: {
@@ -174,6 +222,7 @@ const SITE_CONTENT_QUERY = {
 
 let investmentsPromise: Promise<Investment[]> | undefined;
 let homepageContentPromise: Promise<HomepageContent> | undefined;
+let developerContactPromise: Promise<DeveloperContact> | undefined;
 let siteContentPromise: Promise<(SiteContent & CmsHomepageContent & { _sourceLabel: string })> | undefined;
 
 export async function getInvestments(): Promise<Investment[]> {
@@ -184,6 +233,11 @@ export async function getInvestments(): Promise<Investment[]> {
 export async function getHomepageContent(): Promise<HomepageContent> {
   homepageContentPromise ??= loadHomepageContent();
   return homepageContentPromise;
+}
+
+export async function getDeveloperContact(): Promise<DeveloperContact> {
+  developerContactPromise ??= loadDeveloperContact();
+  return developerContactPromise;
 }
 
 export async function getInvestmentBySlug(slug: string): Promise<Investment | undefined> {
@@ -222,6 +276,22 @@ async function loadHomepageContent(): Promise<HomepageContent> {
 
   return {
     homepageGallery: normalizeHomepageImages(content),
+  };
+}
+
+async function loadDeveloperContact(): Promise<DeveloperContact> {
+  const content = await getSiteContent();
+  const developer = content.developer;
+
+  return {
+    name: developer.name,
+    phone: developer.phone,
+    phoneHref: normalizePhoneHref(developer.phone),
+    email: developer.email,
+    legalForm: developer.legalForm?.trim() || undefined,
+    nip: developer.nip?.trim() || undefined,
+    regon: developer.regon?.trim() || undefined,
+    registeredAddress: formatAddress(developer.registeredAddress),
   };
 }
 
@@ -285,6 +355,21 @@ async function loadBasehubContent(): Promise<SiteContent & CmsHomepageContent> {
     homepageImage5: data.content?.homepageImage5?.url
       ? { url: data.content.homepageImage5.url, alt: data.content.homepageImage5.alt }
       : null,
+    developer: {
+      name: data.content.developer.name,
+      phone: data.content.developer.phone,
+      email: data.content.developer.email,
+      legalForm: data.content.developer.legalForm,
+      nip: data.content.developer.nip,
+      regon: data.content.developer.regon,
+      registeredAddress: {
+        city: data.content.developer.registeredAddress.city,
+        street: data.content.developer.registeredAddress.street,
+        buildingNumber: data.content.developer.registeredAddress.buildingNumber,
+        unitNumber: data.content.developer.registeredAddress.unitNumber,
+        postalCode: data.content.developer.registeredAddress.postalCode,
+      },
+    },
     investments: investments.map((investment) => ({
       name: investment.name,
       slug: investment.slug,
@@ -324,6 +409,22 @@ async function loadBasehubContent(): Promise<SiteContent & CmsHomepageContent> {
       })),
     })),
   };
+}
+
+function formatAddress(address: CmsAddress): DeveloperContact['registeredAddress'] {
+  const lineOne = [address.street, address.buildingNumber].filter(Boolean).join(' ');
+  const lineTwo = [address.postalCode, address.city].filter(Boolean).join(' ');
+  const unitNumber = address.unitNumber?.trim();
+
+  return {
+    lineOne: unitNumber ? `${lineOne}/${unitNumber}` : lineOne,
+    lineTwo: lineTwo || undefined,
+  };
+}
+
+function normalizePhoneHref(phone: string): string {
+  const normalized = phone.replace(/[^\d+]/g, '');
+  return normalized.startsWith('+') ? normalized : `+48${normalized}`;
 }
 
 function getBasehubConfig() {

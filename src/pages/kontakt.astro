@@ -4,7 +4,9 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Banner from "../components/Banner.astro";
 import { brand } from "../config/brand";
-import { client } from "../data/client";
+import { getDeveloperContact } from "../lib/content";
+
+const contact = await getDeveloperContact();
 ---
 
 <BaseLayout
@@ -26,13 +28,8 @@ import { client } from "../data/client";
               >Dane firmy</span
             >
             <h2 class="mt-2 font-heading text-h2 font-bold uppercase text-text">
-              {client.name}
+              {contact.name}
             </h2>
-            <p class="mt-3 text-text-muted leading-relaxed">
-              Realizujemy inwestycje deweloperskie z dbałością o standardy i
-              terminowość. Zapraszamy do bezpośredniego kontaktu telefonicznego
-              lub mailowego.
-            </p>
           </div>
 
           <!-- Company Details & Registration Info -->
@@ -43,10 +40,9 @@ import { client } from "../data/client";
                   Siedziba firmy
                 </h3>
                 <p class="text-sm text-text-muted leading-relaxed">
-                  {client.name}<br />
-                  {client.address.lineOne}<br />
-                  {client.address.zip}
-                  {client.address.city}
+                  {contact.name}<br />
+                  {contact.registeredAddress.lineOne}<br />
+                  {contact.registeredAddress.lineTwo}
                 </p>
               </div>
               <div>
@@ -54,18 +50,24 @@ import { client } from "../data/client";
                   Informacje rejestrowe
                 </h3>
                 <ul class="space-y-2 text-sm text-text-muted">
-                  <li>
-                    <strong class="text-text">Forma prawna:</strong><br />
-                    {client.legalForm}
-                  </li>
-                  <li>
-                    <strong class="text-text">NIP:</strong>
-                    {client.nip}
-                  </li>
-                  <li>
-                    <strong class="text-text">REGON:</strong>
-                    {client.regon}
-                  </li>
+                  {contact.legalForm && (
+                    <li>
+                      <strong class="text-text">Forma prawna:</strong><br />
+                      {contact.legalForm}
+                    </li>
+                  )}
+                  {contact.nip && (
+                    <li>
+                      <strong class="text-text">NIP:</strong>
+                      {contact.nip}
+                    </li>
+                  )}
+                  {contact.regon && (
+                    <li>
+                      <strong class="text-text">REGON:</strong>
+                      {contact.regon}
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>
@@ -111,10 +113,10 @@ import { client } from "../data/client";
                   Telefon
                 </p>
                 <a
-                  href={`tel:${client.phoneForTel}`}
+                  href={`tel:${contact.phoneHref}`}
                   class="text-lg font-bold text-text hover:text-primary transition-colors"
                 >
-                  {client.phoneFormatted}
+                  {contact.phone}
                 </a>
               </div>
             </div>
@@ -145,10 +147,10 @@ import { client } from "../data/client";
                   E-mail
                 </p>
                 <a
-                  href={`mailto:${client.email}`}
+                  href={`mailto:${contact.email}`}
                   class="text-lg font-bold text-text hover:text-primary transition-colors"
                 >
-                  {client.email}
+                  {contact.email}
                 </a>
               </div>
             </div>

@@ -24,7 +24,8 @@ interface CmsHomepageContent {
 
 interface CmsPriceHistoryEntry {
   validFrom: string;
-  totalPrice: number;
+  pricePerM2: number;
+  baseTotalPrice: number;
 }
 
 interface CmsUnit {
@@ -46,6 +47,7 @@ interface CmsInvestment {
   summary: string;
   description: BasehubRichTextDocument | null;
   locationAddress: string;
+  prospectusUrl?: string | null;
   prospectusFile?: CmsAsset | null;
   salesStatus: SalesStatus;
   gallery: CmsGalleryItem[];
@@ -127,6 +129,7 @@ const SITE_CONTENT_QUERY = {
           },
         },
         locationAddress: true,
+        prospectusUrl: true,
         prospectusFile: {
           url: true,
         },
@@ -160,7 +163,8 @@ const SITE_CONTENT_QUERY = {
             priceHistory: {
               items: {
                 validFrom: true,
-                totalPrice: true,
+                pricePerM2: true,
+                baseTotalPrice: true,
               },
             },
           },
@@ -289,6 +293,7 @@ async function loadBasehubContent(): Promise<SiteContent & CmsHomepageContent> {
       summary: investment.summary,
       description: investment.description,
       locationAddress: investment.locationAddress,
+      prospectusUrl: investment.prospectusUrl,
       prospectusFile: investment.prospectusFile?.url
         ? { url: investment.prospectusFile.url }
         : null,
@@ -316,7 +321,8 @@ async function loadBasehubContent(): Promise<SiteContent & CmsHomepageContent> {
         })),
         priceHistory: unit.priceHistory.items.map((entry) => ({
           validFrom: entry.validFrom,
-          totalPrice: entry.totalPrice,
+          pricePerM2: entry.pricePerM2,
+          baseTotalPrice: entry.baseTotalPrice,
         })),
       })),
     })),
@@ -328,16 +334,17 @@ function getBasehubConfig() {
   const url = import.meta.env.BASEHUB_URL;
   const team = import.meta.env.BASEHUB_TEAM;
   const repo = import.meta.env.BASEHUB_REPO;
+  const ref = import.meta.env.BASEHUB_REF;
 
   if (url) {
-    return token ? { token, url } : { url };
+    return token ? { token, url, ref } : { url, ref };
   }
 
   if (team && repo) {
-    return token ? { token, team, repo } : { team, repo };
+    return token ? { token, team, repo, ref } : { team, repo, ref };
   }
 
-  return token ? { token } : {};
+  return token ? { token, ref } : ref ? { ref } : {};
 }
 
 function normalizeAndValidate(content: SiteContent, label: string): Investment[] {
@@ -414,7 +421,8 @@ function normalizeAndValidate(content: SiteContent, label: string): Investment[]
         .map((entry, entryIndex) => {
           const entryPath = `${unitPath}.priceHistory[${entryIndex}]`;
           validateRequiredString(errors, `${entryPath}.validFrom`, entry.validFrom);
-          validatePositiveNumber(errors, `${entryPath}.totalPrice`, entry.totalPrice);
+          validatePositiveNumber(errors, `${entryPath}.pricePerM2`, entry.pricePerM2);
+          validatePositiveNumber(errors, `${entryPath}.baseTotalPrice`, entry.baseTotalPrice);
 
           if (Number.isNaN(Date.parse(entry.validFrom))) {
             errors.push(`${entryPath}.validFrom must be a valid date.`);
@@ -422,8 +430,8 @@ function normalizeAndValidate(content: SiteContent, label: string): Investment[]
 
           return {
             validFrom: entry.validFrom,
-            totalPrice: entry.totalPrice,
-            pricePerM2: Math.round((entry.totalPrice / unit.usableAreaM2) * 100) / 100,
+            totalPrice: entry.baseTotalPrice,
+            pricePerM2: entry.pricePerM2,
           };
         })
         .sort((left, right) => Date.parse(right.validFrom) - Date.parse(left.validFrom));
@@ -454,7 +462,7 @@ function normalizeAndValidate(content: SiteContent, label: string): Investment[]
       summary: investment.summary,
       description: investment.description,
       locationAddress: investment.locationAddress,
-      prospectusUrl: investment.prospectusFile?.url || undefined,
+      prospectusUrl: investment.prospectusUrl || investment.prospectusFile?.url || undefined,
       salesStatus: investment.salesStatus,
       gallery,
       coverImage: gallery[0],

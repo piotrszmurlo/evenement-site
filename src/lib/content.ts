@@ -47,7 +47,6 @@ interface CmsInvestment {
   summary: string;
   description: BasehubRichTextDocument | null;
   locationAddress: string;
-  prospectusUrl?: string | null;
   prospectusFile?: CmsAsset | null;
   salesStatus: SalesStatus;
   gallery: CmsGalleryItem[];
@@ -129,7 +128,6 @@ const SITE_CONTENT_QUERY = {
           },
         },
         locationAddress: true,
-        prospectusUrl: true,
         prospectusFile: {
           url: true,
         },
@@ -293,7 +291,6 @@ async function loadBasehubContent(): Promise<SiteContent & CmsHomepageContent> {
       summary: investment.summary,
       description: investment.description,
       locationAddress: investment.locationAddress,
-      prospectusUrl: investment.prospectusUrl,
       prospectusFile: investment.prospectusFile?.url
         ? { url: investment.prospectusFile.url }
         : null,
@@ -462,7 +459,7 @@ function normalizeAndValidate(content: SiteContent, label: string): Investment[]
       summary: investment.summary,
       description: investment.description,
       locationAddress: investment.locationAddress,
-      prospectusUrl: investment.prospectusUrl || investment.prospectusFile?.url || undefined,
+      prospectusUrl: investment.prospectusFile?.url || undefined,
       salesStatus: investment.salesStatus,
       gallery,
       coverImage: gallery[0],

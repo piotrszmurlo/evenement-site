@@ -2,6 +2,29 @@
 
 This document summarizes the government-data requirements found in `goverment-docs/` so future agents do not need to re-review the raw files before implementing the export.
 
+## Real Data Constraint
+
+`docs/real_data.json` should be treated as the best current reference for the producer payload we actually need to support. It is narrower than the earlier speculative CMS/export model.
+
+The real payload currently proves these concepts:
+
+- one dataset date per export,
+- investments,
+- buildings inside investments,
+- residential properties inside buildings,
+- optional standalone non-residential properties,
+- optional current sale price fields only on unsold properties,
+- prospectus URL at building level.
+
+It does not prove the need for:
+
+- manual dataset title/description fields in CMS,
+- extra price metadata such as VAT/corrections/notes,
+- componentized price add-ons attached to units,
+- deep developer registry metadata as an XML input requirement.
+
+For XML v1, prefer a generator that consumes the smallest model matching this real payload and derives XML-specific labels/identifiers in code.
+
 ## Source Files
 
 Raw reference files are stored in `goverment-docs/`:
@@ -29,6 +52,7 @@ Raw reference files are stored in `goverment-docs/`:
 - Generate daily snapshots even when no prices changed.
 - Use the exact CSV header order from `Wcorcowy_zakres_danych_dotyczących_cen_mieszkań.csv`.
 - Use `X` for not-applicable values, matching the sample CSV and XML `specialSigns`.
+- Do not require broad CMS overrides for XML metadata if the same values can be generated deterministically from investment data.
 
 ## Import Setup
 
@@ -82,6 +106,18 @@ Recommended public path:
 
 Each row should describe one unit/listing and its relevant price components for that day. The daily snapshot should reflect the latest price entries valid on the export date.
 
+For XML v1 implementation, start from the fields visibly present in `docs/real_data.json`:
+
+- dataset date: `offerDate`
+- investment label: `investmentName`
+- building address fragments: `street`, `number`
+- prospectus URL: `prospectusUrl`
+- property identity: `propertyId`, `number`, `type`
+- property area/address/status: `area`, `fullAddress`, `isSold`
+- optional current price: `price`, `pricePerMeter`, `totalPrice`
+
+Treat everything beyond that as deferred unless it is required by the official CSV header or by XSD-valid XML structure.
+
 ## End Of Sale
 
 Guidance provided during planning:
@@ -98,4 +134,3 @@ For v1, there is one active investment. If later multiple investments are presen
 - Before launch, validate generated XML against `otwarte_dane_latest.xsd`.
 - Before launch, verify Cloudflare Pages serves XML with an acceptable content type and MD5 as plain text.
 - Keep generated files inspectable in Git for v1 through a daily GitHub Actions commit-back flow.
-

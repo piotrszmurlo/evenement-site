@@ -432,17 +432,16 @@ function getBasehubConfig() {
   const team = import.meta.env.BASEHUB_TEAM;
   const repo = import.meta.env.BASEHUB_REPO;
   const ref = import.meta.env.BASEHUB_REF;
-  const draft = false;
 
   if (url) {
-    return token ? { token, url, ref, draft } : { url, ref, draft };
+    return token ? { token, url, ref } : { url, ref };
   }
 
   if (team && repo) {
-    return token ? { token, team, repo, ref, draft } : { team, repo, ref, draft };
+    return token ? { token, team, repo, ref } : { team, repo, ref };
   }
 
-  return token ? { token, ref, draft } : ref ? { ref, draft } : { draft };
+  return token ? { token, ref } : ref ? { ref } : {};
 }
 
 function normalizeAndValidate(content: SiteContent, label: string): Investment[] {

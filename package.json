@@ -22,9 +22,9 @@
   },
   "scripts": {
     "basehub": "basehub",
-    "dev": "concurrently \"basehub --watch\" \"astro dev\"",
+    "dev": "concurrently \"basehub dev\" \"astro dev\"",
     "dev:wsl": "bash ./scripts/dev-wsl.sh",
-    "start": "concurrently \"basehub --watch\" \"astro dev\"",
+    "start": "concurrently \"basehub dev\" \"astro dev\"",
     "start:wsl": "bash ./scripts/dev-wsl.sh",
     "build": "basehub && astro build",
     "preview": "astro preview",

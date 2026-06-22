@@ -26,9 +26,9 @@ const completedInvestments = investments.filter((investment) => investment.sales
 
       <div class="mx-auto grid max-w-4xl grid-cols-1 justify-items-center gap-8 md:grid-cols-2 md:justify-items-stretch">
         {activeInvestments.map((investment) => (
-          <a
-            href={`/inwestycje/${investment.slug}/`}
-            class="group flex w-full max-w-xl flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sm transition-transform duration-200 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            <a
+              href={`/inwestycje/${investment.slug}/`}
+            class="group flex w-full max-w-xl flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <div class="relative h-64 overflow-hidden">
               {investment.coverImage ? (
@@ -87,7 +87,7 @@ const completedInvestments = investments.filter((investment) => investment.sales
             {completedInvestments.map((investment) => (
               <a
                 href={`/inwestycje/${investment.slug}/`}
-                class="group flex w-full max-w-xl flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sm transition-transform duration-200 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                class="group flex w-full max-w-xl flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <div class="relative h-64 overflow-hidden">
                   {investment.coverImage ? (

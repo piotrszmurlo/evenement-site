@@ -923,16 +923,17 @@ function getBasehubConfig(env) {
   const team = env.BASEHUB_TEAM
   const repo = env.BASEHUB_REPO
   const ref = env.BASEHUB_REF
+  const draft = false
 
   if (url) {
-    return token ? { token, url, ref } : { url, ref }
+    return token ? { token, url, ref, draft } : { url, ref, draft }
   }
 
   if (team && repo) {
-    return token ? { token, team, repo, ref } : { team, repo, ref }
+    return token ? { token, team, repo, ref, draft } : { team, repo, ref, draft }
   }
 
-  return token ? { token, ref } : ref ? { ref } : {}
+  return token ? { token, ref, draft } : ref ? { ref, draft } : { draft }
 }
 
 function getWarsawDateString() {

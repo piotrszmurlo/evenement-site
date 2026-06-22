@@ -28,8 +28,19 @@ jobs:
           node-version: 22
           cache: pnpm
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Test government feed export
+        env:
+          GOVERNMENT_XSD_VALIDATION_MODE: require
+        run: pnpm test:government-feed
 
       - name: Generate government feed
         env:
@@ -39,6 +50,7 @@ jobs:
           BASEHUB_TOKEN: ${{ secrets.BASEHUB_TOKEN }}
           BASEHUB_REF: ${{ secrets.BASEHUB_REF }}
           GOVERNMENT_EXPORT_BASE_URL: ${{ secrets.GOVERNMENT_EXPORT_BASE_URL }}
+          GOVERNMENT_XSD_VALIDATION_MODE: require
         run: pnpm generate-government-feed
 
       - name: Commit generated artifacts

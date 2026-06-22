@@ -1,17 +1,24 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { execFile as execFileCallback } from 'node:child_process'
 import { mkdtemp, readFile } from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import crypto from 'node:crypto'
+import { promisify } from 'node:util'
 import {
   buildStableExtIdent,
   generateGovernmentFeed,
   normalizeGovernmentSource,
   parseExistingFeedResources,
   selectEffectivePrice,
+  validateFeedXmlAgainstXsd,
   writeGovernmentFeed,
 } from '../src/lib/government-export/index.mjs'
+
+const execFile = promisify(execFileCallback)
+const XSD_PATH = path.resolve(process.cwd(), 'goverment-docs/otwarte_dane_latest.xsd')
+const hasJavaRuntime = await canRunJava()
 
 test('selectEffectivePrice picks latest valid price on export date', () => {
   const result = selectEffectivePrice(
@@ -119,6 +126,23 @@ test('writeGovernmentFeed writes csv, xml and lowercase md5', async () => {
   assert.equal(feedMd5, feedMd5.toLowerCase())
 })
 
+test(
+  'generated feed validates against the government XSD',
+  { skip: !hasJavaRuntime },
+  async () => {
+    const result = await generateGovernmentFeed({
+      exportDate: '2026-06-22',
+      fixturePath: 'fixtures/sample-content.json',
+      baseUrl: 'https://evenement24.com',
+      xsdValidationMode: 'require',
+    })
+
+    await assert.doesNotReject(() =>
+      validateFeedXmlAgainstXsd(result.feedXml, XSD_PATH, { mode: 'require' }),
+    )
+  },
+)
+
 test('missing prospectus yields validation error instead of crashing', () => {
   assert.throws(
     () =>
@@ -201,3 +225,12 @@ test('missing prospectus yields validation error instead of crashing', () => {
     /Government export validation failed:\n- investments\[0\]\.prospectusFile\.url must be a valid https:\/\/ URL\./,
   )
 })
+
+async function canRunJava() {
+  try {
+    await execFile('java', ['-version'])
+    return true
+  } catch {
+    return false
+  }
+}

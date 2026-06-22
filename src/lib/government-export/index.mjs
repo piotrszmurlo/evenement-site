@@ -1,4 +1,7 @@
-import { readFile, mkdir, writeFile } from 'node:fs/promises'
+import { readFile, mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
+import { execFile as execFileCallback } from 'node:child_process'
+import { promisify } from 'node:util'
+import os from 'node:os'
 import path from 'node:path'
 import crypto from 'node:crypto'
 import { basehub } from 'basehub'
@@ -13,6 +16,8 @@ const CSV_REFERENCE_PATH = path.resolve(
   'goverment-docs/Wcorcowy_zakres_danych_dotyczących_cen_mieszkań.csv',
 )
 const XSD_PATH = path.resolve(process.cwd(), 'goverment-docs/otwarte_dane_latest.xsd')
+const JAVA_XSD_VALIDATOR_PATH = path.resolve(process.cwd(), 'scripts/ValidateXmlAgainstXsd.java')
+const execFile = promisify(execFileCallback)
 
 const GOVERNMENT_CONTENT_QUERY = {
   content: {
@@ -215,6 +220,9 @@ export async function generateGovernmentFeed(options = {}) {
   validateFeedModelAgainstSchema(feedModel, XSD_PATH)
   const feedXml = buildFeedXml(feedModel)
   validateFeedXml(feedXml)
+  await validateFeedXmlAgainstXsd(feedXml, XSD_PATH, {
+    mode: options.xsdValidationMode ?? process.env.GOVERNMENT_XSD_VALIDATION_MODE ?? 'auto',
+  })
   const feedMd5 = crypto.createHash('md5').update(feedXml, 'utf8').digest('hex')
 
   return {
@@ -647,7 +655,7 @@ export function validateFeedModelAgainstSchema(feedModel, xsdPath) {
   for (const dataset of feedModel.datasets) {
     validateExtIdent(dataset.extIdent, `dataset:${dataset.title}`)
     validateMaxLength(dataset.title, 300, `dataset "${dataset.extIdent}" title`)
-    validateMaxLength(dataset.description, 10000, `dataset "${dataset.extIdent}" description`)
+    validateMaxLength(dataset.description, 1000, `dataset "${dataset.extIdent}" description`)
     if (extIdents.has(dataset.extIdent)) {
       throw new Error(`Duplicate dataset extIdent "${dataset.extIdent}".`)
     }
@@ -663,7 +671,7 @@ export function validateFeedModelAgainstSchema(feedModel, xsdPath) {
         throw new Error(`Resource "${resource.extIdent}" must use an https:// URL.`)
       }
       validateMaxLength(resource.title, 300, `resource "${resource.extIdent}" title`)
-      validateMaxLength(resource.description, 10000, `resource "${resource.extIdent}" description`)
+      validateMaxLength(resource.description, 1000, `resource "${resource.extIdent}" description`)
       if (!isIsoDate(resource.dataDate)) {
         throw new Error(`Resource "${resource.extIdent}" has invalid dataDate "${resource.dataDate}".`)
       }
@@ -672,6 +680,52 @@ export function validateFeedModelAgainstSchema(feedModel, xsdPath) {
       }
       extIdents.add(resource.extIdent)
     }
+  }
+}
+
+export async function validateFeedXmlAgainstXsd(feedXml, xsdPath, options = {}) {
+  if (!xsdPath) {
+    throw new Error('XSD path is required for XML schema validation.')
+  }
+
+  const mode = options.mode ?? 'auto'
+
+  if (mode === 'off') {
+    return { validated: false, validator: null }
+  }
+
+  const tempDir = await mkdtemp(path.join(os.tmpdir(), 'government-feed-xsd-'))
+  const tempXmlPath = path.join(tempDir, FEED_PATH)
+
+  try {
+    await writeFile(tempXmlPath, feedXml, 'utf8')
+
+    try {
+      await execFile('java', [JAVA_XSD_VALIDATOR_PATH, tempXmlPath, xsdPath], {
+        cwd: process.cwd(),
+      })
+    } catch (error) {
+      if (error?.code === 'ENOENT' && mode === 'auto') {
+        return { validated: false, validator: 'java' }
+      }
+
+      if (error?.code === 'ENOENT') {
+        throw new Error('Java runtime is required for government feed XSD validation.')
+      }
+
+      const message = [error?.stdout, error?.stderr]
+        .filter((value) => typeof value === 'string' && value.trim().length > 0)
+        .join('\n')
+        .trim()
+
+      throw new Error(
+        `Generated feed failed XSD validation against "${path.basename(xsdPath)}".${message ? `\n${message}` : ''}`,
+      )
+    }
+
+    return { validated: true, validator: 'java' }
+  } finally {
+    await rm(tempDir, { recursive: true, force: true })
   }
 }
 

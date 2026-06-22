@@ -44,12 +44,12 @@ jobs:
 
       - name: Generate government feed
         env:
-          BASEHUB_URL: ${{ secrets.BASEHUB_URL }}
-          BASEHUB_TEAM: ${{ secrets.BASEHUB_TEAM }}
-          BASEHUB_REPO: ${{ secrets.BASEHUB_REPO }}
+          BASEHUB_URL: ${{ vars.BASEHUB_URL }}
+          BASEHUB_TEAM: ${{ vars.BASEHUB_TEAM }}
+          BASEHUB_REPO: ${{ vars.BASEHUB_REPO }}
           BASEHUB_TOKEN: ${{ secrets.BASEHUB_TOKEN }}
-          BASEHUB_REF: ${{ secrets.BASEHUB_REF }}
-          GOVERNMENT_EXPORT_BASE_URL: ${{ secrets.GOVERNMENT_EXPORT_BASE_URL }}
+          BASEHUB_REF: ${{ vars.BASEHUB_REF }}
+          GOVERNMENT_EXPORT_BASE_URL: ${{ vars.GOVERNMENT_EXPORT_BASE_URL }}
           GOVERNMENT_XSD_VALIDATION_MODE: require
         run: pnpm generate-government-feed
 

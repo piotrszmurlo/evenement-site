@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns2:datasets xmlns:ns2="urn:otwarte-dane:harvester:1.13" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <dataset status="published">
+    <extIdent>TODOMIGRATEDATASETEXTIDENT</extIdent>
+    <title>
+      <polish>TODO_MIGRATE_DATASET_TITLE</polish>
+    </title>
+    <description>
+      <polish>TODO_MIGRATE_DATASET_DESCRIPTION</polish>
+    </description>
+    <updateFrequency>daily</updateFrequency>
+    <hasDynamicData>false</hasDynamicData>
+    <hasHighValueData>true</hasHighValueData>
+    <hasHighValueDataFromEuropeanCommissionList>false</hasHighValueDataFromEuropeanCommissionList>
+    <hasResearchData>false</hasResearchData>
+    <categories>
+      <category>ECON</category>
+    </categories>
+    <resources>
+    <resource status="published">
+      <extIdent>res2ece8eec42TODOMIGRATEDATASETEXTID</extIdent>
+      <url>https://evenement24.com/otwarte-dane/sloneczna-polana-iv/ceny-ofertowe-evenement-m-szmur-o-sloneczna-polana-iv-2026-06-22.csv</url>
+      <title>
+        <polish>Ceny ofertowe inwestycji Słoneczna Polana IV etap 2026-06-22</polish>
+      </title>
+      <description>
+        <polish>Dane dotyczace cen ofertowych inwestycji Słoneczna Polana IV etap udostepnione 2026-06-22.</polish>
+      </description>
+      <availability>local</availability>
+      <dataDate>2026-06-22</dataDate>
+      <specialSigns>
+        <specialSign>X</specialSign>
+      </specialSigns>
+      <hasDynamicData>false</hasDynamicData>
+      <hasHighValueData>true</hasHighValueData>
+      <hasHighValueDataFromEuropeanCommissionList>false</hasHighValueDataFromEuropeanCommissionList>
+      <hasResearchData>false</hasResearchData>
+      <containsProtectedData>false</containsProtectedData>
+    </resource>
+    </resources>
+    <tags>
+      <tag lang="pl">deweloper</tag>
+      <tag lang="pl">ceny mieszkan</tag>
+    </tags>
+  </dataset>
+</ns2:datasets>

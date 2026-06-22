@@ -317,7 +317,6 @@ async function loadSiteContent(): Promise<SiteContent & CmsHomepageContent & { _
 function hasBasehubCredentials(): boolean {
   return Boolean(
     import.meta.env.BASEHUB_URL ||
-      import.meta.env.BASEHUB_TOKEN ||
       (import.meta.env.BASEHUB_TEAM && import.meta.env.BASEHUB_REPO),
   );
 }

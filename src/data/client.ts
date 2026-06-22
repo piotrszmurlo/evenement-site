@@ -39,7 +39,7 @@ export const client = {
     instagram: 'https://www.instagram.com/',
     google: 'https://www.google.com/maps',
   },
-  domain: 'https://evenement24.pl',
+  domain: 'https://evenement24.com',
 } as const;
 
 export type Client = typeof client;

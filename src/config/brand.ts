@@ -18,7 +18,7 @@ export const brand = {
   tagline: 'Nowoczesne inwestycje deweloperskie.',
   description:
     'Kameralne i funkcjonalne nieruchomości dopasowane do Twoich potrzeb.',
-  url: 'https://evenement.pl',
+  url: 'https://evenement24.com',
   locale: 'pl_PL',
 
   // ── Fonts ──────────────────────────────────────────────────────────────────

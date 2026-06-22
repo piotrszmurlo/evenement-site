@@ -29,7 +29,9 @@
     "build": "basehub && astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "generate-government-feed": "node scripts/generate-government-feed.mjs",
     "test": "playwright test",
+    "test:government-feed": "node --test tests/government-export.test.mjs",
     "test:ui": "playwright test --ui",
     "test:perf": "playwright test tests/performance.spec.ts",
     "test:report": "playwright show-report"

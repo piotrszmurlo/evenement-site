@@ -1,116 +1,141 @@
 {
+  "developer": {
+    "name": "\"EVENEMENT M. Szmurlo\" Marek Szmurlo",
+    "legalForm": "Spolka z ograniczona odpowiedzialnoscia",
+    "krsNumber": "",
+    "ceidgNumber": "",
+    "nip": "5421943411",
+    "regon": "200287001",
+    "phone": "+48 601 625 585",
+    "email": "marek_szmurlo@poczta.onet.pl",
+    "fax": "",
+    "websiteUrl": "https://evenement24.com",
+    "additionalSalesLocations": "",
+    "buyerContactMethod": "Telefonicznie lub mailowo",
+    "registeredAddress": {
+      "voivodeship": "podlaskie",
+      "county": "bialostocki",
+      "municipality": "Choroszcz",
+      "city": "Krupniki",
+      "street": "Krokusowa",
+      "buildingNumber": "12",
+      "unitNumber": "",
+      "postalCode": "16-070"
+    },
+    "salesOfficeAddress": {
+      "voivodeship": "podlaskie",
+      "county": "Bialystok",
+      "municipality": "Bialystok",
+      "city": "Bialystok",
+      "street": "Mickiewicza",
+      "buildingNumber": "7",
+      "unitNumber": "2",
+      "postalCode": "15-213"
+    }
+  },
   "investments": [
     {
       "name": "Sloneczna Polana IV etap",
       "slug": "sloneczna-polana-iv",
-      "summary": "6 nowych domow szeregowych 119,14 m2 z garazem, planowana dostepnosc: IV kwartal 2026.",
-      "description": "Sloneczna Polana IV to kolejny etap kameralnego osiedla domow przy granicy Bialegostoku. W tej fazie powstaja nowe domy szeregowe z garazem, ogrodem i pelnym zakresem mediow. Inwestycja oferuje stan deweloperski, dwie kondygnacje oraz wygodny dojazd asfaltowa droga i kostka brukowa.",
-      "locationAddress": "ul. Rozana i Krokusowa, Krupniki k. Bialegostoku",
       "salesStatus": "active",
+      "salesEndedAt": null,
+      "salesEndedNote": "",
+      "isReportedToGovernment": true,
+      "governmentDatasetExtIdent": "",
+      "governmentDatasetTitle": "",
+      "governmentDatasetDescription": "",
       "prospectusFile": {
-        "url": "https://evenement.pl/prospekt-sloneczna-polana-iv.pdf"
+        "url": "https://evenement24.com/prospekt-sloneczna-polana-iv.pdf"
       },
-      "gallery": [
-        {
-          "image": {
-            "url": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1400&q=80",
-            "alt": "Wizualizacja inwestycji Sloneczna Polana IV"
+      "investmentAddress": {
+        "voivodeship": "podlaskie",
+        "county": "bialostocki",
+        "municipality": "Choroszcz",
+        "city": "Krupniki",
+        "street": "Rozana",
+        "buildingNumber": "1",
+        "unitNumber": "",
+        "postalCode": "16-070"
+      },
+      "units": {
+        "items": [
+          {
+            "unitNumber": "A1",
+            "slug": "a1",
+            "propertyType": "dom w zabudowie szeregowej",
+            "status": "available",
+            "usableAreaM2": 119.14,
+            "governmentReportingEnabled": true,
+            "includedInPriceNotes": "",
+            "priceHistory": {
+              "items": [
+                {
+                  "validFrom": "2026-05-01",
+                  "pricePerM2": 6370.66,
+                  "baseTotalPrice": 759000,
+                  "totalPriceWithComponents": null,
+                  "vatIncluded": true,
+                  "note": "",
+                  "correctionOfPreviousEntry": false
+                },
+                {
+                  "validFrom": "2026-06-13",
+                  "pricePerM2": 6500.08,
+                  "baseTotalPrice": 774410,
+                  "totalPriceWithComponents": 789410,
+                  "vatIncluded": true,
+                  "note": "",
+                  "correctionOfPreviousEntry": false
+                }
+              ]
+            }
+          },
+          {
+            "unitNumber": "A2",
+            "slug": "a2",
+            "propertyType": "dom w zabudowie szeregowej",
+            "status": "reserved",
+            "usableAreaM2": 119.14,
+            "governmentReportingEnabled": true,
+            "includedInPriceNotes": "",
+            "priceHistory": {
+              "items": [
+                {
+                  "validFrom": "2026-06-13",
+                  "pricePerM2": 6500.08,
+                  "baseTotalPrice": 774410,
+                  "totalPriceWithComponents": null,
+                  "vatIncluded": true,
+                  "note": "",
+                  "correctionOfPreviousEntry": false
+                }
+              ]
+            }
+          },
+          {
+            "unitNumber": "A3",
+            "slug": "a3",
+            "propertyType": "dom w zabudowie szeregowej",
+            "status": "sold",
+            "usableAreaM2": 119.14,
+            "governmentReportingEnabled": true,
+            "includedInPriceNotes": "",
+            "priceHistory": {
+              "items": [
+                {
+                  "validFrom": "2026-04-15",
+                  "pricePerM2": 6286.72,
+                  "baseTotalPrice": 749000,
+                  "totalPriceWithComponents": null,
+                  "vatIncluded": true,
+                  "note": "",
+                  "correctionOfPreviousEntry": false
+                }
+              ]
+            }
           }
-        },
-        {
-          "image": {
-            "url": "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=1400&q=80",
-            "alt": "Widok osiedla z zewnatrz"
-          }
-        }
-      ],
-      "units": [
-        {
-          "unitNumber": "A1",
-          "slug": "a1",
-          "propertyType": "dom w zabudowie szeregowej",
-          "status": "available",
-          "usableAreaM2": 119.14,
-          "plotAreaM2": 144,
-          "rooms": 5,
-          "shortDescription": "Dom szeregowy z garazem, ogrodem i pelnymi mediami.",
-          "description": "Nowy dom w zabudowie szeregowej o powierzchni 119,14 m2, w stanie deweloperskim, z garazem, ogrodem i podjazdem.",
-          "gallery": [
-            {
-              "image": {
-                "url": "https://images.unsplash.com/photo-1560185008-b033106af5d9?w=1200&q=80",
-                "alt": "Dom A1"
-              }
-            },
-            {
-              "image": {
-                "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80",
-                "alt": "Wnetrze domu A1"
-              }
-            }
-          ],
-          "priceHistory": [
-            {
-              "validFrom": "2026-05-01",
-              "totalPrice": 759000
-            },
-            {
-              "validFrom": "2026-06-13",
-              "totalPrice": 774410
-            }
-          ]
-        },
-        {
-          "unitNumber": "A2",
-          "slug": "a2",
-          "propertyType": "dom w zabudowie szeregowej",
-          "status": "reserved",
-          "usableAreaM2": 119.14,
-          "plotAreaM2": 119.14,
-          "rooms": 5,
-          "shortDescription": "Funkcjonalny segment z nowoczesnymi rozwiazaniami i duzymi oknami.",
-          "description": "Segment srodkowy z przemyslanym ukladem pomieszczen, nowoczesna architektura i estetycznym wykonczeniem stanu deweloperskiego.",
-          "gallery": [
-            {
-              "image": {
-                "url": "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=1200&q=80",
-                "alt": "Dom A2"
-              }
-            }
-          ],
-          "priceHistory": [
-            {
-              "validFrom": "2026-06-13",
-              "totalPrice": 774410
-            }
-          ]
-        },
-        {
-          "unitNumber": "A3",
-          "slug": "a3",
-          "propertyType": "dom w zabudowie szeregowej",
-          "status": "sold",
-          "usableAreaM2": 119.14,
-          "plotAreaM2": 119.14,
-          "rooms": 5,
-          "shortDescription": "Dom z podjazdem, garazem i dostepem do swiatlowodu.",
-          "description": "Dom szeregowy z pelnymi mediami, szybkim dojazdem do miasta i spokojnym sasiedztwem.",
-          "gallery": [
-            {
-              "image": {
-                "url": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80",
-                "alt": "Dom A3"
-              }
-            }
-          ],
-          "priceHistory": [
-            {
-              "validFrom": "2026-04-15",
-              "totalPrice": 749000
-            }
-          ]
-        }
-      ]
+        ]
+      }
     }
   ]
 }

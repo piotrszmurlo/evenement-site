@@ -1,0 +1,65 @@
+name: Generate Government Feed
+
+on:
+  schedule:
+    - cron: '15 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Test government feed export
+        env:
+          GOVERNMENT_XSD_VALIDATION_MODE: require
+        run: pnpm test:government-feed
+
+      - name: Generate government feed
+        env:
+          BASEHUB_URL: ${{ secrets.BASEHUB_URL }}
+          BASEHUB_TEAM: ${{ secrets.BASEHUB_TEAM }}
+          BASEHUB_REPO: ${{ secrets.BASEHUB_REPO }}
+          BASEHUB_TOKEN: ${{ secrets.BASEHUB_TOKEN }}
+          BASEHUB_REF: ${{ secrets.BASEHUB_REF }}
+          GOVERNMENT_EXPORT_BASE_URL: ${{ secrets.GOVERNMENT_EXPORT_BASE_URL }}
+          GOVERNMENT_XSD_VALIDATION_MODE: require
+        run: pnpm generate-government-feed
+
+      - name: Commit generated artifacts
+        run: |
+          if git diff --quiet -- public/otwarte-dane; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/otwarte-dane
+          git commit -m "chore: update government feed"
+          git push

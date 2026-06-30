@@ -70,7 +70,7 @@
             "priceHistory": {
               "items": [
                 {
-                  "validFrom": "2026-05-01",
+                  "validFrom": "2026-05-01T00:00:00.000Z",
                   "pricePerM2": 6370.66,
                   "baseTotalPrice": 759000,
                   "totalPriceWithComponents": null,
@@ -79,7 +79,7 @@
                   "correctionOfPreviousEntry": false
                 },
                 {
-                  "validFrom": "2026-06-13",
+                  "validFrom": "2026-06-13T00:00:00.000Z",
                   "pricePerM2": 6500.08,
                   "baseTotalPrice": 774410,
                   "totalPriceWithComponents": 789410,
@@ -101,7 +101,7 @@
             "priceHistory": {
               "items": [
                 {
-                  "validFrom": "2026-06-13",
+                  "validFrom": "2026-06-13T00:00:00.000Z",
                   "pricePerM2": 6500.08,
                   "baseTotalPrice": 774410,
                   "totalPriceWithComponents": null,
@@ -123,7 +123,7 @@
             "priceHistory": {
               "items": [
                 {
-                  "validFrom": "2026-04-15",
+                  "validFrom": "2026-04-15T00:00:00.000Z",
                   "pricePerM2": 6286.72,
                   "baseTotalPrice": 749000,
                   "totalPriceWithComponents": null,

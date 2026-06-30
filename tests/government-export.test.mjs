@@ -20,6 +20,87 @@ const execFile = promisify(execFileCallback)
 const XSD_PATH = path.resolve(process.cwd(), 'goverment-docs/otwarte_dane_latest.xsd')
 const hasJavaRuntime = await canRunJava()
 
+test('normalizeGovernmentSource accepts BaseHub ISO datetime validFrom values', () => {
+  const result = normalizeGovernmentSource(
+    {
+      developer: {
+        name: 'Evenement',
+        phone: '+48 600 000 000',
+        email: 'test@example.com',
+        websiteUrl: 'https://evenement24.com',
+        registeredAddress: {
+          voivodeship: 'podlaskie',
+          county: 'bialostocki',
+          municipality: 'Choroszcz',
+          city: 'Krupniki',
+          street: 'Krokusowa',
+          buildingNumber: '12',
+          unitNumber: '',
+          postalCode: '16-070',
+        },
+        salesOfficeAddress: {
+          voivodeship: 'podlaskie',
+          county: 'Bialystok',
+          municipality: 'Bialystok',
+          city: 'Bialystok',
+          street: 'Mickiewicza',
+          buildingNumber: '7',
+          unitNumber: '2',
+          postalCode: '15-213',
+        },
+      },
+      investments: [
+        {
+          name: 'Sloneczna Polana IV etap',
+          slug: 'sloneczna-polana-iv',
+          salesStatus: 'active',
+          isReportedToGovernment: true,
+          prospectusFile: { url: 'https://evenement24.com/prospectus.pdf' },
+          investmentAddress: {
+            voivodeship: 'podlaskie',
+            county: 'bialostocki',
+            municipality: 'Choroszcz',
+            city: 'Krupniki',
+            street: 'Rozana',
+            buildingNumber: '1',
+            unitNumber: '',
+            postalCode: '16-070',
+          },
+          units: {
+            items: [
+              {
+                unitNumber: 'A1',
+                slug: 'a1',
+                propertyType: 'dom w zabudowie szeregowej',
+                status: 'available',
+                usableAreaM2: 119.14,
+                governmentReportingEnabled: true,
+                includedInPriceNotes: '',
+                priceHistory: {
+                  items: [
+                    {
+                      validFrom: '2026-06-13T00:00:00.000Z',
+                      pricePerM2: 6500.08,
+                      baseTotalPrice: 774410,
+                      totalPriceWithComponents: 789410,
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
+      exportDate: '2026-06-22',
+      baseUrl: 'https://evenement24.com',
+    },
+  )
+
+  assert.equal(result.investments[0].offerRows[0].pricePerM2ValidFrom, '2026-06-13')
+})
+
 test('selectEffectivePrice picks latest valid price on export date', () => {
   const result = selectEffectivePrice(
     [
@@ -204,7 +285,7 @@ test('missing prospectus yields validation error instead of crashing', () => {
                     priceHistory: {
                       items: [
                         {
-                          validFrom: '2026-06-13',
+                          validFrom: '2026-06-13T00:00:00.000Z',
                           pricePerM2: 6500.08,
                           baseTotalPrice: 774410,
                           totalPriceWithComponents: 789410,

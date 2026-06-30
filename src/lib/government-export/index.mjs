@@ -454,12 +454,12 @@ function normalizePriceHistory(priceHistory, unitLabel, errors) {
         validatePositiveNumber(errors, `${label}.totalPriceWithComponents`, entry.totalPriceWithComponents)
       }
 
-      if (!isIsoDate(entry?.validFrom)) {
-        errors.push(`${label}.validFrom must be a valid YYYY-MM-DD date.`)
+      if (!BASEHUB_VALID_FROM_RE.test(entry?.validFrom ?? '')) {
+        errors.push(`${label}.validFrom must be a BaseHub ISO date (YYYY-MM-DDT00:00:00.000Z).`)
       }
 
       return {
-        validFrom: entry.validFrom,
+        validFrom: entry.validFrom.slice(0, 10),
         pricePerM2: entry.pricePerM2,
         baseTotalPrice: entry.baseTotalPrice,
         totalPriceWithComponents: entry.totalPriceWithComponents ?? null,
@@ -945,6 +945,8 @@ function getWarsawDateString() {
 
   return formatter.format(new Date())
 }
+
+const BASEHUB_VALID_FROM_RE = /^\d{4}-\d{2}-\d{2}T00:00:00\.000Z$/
 
 function isIsoDate(value) {
   return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(value))

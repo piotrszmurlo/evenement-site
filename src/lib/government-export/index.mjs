@@ -9,6 +9,7 @@ import { basehub } from 'basehub'
 const GOVERNMENT_NAMESPACE = 'urn:otwarte-dane:harvester:1.13'
 const DEFAULT_BASE_URL = 'https://evenement24.com'
 const DEFAULT_OUTPUT_DIR = path.resolve(process.cwd(), 'public/otwarte-dane')
+const DEFAULT_BUYER_CONTACT_METHOD = 'Telefonicznie lub mailowo'
 const FEED_PATH = 'feed.xml'
 const FEED_MD5_PATH = 'feed.md5'
 const CSV_REFERENCE_PATH = path.resolve(
@@ -362,7 +363,7 @@ function normalizeDeveloper(developer, baseUrl, errors) {
     fax: normalizeCsvCell(developer.fax),
     websiteUrl,
     additionalSalesLocations: normalizeCsvCell(developer.additionalSalesLocations),
-    buyerContactMethod: normalizeCsvCell(developer.buyerContactMethod),
+    buyerContactMethod: normalizeOptionalString(developer.buyerContactMethod) ?? DEFAULT_BUYER_CONTACT_METHOD,
     registeredAddress: normalizeAddress(developer.registeredAddress),
     salesOfficeAddress: normalizeAddress(developer.salesOfficeAddress),
   }

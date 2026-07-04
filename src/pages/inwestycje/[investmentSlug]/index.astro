@@ -223,13 +223,14 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
                                 href={unit.floorPlanUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="inline-flex items-center gap-2 text-xs font-medium text-primary transition-colors hover:text-primaryLight"
+                                class="inline-flex w-fit items-center rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
                               >
-                                <span aria-hidden="true">i</span>
-                                Rzut lokalu
+                                Rzuty
                               </a>
                             ) : (
-                              <span class="text-xs text-text-muted">—</span>
+                              <span class="inline-flex w-fit items-center rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted">
+                                Brak
+                              </span>
                             )}
                           </div>
                         </td>

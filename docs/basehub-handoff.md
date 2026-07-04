@@ -82,7 +82,6 @@ status: available | reserved | sold
 usableAreaM2
 plotAreaM2
 rooms
-shortDescription
 description
 gallery
   image
@@ -254,7 +253,6 @@ Unit required fields:
 - positive `usableAreaM2`
 - positive `plotAreaM2`
 - positive `rooms`
-- `shortDescription`
 - `description`
 - at least one gallery image
 - at least one price history entry

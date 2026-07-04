@@ -319,7 +319,6 @@ Top level:
 - `plotAreaM2`
 - `rooms`
 - `floor`
-- `shortDescription`
 - `description`
 - `governmentReportingEnabled`
 - `includedInPriceNotes`

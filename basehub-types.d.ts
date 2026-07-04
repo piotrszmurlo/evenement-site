@@ -488,7 +488,6 @@ export interface LokalDomComponent {
     priceHistory: PriceHistory
     propertyType: Scalars['BSHBSelect__45995339']
     rooms: Scalars['Float']
-    shortDescription: Scalars['String']
     slug: Scalars['String']
     status: Scalars['BSHBSelect_426015504']
     unitNumber: Scalars['String']
@@ -496,7 +495,7 @@ export interface LokalDomComponent {
     __typename: 'LokalDomComponent'
 }
 
-export type LokalDomComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'description__ASC' | 'description__DESC' | 'floor__ASC' | 'floor__DESC' | 'gallery__ASC' | 'gallery__DESC' | 'governmentReportingEnabled__ASC' | 'governmentReportingEnabled__DESC' | 'includedInPriceNotes__ASC' | 'includedInPriceNotes__DESC' | 'plotAreaM2__ASC' | 'plotAreaM2__DESC' | 'priceHistory__ASC' | 'priceHistory__DESC' | 'propertyType__ASC' | 'propertyType__DESC' | 'rooms__ASC' | 'rooms__DESC' | 'shortDescription__ASC' | 'shortDescription__DESC' | 'slug__ASC' | 'slug__DESC' | 'status__ASC' | 'status__DESC' | 'unitNumber__ASC' | 'unitNumber__DESC' | 'usableAreaM2__ASC' | 'usableAreaM2__DESC'
+export type LokalDomComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'description__ASC' | 'description__DESC' | 'floor__ASC' | 'floor__DESC' | 'gallery__ASC' | 'gallery__DESC' | 'governmentReportingEnabled__ASC' | 'governmentReportingEnabled__DESC' | 'includedInPriceNotes__ASC' | 'includedInPriceNotes__DESC' | 'plotAreaM2__ASC' | 'plotAreaM2__DESC' | 'priceHistory__ASC' | 'priceHistory__DESC' | 'propertyType__ASC' | 'propertyType__DESC' | 'rooms__ASC' | 'rooms__DESC' | 'slug__ASC' | 'slug__DESC' | 'status__ASC' | 'status__DESC' | 'unitNumber__ASC' | 'unitNumber__DESC' | 'usableAreaM2__ASC' | 'usableAreaM2__DESC'
 
 export type MediaBlock = (BlockAudio | BlockFile | BlockImage | BlockVideo) & { __isUnion?: true }
 
@@ -1728,7 +1727,6 @@ export interface LokalDomComponentGenqlSelection{
     skip?: (Scalars['Int'] | null)} })
     propertyType?: boolean | number
     rooms?: boolean | number
-    shortDescription?: boolean | number
     slug?: boolean | number
     status?: boolean | number
     unitNumber?: boolean | number
@@ -1737,7 +1735,7 @@ export interface LokalDomComponentGenqlSelection{
     __fragmentOn?: "LokalDomComponent"
 }
 
-export interface LokalDomComponentFilterInput {AND?: (LokalDomComponentFilterInput | null),OR?: (LokalDomComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),description?: (StringFilter | null),floor?: (NumberFilter | null),gallery?: (ListFilter | null),governmentReportingEnabled?: (Scalars['Boolean'] | null),includedInPriceNotes?: (StringFilter | null),plotAreaM2?: (NumberFilter | null),priceHistory?: (ListFilter | null),propertyType?: (SelectFilter | null),rooms?: (NumberFilter | null),shortDescription?: (StringFilter | null),slug?: (StringFilter | null),status?: (SelectFilter | null),unitNumber?: (StringFilter | null),usableAreaM2?: (NumberFilter | null)}
+export interface LokalDomComponentFilterInput {AND?: (LokalDomComponentFilterInput | null),OR?: (LokalDomComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),description?: (StringFilter | null),floor?: (NumberFilter | null),gallery?: (ListFilter | null),governmentReportingEnabled?: (Scalars['Boolean'] | null),includedInPriceNotes?: (StringFilter | null),plotAreaM2?: (NumberFilter | null),priceHistory?: (ListFilter | null),propertyType?: (SelectFilter | null),rooms?: (NumberFilter | null),slug?: (StringFilter | null),status?: (SelectFilter | null),unitNumber?: (StringFilter | null),usableAreaM2?: (NumberFilter | null)}
 
 export interface LokalDomComponentSearchInput {
 /** Searchable fields for query */

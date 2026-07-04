@@ -18,7 +18,6 @@ Defer from v1 XML work unless a real producer or a validated CSV example forces 
 - extra company registry/contact fields beyond what the public site already needs,
 - manual dataset title/description overrides stored in CMS,
 - unit `floor`,
-- unit `shortDescription` as a government-export dependency,
 - repeatable `propertyParts`, `appurtenantRooms`, `useRights`, `otherFees`,
 - price-history fields beyond current effective price and date,
 - editorial-only correction/note/VAT fields.

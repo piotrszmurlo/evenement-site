@@ -533,7 +533,7 @@ export interface SalesOfficeAddressComponent {
     __typename: 'SalesOfficeAddressComponent'
 }
 
-export type SalesOfficeAddressComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'buildingNumber__ASC' | 'buildingNumber__DESC' | 'city__ASC' | 'city__DESC' | 'county__ASC' | 'county__DESC' | 'municipality__ASC' | 'municipality__DESC' | 'postalCode__ASC' | 'postalCode__DESC' | 'street__ASC' | 'street__DESC' | 'unitNumber__ASC' | 'unitNumber__DESC' | 'voivodeship__ASC' | 'voivodeship__DESC'
+export type SalesOfficeAddressComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'buildingNumber__ASC' | 'buildingNumber__DESC' | 'city__ASC' | 'city__DESC' | 'county__ASC' | 'county__DESC' | 'municipality__ASC' | 'municipality__DESC' | 'postalCode__ASC' | 'postalCode__DESC' | 'street__ASC' | 'street__DESC' | 'unitNumber__ASC' | 'unitNumber__DESC' | 'untitled__ASC' | 'untitled__DESC' | 'voivodeship__ASC' | 'voivodeship__DESC'
 
 export interface SearchHighlight {
     /** The field/path that was matched (e.g., "title", "body.content") */

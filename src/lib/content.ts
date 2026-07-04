@@ -45,6 +45,7 @@ interface CmsDeveloperContact {
   nip?: string | null;
   regon?: string | null;
   registeredAddress: CmsAddress;
+  salesOfficeAddress: CmsAddress;
 }
 
 interface CmsPriceHistoryEntry {
@@ -144,6 +145,10 @@ export interface DeveloperContact {
     lineOne: string;
     lineTwo?: string;
   };
+  salesOfficeAddress: {
+    lineOne: string;
+    lineTwo?: string;
+  };
 }
 
 const SITE_CONTENT_QUERY = {
@@ -176,6 +181,13 @@ const SITE_CONTENT_QUERY = {
       nip: true,
       regon: true,
       registeredAddress: {
+        city: true,
+        street: true,
+        buildingNumber: true,
+        unitNumber: true,
+        postalCode: true,
+      },
+      salesOfficeAddress: {
         city: true,
         street: true,
         buildingNumber: true,
@@ -409,6 +421,7 @@ async function loadDeveloperContact(): Promise<DeveloperContact> {
     nipFormatted: nip ? formatNipDisplay(nip) : undefined,
     regon: developer.regon?.trim() || undefined,
     registeredAddress: formatAddress(developer.registeredAddress),
+    salesOfficeAddress: formatAddress(developer.salesOfficeAddress),
   };
 }
 
@@ -484,6 +497,13 @@ async function loadBasehubContent(): Promise<SiteContent & CmsHomepageContent> {
         buildingNumber: data.content.developer.registeredAddress.buildingNumber,
         unitNumber: data.content.developer.registeredAddress.unitNumber,
         postalCode: data.content.developer.registeredAddress.postalCode,
+      },
+      salesOfficeAddress: {
+        city: data.content.developer.salesOfficeAddress.city,
+        street: data.content.developer.salesOfficeAddress.street,
+        buildingNumber: data.content.developer.salesOfficeAddress.buildingNumber,
+        unitNumber: data.content.developer.salesOfficeAddress.unitNumber,
+        postalCode: data.content.developer.salesOfficeAddress.postalCode,
       },
     },
     investments: investments.map((investment) => ({

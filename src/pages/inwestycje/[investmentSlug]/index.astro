@@ -121,11 +121,11 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
 
         {galleryImages.length > 0 && (
           <dialog
-            class="fixed inset-0 h-dvh max-h-none w-dvw max-w-none overflow-hidden bg-slate-900/90 p-0 text-white backdrop:bg-slate-950/65"
+            class="fixed inset-0 m-0 h-dvh max-h-none w-dvw max-w-none overflow-hidden bg-slate-900/90 p-0 text-white backdrop:bg-slate-950/65"
             data-gallery-viewer
             aria-label={`Galeria inwestycji ${investment.name}`}
           >
-            <div class="grid h-full grid-rows-[auto_1fr_auto]">
+            <div class="fixed inset-0 grid h-dvh w-dvw min-w-0 grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto]">
               <div class="flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
                 <p class="text-sm font-semibold uppercase tracking-wider text-white/80" data-gallery-counter></p>
                 <button
@@ -140,7 +140,7 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
                 </button>
               </div>
 
-              <div class="relative min-h-0">
+              <div class="relative flex min-h-0 min-w-0 items-center justify-center overflow-hidden px-4 py-2 sm:px-20">
                 {galleryImages.length > 1 && (
                   <>
                     <button
@@ -170,13 +170,13 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
                 <img
                   src={galleryImages[0]}
                   alt=""
-                  class="h-full w-full object-contain px-4 py-2 sm:px-20"
+                  class="h-full w-full object-contain"
                   data-gallery-viewer-image
                 />
               </div>
 
               <div class="border-t border-white/10 bg-slate-950/25 px-4 py-4 sm:px-6">
-                <div class="flex gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]" data-gallery-viewer-thumbs aria-label="Miniatury powiększonej galerii">
+                <div class="flex w-full min-w-0 gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]" data-gallery-viewer-thumbs aria-label="Miniatury powiększonej galerii">
                   {galleryImages.map((src, index) => (
                     <button
                       type="button"

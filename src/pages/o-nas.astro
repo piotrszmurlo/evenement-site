@@ -5,10 +5,15 @@ import Footer from '../components/Footer.astro';
 import Banner from '../components/Banner.astro';
 import CTA from '../components/CTA.astro';
 import { Image } from 'astro:assets';
-import { brand } from '../config/brand';
+import { renderBasehubRichText } from '../lib/basehub-rich-text';
+import { getAboutPageContent } from '../lib/content';
+
+const aboutPage = await getAboutPageContent();
+const storyImageUrl = aboutPage.storyImage?.url;
+const storyContentHtml = renderBasehubRichText(aboutPage.storyContent);
 ---
 
-<BaseLayout title="O nas" description={`Dowiedz się więcej o firmie ${brand.name} — naszej historii, wartościach i zespole.`}>
+<BaseLayout title="O nas" description={aboutPage.metaDescription}>
   <Header slot="header" />
 
   <Banner title="O nas" />
@@ -17,24 +22,21 @@ import { brand } from '../config/brand';
   <section class="py-section">
     <div class="mx-auto grid max-w-site grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:gap-14">
       <div class="overflow-hidden rounded-lg shadow-lg">
-        <Image
-          src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80"
-          alt="Nasz zespół podczas planowania projektu"
-          width={800}
-          height={600}
-          loading="lazy"
-          class="size-full object-cover"
-        />
+        {storyImageUrl && (
+          <Image
+            src={storyImageUrl}
+            alt="Zdjęcie ilustracyjne"
+            width={800}
+            height={600}
+            loading="lazy"
+            class="size-full object-cover"
+          />
+        )}
       </div>
       <div class="space-y-5">
-        <span class="text-topper font-bold uppercase tracking-widest text-accent">Nasza Historia</span>
-        <h2 class="font-heading text-h2 font-bold uppercase text-text">Zbudowane na zaufaniu i najwyższej jakości</h2>
-        <p class="text-text-muted leading-relaxed">
-          Zaczynaliśmy jako niewielka firma rodzinna, a dziś jesteśmy zaufanym deweloperem realizującym nowoczesne inwestycje mieszkaniowe. Od ponad 15 lat tworzymy przemyślane nieruchomości z dbałością o każdy detal — z myślą o kolejnych pokoleniach.
-        </p>
-        <p class="text-text-muted leading-relaxed">
-          Nasze projekty łączą nowoczesną architekturę, funkcjonalne układy oraz ekologiczne rozwiązania. Dbamy o to, aby każdy etap budowy przebiegał zgodnie z najwyższymi standardami, gwarantując naszym klientom bezpieczeństwo i spokój na lata.
-        </p>
+        <span class="text-topper font-bold uppercase tracking-widest text-accent">{aboutPage.storyEyebrow}</span>
+        <h2 class="font-heading text-h2 font-bold uppercase text-text">{aboutPage.storyHeading}</h2>
+        <div class="prose prose-slate max-w-none text-text-muted" set:html={storyContentHtml} />
       </div>
     </div>
   </section>

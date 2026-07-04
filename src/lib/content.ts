@@ -22,6 +22,14 @@ interface CmsHomepageContent {
   homepageImage5?: CmsAsset | null;
 }
 
+interface CmsAboutPage {
+  metaDescription: string;
+  storyEyebrow: string;
+  storyHeading: string;
+  storyContent: BasehubRichTextDocument | null;
+  storyImage?: CmsAsset | null;
+}
+
 interface CmsAddress {
   city: string;
   street: string;
@@ -112,6 +120,14 @@ export interface Investment {
 
 export interface HomepageContent {
   homepageGallery: string[];
+}
+
+export interface AboutPageContent {
+  metaDescription: string;
+  storyEyebrow: string;
+  storyHeading: string;
+  storyContent: BasehubRichTextDocument | null;
+  storyImage?: CmsAsset;
 }
 
 export interface DeveloperContact {
@@ -222,8 +238,61 @@ const SITE_CONTENT_QUERY = {
   },
 } as const;
 
+const ABOUT_PAGE_QUERY = {
+  content: {
+    aboutPage: {
+      metaDescription: true,
+      storyEyebrow: true,
+      storyHeading: true,
+      storyContent: {
+        json: {
+          content: true,
+        },
+      },
+      storyImage: {
+        url: true,
+        alt: true,
+      },
+    },
+  },
+} as const;
+
+const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
+  metaDescription: 'Dowiedz się więcej o firmie EVENEMENT — naszej historii, wartościach i zespole.',
+  storyEyebrow: 'Nasza Historia',
+  storyHeading: 'Zbudowane na zaufaniu i najwyższej jakości',
+  storyContent: {
+    json: {
+      content: [
+        {
+          type: 'paragraph',
+          content: [
+            {
+              type: 'text',
+              text: 'Zaczynaliśmy jako niewielka firma rodzinna, a dziś jesteśmy zaufanym deweloperem realizującym nowoczesne inwestycje mieszkaniowe. Od ponad 15 lat tworzymy przemyślane nieruchomości z dbałością o każdy detal — z myślą o kolejnych pokoleniach.',
+            },
+          ],
+        },
+        {
+          type: 'paragraph',
+          content: [
+            {
+              type: 'text',
+              text: 'Nasze projekty łączą nowoczesną architekturę, funkcjonalne układy oraz ekologiczne rozwiązania. Dbamy o to, aby każdy etap budowy przebiegał zgodnie z najwyższymi standardami, gwarantując naszym klientom bezpieczeństwo i spokój na lata.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  storyImage: {
+    url: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80',
+  },
+};
+
 let investmentsPromise: Promise<Investment[]> | undefined;
 let homepageContentPromise: Promise<HomepageContent> | undefined;
+let aboutPageContentPromise: Promise<AboutPageContent> | undefined;
 let developerContactPromise: Promise<DeveloperContact> | undefined;
 let siteContentPromise: Promise<(SiteContent & CmsHomepageContent & { _sourceLabel: string })> | undefined;
 
@@ -235,6 +304,11 @@ export async function getInvestments(): Promise<Investment[]> {
 export async function getHomepageContent(): Promise<HomepageContent> {
   homepageContentPromise ??= loadHomepageContent();
   return homepageContentPromise;
+}
+
+export async function getAboutPageContent(): Promise<AboutPageContent> {
+  aboutPageContentPromise ??= loadAboutPageContent();
+  return aboutPageContentPromise;
 }
 
 export async function getDeveloperContact(): Promise<DeveloperContact> {
@@ -278,6 +352,36 @@ async function loadHomepageContent(): Promise<HomepageContent> {
 
   return {
     homepageGallery: normalizeHomepageImages(content),
+  };
+}
+
+async function loadAboutPageContent(): Promise<AboutPageContent> {
+  if (!hasBasehubCredentials()) {
+    return DEFAULT_ABOUT_PAGE_CONTENT;
+  }
+
+  try {
+    const data = await basehub(getBasehubConfig()).query(ABOUT_PAGE_QUERY as any);
+    return normalizeAboutPageContent(data.content.aboutPage);
+  } catch (error) {
+    warnLog('Falling back to default about page content', {
+      reason: error instanceof Error ? error.message : String(error),
+    });
+    return DEFAULT_ABOUT_PAGE_CONTENT;
+  }
+}
+
+function normalizeAboutPageContent(aboutPage: CmsAboutPage): AboutPageContent {
+  const storyImage = aboutPage.storyImage?.url
+    ? { url: aboutPage.storyImage.url, alt: aboutPage.storyImage.alt }
+    : DEFAULT_ABOUT_PAGE_CONTENT.storyImage;
+
+  return {
+    metaDescription: aboutPage.metaDescription,
+    storyEyebrow: aboutPage.storyEyebrow,
+    storyHeading: aboutPage.storyHeading,
+    storyContent: aboutPage.storyContent,
+    storyImage,
   };
 }
 

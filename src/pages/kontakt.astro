@@ -59,7 +59,7 @@ const contact = await getDeveloperContact();
                   {contact.nip && (
                     <li>
                       <strong class="text-text">NIP:</strong>
-                      {contact.nip}
+                      {contact.nipFormatted ?? contact.nip}
                     </li>
                   )}
                   {contact.regon && (
@@ -116,7 +116,7 @@ const contact = await getDeveloperContact();
                   href={`tel:${contact.phoneHref}`}
                   class="text-lg font-bold text-text hover:text-primary transition-colors"
                 >
-                  {contact.phone}
+                  {contact.phoneFormatted}
                 </a>
               </div>
             </div>

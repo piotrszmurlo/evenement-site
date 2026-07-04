@@ -117,10 +117,12 @@ export interface HomepageContent {
 export interface DeveloperContact {
   name: string;
   phone: string;
+  phoneFormatted: string;
   phoneHref: string;
   email: string;
   legalForm?: string;
   nip?: string;
+  nipFormatted?: string;
   regon?: string;
   registeredAddress: {
     lineOne: string;
@@ -282,14 +284,18 @@ async function loadHomepageContent(): Promise<HomepageContent> {
 async function loadDeveloperContact(): Promise<DeveloperContact> {
   const content = await getSiteContent();
   const developer = content.developer;
+  const phone = developer.phone.trim();
+  const nip = developer.nip?.trim();
 
   return {
     name: developer.name,
-    phone: developer.phone,
-    phoneHref: normalizePhoneHref(developer.phone),
+    phone,
+    phoneFormatted: formatPhoneDisplay(phone),
+    phoneHref: normalizePhoneHref(phone),
     email: developer.email,
     legalForm: developer.legalForm?.trim() || undefined,
-    nip: developer.nip?.trim() || undefined,
+    nip: nip || undefined,
+    nipFormatted: nip ? formatNipDisplay(nip) : undefined,
     regon: developer.regon?.trim() || undefined,
     registeredAddress: formatAddress(developer.registeredAddress),
   };
@@ -424,6 +430,33 @@ function formatAddress(address: CmsAddress): DeveloperContact['registeredAddress
 function normalizePhoneHref(phone: string): string {
   const normalized = phone.replace(/[^\d+]/g, '');
   return normalized.startsWith('+') ? normalized : `+48${normalized}`;
+}
+
+export function formatPhoneDisplay(phone: string): string {
+  const trimmed = phone.trim();
+  const normalized = trimmed.replace(/[^\d+]/g, '');
+  const digits = normalized.replace(/\D/g, '');
+
+  if (digits.length === 9) {
+    return `+48 ${digits.replace(/(\d{3})(?=\d)/g, '$1 ')}`;
+  }
+
+  if (digits.startsWith('48') && digits.length === 11) {
+    const subscriber = digits.slice(2).replace(/(\d{3})(?=\d)/g, '$1 ');
+    return `+48 ${subscriber}`;
+  }
+
+  return trimmed;
+}
+
+function formatNipDisplay(nip: string): string {
+  const digits = nip.replace(/\D/g, '');
+
+  if (digits.length === 10) {
+    return digits.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4');
+  }
+
+  return digits.replace(/(\d{3})(?=\d)/g, '$1 ');
 }
 
 function getBasehubConfig() {

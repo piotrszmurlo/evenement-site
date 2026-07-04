@@ -2,22 +2,25 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * CLIENT DATA
  * ─────────────────────────────────────────────────────────────────────────────
- * Business-specific copy: name, phone, email, address, socials.
- * Imported by Header, Footer, Contact page, and Head/SEO components.
- *
- * No component should hardcode a business name or phone number —
- * everything comes from this file or brand.ts.
+ * Shared business contact data. Phone, email, legal details, and registered
+ * address are sourced from BaseHub; the remaining site-specific fields stay in
+ * this module because they are not modeled in CMS yet.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
+import { getDeveloperContact } from '../lib/content';
+
+const basehubContact = await getDeveloperContact();
+
 export const client = {
-  name: '"EVENEMENT M. Szmurło" Marek Szmurło',
-  legalForm: 'Spółka z ograniczoną odpowiedzialnością',
-  nip: '5421943411',
-  regon: '200287001',
-  email: 'marek_szmurlo@poczta.onet.pl',
-  phoneForTel: '+48601625585',
-  phoneFormatted: '+48 601 625 585',
+  name: basehubContact.name,
+  legalForm: basehubContact.legalForm ?? 'Spółka z ograniczoną odpowiedzialnością',
+  nip: basehubContact.nip,
+  nipFormatted: basehubContact.nipFormatted,
+  regon: basehubContact.regon,
+  email: basehubContact.email,
+  phoneForTel: basehubContact.phoneHref,
+  phoneFormatted: basehubContact.phoneFormatted,
   license: '',
   address: {
     lineOne: 'ul. Krokusowa 12',

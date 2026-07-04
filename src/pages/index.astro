@@ -52,21 +52,24 @@ const heroGallery =
           <h2 class="mt-2 font-heading text-h2 font-bold uppercase text-text">Poznaj Nasz Najnowszy Projekt</h2>
         </div>
 
-        <div class="mx-auto grid max-w-5xl grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-14">
-          <div class="overflow-hidden rounded-lg shadow-lg">
+        <a
+          href={`/inwestycje/${featuredInvestment.slug}/`}
+          class="group mx-auto grid max-w-5xl grid-cols-1 items-center overflow-hidden rounded-lg border border-border bg-background shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface lg:grid-cols-2"
+        >
+          <div class="h-full min-h-[320px] overflow-hidden">
             {featuredInvestment.coverImage ? (
               <Image
                 src={featuredInvestment.coverImage}
                 alt={featuredInvestment.name}
                 width={800}
                 height={500}
-                class="w-full object-cover transition-transform duration-300 hover:scale-105"
+                class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
             ) : (
-              <ImagePlaceholder label="Placeholder inwestycji do uzupełnienia" class="min-h-[320px] w-full" />
+              <ImagePlaceholder label="Placeholder inwestycji do uzupełnienia" class="size-full min-h-[320px]" />
             )}
           </div>
-          <div class="space-y-6">
+          <div class="space-y-6 p-6 sm:p-8 lg:p-10">
             <h3 class="font-heading text-h3 font-bold uppercase tracking-wide text-text">{featuredInvestment.name}</h3>
             <p class="flex items-center gap-1 text-sm text-text-muted">
               <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -78,16 +81,13 @@ const heroGallery =
             <p class="text-sm leading-relaxed text-text-muted">
               {featuredInvestment.summary}
             </p>
-            <div>
-              <a
-                href={`/inwestycje/${featuredInvestment.slug}/`}
-                class="inline-flex min-h-[44px] items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-bold text-primary-fg shadow-sm transition-opacity hover:opacity-90"
-              >
-                Zobacz dostępne oferty
-              </a>
-            </div>
+            <span
+              class="inline-flex min-h-[44px] items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-bold text-primary-fg shadow-sm transition-opacity group-hover:opacity-90"
+            >
+              Zobacz dostępne oferty
+            </span>
           </div>
-        </div>
+        </a>
       </div>
     </section>
   )}

@@ -55,7 +55,7 @@ jobs:
 
       - name: Commit generated artifacts
         run: |
-          if git diff --quiet -- public/otwarte-dane; then
+          if [ -z "$(git status --porcelain -- public/otwarte-dane)" ]; then
             exit 0
           fi
           git config user.name "github-actions[bot]"

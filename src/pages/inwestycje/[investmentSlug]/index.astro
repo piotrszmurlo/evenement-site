@@ -5,7 +5,7 @@ import Footer from '../../../components/Footer.astro';
 import Banner from '../../../components/Banner.astro';
 import ImagePlaceholder from '../../../components/ImagePlaceholder.astro';
 import { Image } from 'astro:assets';
-import { getInvestments } from '../../../lib/content';
+import { formatAreaM2, getInvestments } from '../../../lib/content';
 import { renderBasehubRichText } from '../../../lib/basehub-rich-text';
 
 export async function getStaticPaths() {
@@ -196,8 +196,8 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
                     return (
                       <tr class="align-top">
                         <td class="px-4 py-4 font-semibold text-text">{unit.unitNumber.toUpperCase()}</td>
-                        <td class="px-4 py-4 text-text-muted">{unit.usableAreaM2.toLocaleString('pl-PL')} m²</td>
-                        <td class="px-4 py-4 text-text-muted">{unit.plotAreaM2.toLocaleString('pl-PL')} m²</td>
+                        <td class="px-4 py-4 text-text-muted">{formatAreaM2(unit.usableAreaM2)} m²</td>
+                        <td class="px-4 py-4 text-text-muted">{formatAreaM2(unit.plotAreaM2)} m²</td>
                         <td class="px-4 py-4">
                           <span class:list={[
                             'inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white',

@@ -23,7 +23,6 @@ interface CmsHomepageContent {
 }
 
 interface CmsAboutPage {
-  metaDescription: string;
   storyEyebrow: string;
   storyHeading: string;
   storyContent: BasehubRichTextDocument | null;
@@ -123,7 +122,6 @@ export interface HomepageContent {
 }
 
 export interface AboutPageContent {
-  metaDescription: string;
   storyEyebrow: string;
   storyHeading: string;
   storyContent: BasehubRichTextDocument | null;
@@ -241,7 +239,6 @@ const SITE_CONTENT_QUERY = {
 const ABOUT_PAGE_QUERY = {
   content: {
     aboutPage: {
-      metaDescription: true,
       storyEyebrow: true,
       storyHeading: true,
       storyContent: {
@@ -258,7 +255,6 @@ const ABOUT_PAGE_QUERY = {
 } as const;
 
 const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
-  metaDescription: 'Dowiedz się więcej o firmie EVENEMENT — naszej historii, wartościach i zespole.',
   storyEyebrow: 'Nasza Historia',
   storyHeading: 'Zbudowane na zaufaniu i najwyższej jakości',
   storyContent: {
@@ -342,6 +338,13 @@ export function formatPropertyTypeLabel(propertyType: PropertyType): string {
   return propertyType;
 }
 
+export function formatAreaM2(value: number): string {
+  return value.toLocaleString('pl-PL', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
 async function loadInvestments(): Promise<Investment[]> {
   const content = await getSiteContent();
   return normalizeAndValidate(content, content._sourceLabel);
@@ -377,7 +380,6 @@ function normalizeAboutPageContent(aboutPage: CmsAboutPage): AboutPageContent {
     : DEFAULT_ABOUT_PAGE_CONTENT.storyImage;
 
   return {
-    metaDescription: aboutPage.metaDescription,
     storyEyebrow: aboutPage.storyEyebrow,
     storyHeading: aboutPage.storyHeading,
     storyContent: aboutPage.storyContent,

@@ -11,9 +11,10 @@ import { getAboutPageContent } from '../lib/content';
 const aboutPage = await getAboutPageContent();
 const storyImageUrl = aboutPage.storyImage?.url;
 const storyContentHtml = renderBasehubRichText(aboutPage.storyContent);
+const pageDescription = 'Dowiedz się więcej o firmie EVENEMENT, naszej historii, wartościach i podejściu do realizacji inwestycji mieszkaniowych.';
 ---
 
-<BaseLayout title="O nas" description={aboutPage.metaDescription}>
+<BaseLayout title="O nas" description={pageDescription}>
   <Header slot="header" />
 
   <Banner title="O nas" />

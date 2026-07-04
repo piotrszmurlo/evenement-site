@@ -83,6 +83,26 @@ export interface Scalars {
 } },
 }
 
+export interface AboutPageComponent {
+    _analyticsKey: Scalars['String']
+    _dashboardUrl: Scalars['String']
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight: (SearchHighlight[] | null)
+    _id: Scalars['String']
+    _idPath: Scalars['String']
+    _slug: Scalars['String']
+    _slugPath: Scalars['String']
+    _sys: BlockDocumentSys
+    _title: Scalars['String']
+    storyContent: StoryContent
+    storyEyebrow: Scalars['String']
+    storyHeading: Scalars['String']
+    storyImage: (BlockImage | null)
+    __typename: 'AboutPageComponent'
+}
+
+export type AboutPageComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'storyContent__ASC' | 'storyContent__DESC' | 'storyEyebrow__ASC' | 'storyEyebrow__DESC' | 'storyHeading__ASC' | 'storyHeading__DESC' | 'storyImage__ASC' | 'storyImage__DESC'
+
 export type AnalyticsKeyScope = 'query' | 'send'
 
 export interface BaseRichTextJson {
@@ -122,7 +142,7 @@ export interface BlockColor {
     __typename: 'BlockColor'
 }
 
-export type BlockDocument = (CloudflareWebhook | Content | DeveloperComponent | ElementGaleriiComponent | Gallery | GalleryItem | Gallery_1 | InvestmentAddressComponent | Investments | InwestycjaComponent | LokalDomComponent | PriceHistory | RegisteredAddressComponent | SalesOfficeAddressComponent | Units | WpisHistoriiCenyComponent | _AgentStart | developerComponent_AsList | elementGaleriiComponent_AsList | galleryItem_AsList | investmentAddressComponent_AsList | inwestycjaComponent_AsList | lokalDomComponent_AsList | registeredAddressComponent_AsList | salesOfficeAddressComponent_AsList | wpisHistoriiCenyComponent_AsList) & { __isUnion?: true }
+export type BlockDocument = (AboutPageComponent | CloudflareWebhook | Content | DeveloperComponent | ElementGaleriiComponent | Gallery | GalleryItem | Gallery_1 | InvestmentAddressComponent | Investments | InwestycjaComponent | LokalDomComponent | PriceHistory | RegisteredAddressComponent | SalesOfficeAddressComponent | Units | WpisHistoriiCenyComponent | _AgentStart | aboutPageComponent_AsList | developerComponent_AsList | elementGaleriiComponent_AsList | galleryItem_AsList | investmentAddressComponent_AsList | inwestycjaComponent_AsList | lokalDomComponent_AsList | registeredAddressComponent_AsList | salesOfficeAddressComponent_AsList | wpisHistoriiCenyComponent_AsList) & { __isUnion?: true }
 
 export interface BlockDocumentSys {
     apiNamePath: Scalars['String']
@@ -181,7 +201,7 @@ export interface BlockImage {
     __typename: 'BlockImage'
 }
 
-export type BlockList = (Gallery | Gallery_1 | Investments | PriceHistory | Units | developerComponent_AsList | elementGaleriiComponent_AsList | galleryItem_AsList | investmentAddressComponent_AsList | inwestycjaComponent_AsList | lokalDomComponent_AsList | registeredAddressComponent_AsList | salesOfficeAddressComponent_AsList | wpisHistoriiCenyComponent_AsList) & { __isUnion?: true }
+export type BlockList = (Gallery | Gallery_1 | Investments | PriceHistory | Units | aboutPageComponent_AsList | developerComponent_AsList | elementGaleriiComponent_AsList | galleryItem_AsList | investmentAddressComponent_AsList | inwestycjaComponent_AsList | lokalDomComponent_AsList | registeredAddressComponent_AsList | salesOfficeAddressComponent_AsList | wpisHistoriiCenyComponent_AsList) & { __isUnion?: true }
 
 export interface BlockOgImage {
     height: Scalars['Int']
@@ -192,7 +212,7 @@ export interface BlockOgImage {
 
 
 /** Rich text block */
-export type BlockRichText = (Description) & { __isUnion?: true }
+export type BlockRichText = (Description | StoryContent) & { __isUnion?: true }
 
 export interface BlockVideo {
     aspectRatio: Scalars['String']
@@ -230,6 +250,7 @@ export interface Content {
     _slugPath: Scalars['String']
     _sys: BlockDocumentSys
     _title: Scalars['String']
+    aboutPage: AboutPageComponent
     developer: DeveloperComponent
     homepageImage1: (BlockImage | null)
     homepageImage2: (BlockImage | null)
@@ -585,7 +606,7 @@ export interface RepoSys {
     __typename: 'RepoSys'
 }
 
-export type RichTextJson = (BaseRichTextJson | DescriptionRichText) & { __isUnion?: true }
+export type RichTextJson = (BaseRichTextJson | DescriptionRichText | StoryContentRichText) & { __isUnion?: true }
 
 export interface SalesOfficeAddressComponent {
     _analyticsKey: Scalars['String']
@@ -617,6 +638,21 @@ export interface SearchHighlight {
     /** HTML snippet with <mark> tags around the matched terms */
     snippet: Scalars['String']
     __typename: 'SearchHighlight'
+}
+
+export interface StoryContent {
+    html: Scalars['String']
+    json: StoryContentRichText
+    markdown: Scalars['String']
+    plainText: Scalars['String']
+    readingTime: Scalars['Int']
+    __typename: 'StoryContent'
+}
+
+export interface StoryContentRichText {
+    content: Scalars['BSHBRichTextContentSchema']
+    toc: Scalars['BSHBRichTextTOCSchema']
+    __typename: 'StoryContentRichText'
 }
 
 export interface TransactionStatus {
@@ -790,6 +826,7 @@ export interface _agents {
 }
 
 export interface _components {
+    aboutPage: aboutPageComponent_AsList
     developer: developerComponent_AsList
     elementGalerii: elementGaleriiComponent_AsList
     galleryItem: galleryItem_AsList
@@ -800,6 +837,25 @@ export interface _components {
     salesOfficeAddress: salesOfficeAddressComponent_AsList
     wpisHistoriiCeny: wpisHistoriiCenyComponent_AsList
     __typename: '_components'
+}
+
+export interface aboutPageComponent_AsList {
+    _analyticsKey: Scalars['String']
+    _dashboardUrl: Scalars['String']
+    _id: Scalars['String']
+    _idPath: Scalars['String']
+    _meta: ListMeta
+    /** The key used to search from the frontend. */
+    _searchKey: Scalars['String']
+    _slug: Scalars['String']
+    _slugPath: Scalars['String']
+    _sys: BlockDocumentSys
+    _title: Scalars['String']
+    /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
+    item: (AboutPageComponent | null)
+    /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
+    items: AboutPageComponent[]
+    __typename: 'aboutPageComponent_AsList'
 }
 
 export interface developerComponent_AsList {
@@ -973,6 +1029,39 @@ export interface wpisHistoriiCenyComponent_AsList {
     __typename: 'wpisHistoriiCenyComponent_AsList'
 }
 
+export interface AboutPageComponentGenqlSelection{
+    _analyticsKey?: { __args: {
+    /**
+     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
+     * 
+     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
+     */
+    scope?: (AnalyticsKeyScope | null)} } | boolean | number
+    _dashboardUrl?: boolean | number
+    /** Array of search highlight information with field names and HTML markup */
+    _highlight?: SearchHighlightGenqlSelection
+    _id?: boolean | number
+    _idPath?: boolean | number
+    _slug?: boolean | number
+    _slugPath?: boolean | number
+    _sys?: BlockDocumentSysGenqlSelection
+    _title?: boolean | number
+    storyContent?: StoryContentGenqlSelection
+    storyEyebrow?: boolean | number
+    storyHeading?: boolean | number
+    storyImage?: BlockImageGenqlSelection
+    __typename?: boolean | number
+    __fragmentOn?: "AboutPageComponent"
+}
+
+export interface AboutPageComponentFilterInput {AND?: (AboutPageComponentFilterInput | null),OR?: (AboutPageComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),storyEyebrow?: (StringFilter | null),storyHeading?: (StringFilter | null)}
+
+export interface AboutPageComponentSearchInput {
+/** Searchable fields for query */
+by?: (Scalars['String'][] | null),
+/** Search query */
+q?: (Scalars['String'] | null)}
+
 export interface BaseRichTextJsonGenqlSelection{
     blocks?: boolean | number
     content?: boolean | number
@@ -1031,6 +1120,7 @@ export interface BlockDocumentGenqlSelection{
     _slugPath?: boolean | number
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
+    on_AboutPageComponent?: AboutPageComponentGenqlSelection
     on_CloudflareWebhook?: CloudflareWebhookGenqlSelection
     on_Content?: ContentGenqlSelection
     on_DeveloperComponent?: DeveloperComponentGenqlSelection
@@ -1048,6 +1138,7 @@ export interface BlockDocumentGenqlSelection{
     on_Units?: UnitsGenqlSelection
     on_WpisHistoriiCenyComponent?: WpisHistoriiCenyComponentGenqlSelection
     on__AgentStart?: _AgentStartGenqlSelection
+    on_aboutPageComponent_AsList?: aboutPageComponent_AsListGenqlSelection
     on_developerComponent_AsList?: developerComponent_AsListGenqlSelection
     on_elementGaleriiComponent_AsList?: elementGaleriiComponent_AsListGenqlSelection
     on_galleryItem_AsList?: galleryItem_AsListGenqlSelection
@@ -1144,6 +1235,7 @@ export interface BlockListGenqlSelection{
     on_Investments?: InvestmentsGenqlSelection
     on_PriceHistory?: PriceHistoryGenqlSelection
     on_Units?: UnitsGenqlSelection
+    on_aboutPageComponent_AsList?: aboutPageComponent_AsListGenqlSelection
     on_developerComponent_AsList?: developerComponent_AsListGenqlSelection
     on_elementGaleriiComponent_AsList?: elementGaleriiComponent_AsListGenqlSelection
     on_galleryItem_AsList?: galleryItem_AsListGenqlSelection
@@ -1180,6 +1272,7 @@ export interface BlockRichTextGenqlSelection{
     /** Words per minute, defaults to average 183wpm */
     wpm?: (Scalars['Int'] | null)} } | boolean | number
     on_Description?: DescriptionGenqlSelection
+    on_StoryContent?: StoryContentGenqlSelection
     __typename?: boolean | number
     __fragmentOn?: "BlockRichText"
 }
@@ -1234,6 +1327,7 @@ export interface ContentGenqlSelection{
     _slugPath?: boolean | number
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
+    aboutPage?: AboutPageComponentGenqlSelection
     developer?: DeveloperComponentGenqlSelection
     homepageImage1?: BlockImageGenqlSelection
     homepageImage2?: BlockImageGenqlSelection
@@ -1849,6 +1943,7 @@ export interface RichTextJsonGenqlSelection{
     toc?: boolean | number
     on_BaseRichTextJson?: BaseRichTextJsonGenqlSelection
     on_DescriptionRichText?: DescriptionRichTextGenqlSelection
+    on_StoryContentRichText?: StoryContentRichTextGenqlSelection
     __typename?: boolean | number
     __fragmentOn?: "RichTextJson"
 }
@@ -1900,6 +1995,29 @@ export interface SearchHighlightGenqlSelection{
 }
 
 export interface SelectFilter {excludes?: (Scalars['String'] | null),excludesAll?: (Scalars['String'][] | null),includes?: (Scalars['String'] | null),includesAll?: (Scalars['String'][] | null),includesAny?: (Scalars['String'][] | null),isEmpty?: (Scalars['Boolean'] | null)}
+
+export interface StoryContentGenqlSelection{
+    html?: { __args: {
+    /** It automatically generates a unique id for each heading present in the HTML. Enabled by default. */
+    slugs?: (Scalars['Boolean'] | null), 
+    /** Inserts a table of contents at the beginning of the HTML. */
+    toc?: (Scalars['Boolean'] | null)} } | boolean | number
+    json?: StoryContentRichTextGenqlSelection
+    markdown?: boolean | number
+    plainText?: boolean | number
+    readingTime?: { __args: {
+    /** Words per minute, defaults to average 183wpm */
+    wpm?: (Scalars['Int'] | null)} } | boolean | number
+    __typename?: boolean | number
+    __fragmentOn?: "StoryContent"
+}
+
+export interface StoryContentRichTextGenqlSelection{
+    content?: boolean | number
+    toc?: boolean | number
+    __typename?: boolean | number
+    __fragmentOn?: "StoryContentRichText"
+}
 
 export interface StringFilter {contains?: (Scalars['String'] | null),endsWith?: (Scalars['String'] | null),eq?: (Scalars['String'] | null),in?: (Scalars['String'][] | null),isNull?: (Scalars['Boolean'] | null),matches?: (StringMatchesFilter | null),notEq?: (Scalars['String'] | null),notIn?: (Scalars['String'][] | null),startsWith?: (Scalars['String'] | null)}
 
@@ -2108,6 +2226,17 @@ export interface _agentsGenqlSelection{
 }
 
 export interface _componentsGenqlSelection{
+    aboutPage?: (aboutPageComponent_AsListGenqlSelection & { __args?: {
+    /** Filter by a field. */
+    filter?: (AboutPageComponentFilterInput | null), 
+    /** Limit the number of items returned. Defaults to 500. */
+    first?: (Scalars['Int'] | null), 
+    /** Order by a field. */
+    orderBy?: (AboutPageComponentOrderByEnum | null), 
+    /** Search configuration */
+    search?: (AboutPageComponentSearchInput | null), 
+    /** Skip the first n items. */
+    skip?: (Scalars['Int'] | null)} })
     developer?: (developerComponent_AsListGenqlSelection & { __args?: {
     /** Filter by a field. */
     filter?: (DeveloperComponentFilterInput | null), 
@@ -2209,6 +2338,32 @@ export interface _componentsGenqlSelection{
     skip?: (Scalars['Int'] | null)} })
     __typename?: boolean | number
     __fragmentOn?: "_components"
+}
+
+export interface aboutPageComponent_AsListGenqlSelection{
+    _analyticsKey?: { __args: {
+    /**
+     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
+     * 
+     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
+     */
+    scope?: (AnalyticsKeyScope | null)} } | boolean | number
+    _dashboardUrl?: boolean | number
+    _id?: boolean | number
+    _idPath?: boolean | number
+    _meta?: ListMetaGenqlSelection
+    /** The key used to search from the frontend. */
+    _searchKey?: boolean | number
+    _slug?: boolean | number
+    _slugPath?: boolean | number
+    _sys?: BlockDocumentSysGenqlSelection
+    _title?: boolean | number
+    /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
+    item?: AboutPageComponentGenqlSelection
+    /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
+    items?: AboutPageComponentGenqlSelection
+    __typename?: boolean | number
+    __fragmentOn?: "aboutPageComponent_AsList"
 }
 
 export interface developerComponent_AsListGenqlSelection{
@@ -2446,6 +2601,10 @@ export interface wpisHistoriiCenyComponent_AsListGenqlSelection{
 }
 
 export interface FragmentsMap {
+  AboutPageComponent: {
+    root: AboutPageComponent,
+    selection: AboutPageComponentGenqlSelection,
+}
   BaseRichTextJson: {
     root: BaseRichTextJson,
     selection: BaseRichTextJsonGenqlSelection,
@@ -2590,6 +2749,14 @@ export interface FragmentsMap {
     root: SearchHighlight,
     selection: SearchHighlightGenqlSelection,
 }
+  StoryContent: {
+    root: StoryContent,
+    selection: StoryContentGenqlSelection,
+}
+  StoryContentRichText: {
+    root: StoryContentRichText,
+    selection: StoryContentRichTextGenqlSelection,
+}
   TransactionStatus: {
     root: TransactionStatus,
     selection: TransactionStatusGenqlSelection,
@@ -2641,6 +2808,10 @@ export interface FragmentsMap {
   _components: {
     root: _components,
     selection: _componentsGenqlSelection,
+}
+  aboutPageComponent_AsList: {
+    root: aboutPageComponent_AsList,
+    selection: aboutPageComponent_AsListGenqlSelection,
 }
   developerComponent_AsList: {
     root: developerComponent_AsList,

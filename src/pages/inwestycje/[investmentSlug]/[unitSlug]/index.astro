@@ -5,7 +5,7 @@ import Footer from '../../../../components/Footer.astro';
 import Banner from '../../../../components/Banner.astro';
 import ImagePlaceholder from '../../../../components/ImagePlaceholder.astro';
 import { Image } from 'astro:assets';
-import { formatPropertyTypeLabel, getInvestments } from '../../../../lib/content';
+import { formatAreaM2, formatPropertyTypeLabel, getInvestments } from '../../../../lib/content';
 
 export async function getStaticPaths() {
   const investments = await getInvestments();
@@ -31,7 +31,7 @@ const isSold = unit.status === 'sold';
 const heroImage = unit.coverImage ?? investmentCoverImage;
 const propertyTypeLabel = formatPropertyTypeLabel(unit.propertyType);
 const offerLabel = 'Nieruchomość';
-const pageDescription = `${offerLabel} ${unit.unitNumber} w inwestycji ${investmentName}. ${unit.usableAreaM2} m² powierzchni użytkowej, ${unit.rooms} pokoje, działka ${unit.plotAreaM2} m².`;
+const pageDescription = `${offerLabel} ${unit.unitNumber} w inwestycji ${investmentName}. ${formatAreaM2(unit.usableAreaM2)} m² powierzchni użytkowej, ${unit.rooms} pokoje, działka ${formatAreaM2(unit.plotAreaM2)} m².`;
 
 const formatPriceHistoryDate = (value: string) => {
   const date = new Date(value);
@@ -106,7 +106,7 @@ const formatPriceHistoryDate = (value: string) => {
             </div>
             <div>
               <p class="text-xs uppercase tracking-wider text-text-muted">Powierzchnia użytkowa</p>
-              <p class="text-base font-semibold text-text">{unit.usableAreaM2} m²</p>
+              <p class="text-base font-semibold text-text">{formatAreaM2(unit.usableAreaM2)} m²</p>
             </div>
             <div>
               <p class="text-xs uppercase tracking-wider text-text-muted">Liczba pokoi</p>
@@ -114,7 +114,7 @@ const formatPriceHistoryDate = (value: string) => {
             </div>
             <div>
               <p class="text-xs uppercase tracking-wider text-text-muted">Działka</p>
-              <p class="text-base font-semibold text-text">{unit.plotAreaM2} m²</p>
+              <p class="text-base font-semibold text-text">{formatAreaM2(unit.plotAreaM2)} m²</p>
             </div>
           </div>
 

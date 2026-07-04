@@ -175,8 +175,29 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
                 />
               </div>
 
-              <div class="px-4 py-3 text-center text-sm text-white/70 sm:px-6">
-                Użyj przycisków lub klawiszy strzałek, aby przełączać zdjęcia.
+              <div class="border-t border-white/10 bg-slate-950/25 px-4 py-4 sm:px-6">
+                <div class="flex gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]" data-gallery-viewer-thumbs aria-label="Miniatury powiększonej galerii">
+                  {galleryImages.map((src, index) => (
+                    <button
+                      type="button"
+                      class="relative aspect-[4/3] w-20 shrink-0 overflow-hidden rounded-lg border border-white/20 bg-slate-800/70 opacity-70 transition-all hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:w-24"
+                      data-gallery-viewer-thumb
+                      data-index={index}
+                      aria-label={`Pokaż zdjęcie ${index + 1}`}
+                      aria-pressed={index === 0 ? 'true' : 'false'}
+                    >
+                      <Image
+                        src={src}
+                        alt=""
+                        aria-hidden="true"
+                        width={240}
+                        height={180}
+                        class="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </dialog>
@@ -352,6 +373,7 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
       const viewerCloseBtn = viewer?.querySelector('[data-gallery-close]');
       const viewerPrevBtn = viewer?.querySelector('[data-gallery-prev]');
       const viewerNextBtn = viewer?.querySelector('[data-gallery-next]');
+      const viewerThumbs = Array.from(viewer?.querySelectorAll('[data-gallery-viewer-thumb]') ?? []);
       const cleanupFns = [];
 
       if (!viewport) return;
@@ -406,6 +428,19 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
         if (viewerCounter) {
           viewerCounter.textContent = `Zdjęcie ${viewerIndex + 1} / ${imageSources.length}`;
         }
+
+        viewerThumbs.forEach((thumb, thumbIndex) => {
+          const active = thumbIndex === viewerIndex;
+          thumb.setAttribute('aria-pressed', String(active));
+          thumb.classList.toggle('border-2', active);
+          thumb.classList.toggle('border-white', active);
+          thumb.classList.toggle('opacity-100', active);
+          thumb.classList.toggle('opacity-70', !active);
+
+          if (active && viewer?.open) {
+            thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          }
+        });
       };
 
       const openViewer = (index, trigger) => {
@@ -467,6 +502,10 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
 
           if (clickAllowed) openViewer(index, button);
         });
+      });
+
+      viewerThumbs.forEach((thumb, index) => {
+        addListener(thumb, 'click', () => setViewerImage(index));
       });
 
       addListener(prevBtn, 'click', () => embla.scrollPrev());

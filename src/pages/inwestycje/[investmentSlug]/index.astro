@@ -38,14 +38,23 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
                 <div class="embla__container flex touch-pan-y">
                   {galleryImages.map((src, index) => (
                     <div class="embla__slide min-w-0 flex-[0_0_100%]">
-                      <Image
-                        src={src}
-                        alt={`${investment.name} - zdjęcie ${index + 1}`}
-                        width={1400}
-                        height={780}
-                        class="aspect-[1400/780] w-full object-cover"
-                        loading={index === 0 ? 'eager' : 'lazy'}
-                      />
+                      <button
+                        type="button"
+                        class="block w-full cursor-zoom-in focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/70"
+                        data-gallery-open
+                        data-index={index}
+                        data-src={src}
+                        aria-label={`Powiększ zdjęcie ${index + 1}`}
+                      >
+                        <Image
+                          src={src}
+                          alt={`${investment.name} - zdjęcie ${index + 1}`}
+                          width={1400}
+                          height={780}
+                          class="aspect-[1400/780] w-full object-cover"
+                          loading={index === 0 ? 'eager' : 'lazy'}
+                        />
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -109,6 +118,69 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
             <ImagePlaceholder label="Galeria inwestycji pojawi się po dodaniu zdjęć" class="aspect-[1400/780] w-full" />
           )}
         </div>
+
+        {galleryImages.length > 0 && (
+          <dialog
+            class="fixed inset-0 h-dvh max-h-none w-dvw max-w-none overflow-hidden bg-slate-900/90 p-0 text-white backdrop:bg-slate-950/65"
+            data-gallery-viewer
+            aria-label={`Galeria inwestycji ${investment.name}`}
+          >
+            <div class="grid h-full grid-rows-[auto_1fr_auto]">
+              <div class="flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
+                <p class="text-sm font-semibold uppercase tracking-wider text-white/80" data-gallery-counter></p>
+                <button
+                  type="button"
+                  class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+                  data-gallery-close
+                  aria-label="Zamknij podgląd"
+                >
+                  <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="relative min-h-0">
+                {galleryImages.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      class="absolute left-3 top-1/2 z-10 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-slate-900/70 text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-slate-900/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:left-6"
+                      data-gallery-prev
+                      aria-label="Poprzednie zdjęcie"
+                    >
+                      <svg class="size-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </button>
+
+                    <button
+                      type="button"
+                      class="absolute right-3 top-1/2 z-10 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-slate-900/70 text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-slate-900/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:right-6"
+                      data-gallery-next
+                      aria-label="Następne zdjęcie"
+                    >
+                      <svg class="size-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </button>
+                  </>
+                )}
+
+                <img
+                  src={galleryImages[0]}
+                  alt=""
+                  class="h-full w-full object-contain px-4 py-2 sm:px-20"
+                  data-gallery-viewer-image
+                />
+              </div>
+
+              <div class="px-4 py-3 text-center text-sm text-white/70 sm:px-6">
+                Użyj przycisków lub klawiszy strzałek, aby przełączać zdjęcia.
+              </div>
+            </div>
+          </dialog>
+        )}
 
         <div class="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-start">
           <div class="space-y-6">
@@ -273,6 +345,14 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
       const prevBtn = root.querySelector('[data-embla-prev]');
       const nextBtn = root.querySelector('[data-embla-next]');
       const thumbs = Array.from(root.querySelectorAll('[data-embla-thumb]'));
+      const openBtns = Array.from(root.querySelectorAll('[data-gallery-open]'));
+      const viewer = document.querySelector('[data-gallery-viewer]');
+      const viewerImage = viewer?.querySelector('[data-gallery-viewer-image]');
+      const viewerCounter = viewer?.querySelector('[data-gallery-counter]');
+      const viewerCloseBtn = viewer?.querySelector('[data-gallery-close]');
+      const viewerPrevBtn = viewer?.querySelector('[data-gallery-prev]');
+      const viewerNextBtn = viewer?.querySelector('[data-gallery-next]');
+      const cleanupFns = [];
 
       if (!viewport) return;
 
@@ -281,6 +361,12 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
         align: 'start',
         skipSnaps: false,
       });
+      const imageSources = openBtns
+        .map((button) => button.getAttribute('data-src'))
+        .filter(Boolean);
+      let viewerIndex = 0;
+      let lastFocusedElement = null;
+      let previousBodyOverflow = '';
 
       const setSelected = () => {
         const selectedIndex = embla.selectedScrollSnap();
@@ -310,17 +396,93 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
         }
       };
 
+      const setViewerImage = (index) => {
+        if (!viewerImage || imageSources.length === 0) return;
+
+        viewerIndex = (index + imageSources.length) % imageSources.length;
+        viewerImage.setAttribute('src', imageSources[viewerIndex]);
+        viewerImage.setAttribute('alt', `${viewerIndex + 1}. zdjęcie inwestycji`);
+
+        if (viewerCounter) {
+          viewerCounter.textContent = `Zdjęcie ${viewerIndex + 1} / ${imageSources.length}`;
+        }
+      };
+
+      const openViewer = (index, trigger) => {
+        if (!viewer || typeof viewer.showModal !== 'function') return;
+
+        lastFocusedElement = trigger;
+        previousBodyOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        setViewerImage(index);
+        viewer.showModal();
+        viewerCloseBtn?.focus();
+      };
+
+      const closeViewer = () => {
+        if (!viewer || !viewer.open) return;
+
+        viewer.close();
+      };
+
+      const showViewerPrev = () => setViewerImage(viewerIndex - 1);
+      const showViewerNext = () => setViewerImage(viewerIndex + 1);
+
+      const onViewerCancel = () => {
+        document.body.style.overflow = previousBodyOverflow;
+        if (lastFocusedElement instanceof HTMLElement) {
+          lastFocusedElement.focus();
+        }
+      };
+
+      const onKeydown = (event) => {
+        if (!viewer?.open) return;
+
+        if (event.key === 'ArrowLeft' && imageSources.length > 1) {
+          event.preventDefault();
+          showViewerPrev();
+        }
+
+        if (event.key === 'ArrowRight' && imageSources.length > 1) {
+          event.preventDefault();
+          showViewerNext();
+        }
+      };
+
+      const addListener = (target, eventName, handler) => {
+        if (!target) return;
+
+        target.addEventListener(eventName, handler);
+        cleanupFns.push(() => target.removeEventListener(eventName, handler));
+      };
+
       thumbs.forEach((thumb, index) => {
-        thumb.addEventListener('click', () => embla.scrollTo(index));
+        addListener(thumb, 'click', () => embla.scrollTo(index));
       });
 
-      prevBtn?.addEventListener('click', () => embla.scrollPrev());
-      nextBtn?.addEventListener('click', () => embla.scrollNext());
+      openBtns.forEach((button, index) => {
+        addListener(button, 'click', () => {
+          const clickAllowed =
+            typeof embla.clickAllowed === 'function' ? embla.clickAllowed() : true;
+
+          if (clickAllowed) openViewer(index, button);
+        });
+      });
+
+      addListener(prevBtn, 'click', () => embla.scrollPrev());
+      addListener(nextBtn, 'click', () => embla.scrollNext());
+      addListener(viewerCloseBtn, 'click', closeViewer);
+      addListener(viewerPrevBtn, 'click', showViewerPrev);
+      addListener(viewerNextBtn, 'click', showViewerNext);
+      addListener(viewer, 'close', onViewerCancel);
+      addListener(document, 'keydown', onKeydown);
       embla.on('select', setSelected);
       embla.on('reInit', setSelected);
       setSelected();
 
       root[GALLERY_KEY] = () => {
+        cleanupFns.forEach((cleanup) => cleanup());
+        if (viewer?.open) closeViewer();
         embla.destroy();
         delete root[GALLERY_KEY];
       };

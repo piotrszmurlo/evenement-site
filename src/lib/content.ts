@@ -62,6 +62,7 @@ interface CmsUnit {
   plotAreaM2: number;
   rooms: number;
   description: string;
+  floorPlanFile?: CmsAsset | null;
   gallery: CmsGalleryItem[];
   priceHistory: CmsPriceHistoryEntry[];
 }
@@ -98,6 +99,7 @@ export interface Unit {
   plotAreaM2: number;
   rooms: number;
   description: string;
+  floorPlanUrl?: string;
   gallery: string[];
   coverImage?: string;
   currentPrice: PriceHistoryEntry;
@@ -214,6 +216,9 @@ const SITE_CONTENT_QUERY = {
             plotAreaM2: true,
             rooms: true,
             description: true,
+            floorPlanFile: {
+              url: true,
+            },
             gallery: {
               items: {
                 image: {
@@ -506,6 +511,9 @@ async function loadBasehubContent(): Promise<SiteContent & CmsHomepageContent> {
         plotAreaM2: unit.plotAreaM2,
         rooms: unit.rooms,
         description: unit.description,
+        floorPlanFile: unit.floorPlanFile?.url
+          ? { url: unit.floorPlanFile.url }
+          : null,
         gallery: unit.gallery.items.map((item) => ({
           image: {
             url: item.image.url,
@@ -685,6 +693,7 @@ function normalizeAndValidate(content: SiteContent, label: string): Investment[]
         plotAreaM2: unit.plotAreaM2,
         rooms: unit.rooms,
         description: unit.description,
+        floorPlanUrl: unit.floorPlanFile?.url || undefined,
         gallery: unitGallery,
         coverImage: unitGallery[0],
         currentPrice: priceHistory[0]!,

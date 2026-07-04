@@ -83,6 +83,7 @@ usableAreaM2
 plotAreaM2
 rooms
 description
+floorPlanFile
 gallery
   image
 priceHistory

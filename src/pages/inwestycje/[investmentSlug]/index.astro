@@ -218,15 +218,15 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
                         </td>
                         <td class="px-4 py-4">
                           <div class="flex flex-col gap-3">
-                            {unit.slug === 'a2' && investment.prospectusUrl ? (
+                            {unit.floorPlanUrl ? (
                               <a
-                                href={investment.prospectusUrl}
+                                href={unit.floorPlanUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 class="inline-flex items-center gap-2 text-xs font-medium text-primary transition-colors hover:text-primaryLight"
                               >
                                 <span aria-hidden="true">i</span>
-                                Karta SK2
+                                Rzut lokalu
                               </a>
                             ) : (
                               <span class="text-xs text-text-muted">—</span>

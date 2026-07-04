@@ -320,6 +320,7 @@ Top level:
 - `rooms`
 - `floor`
 - `description`
+- `floorPlanFile`
 - `governmentReportingEnabled`
 - `includedInPriceNotes`
 - `priceHistory`

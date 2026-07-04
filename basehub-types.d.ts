@@ -481,6 +481,7 @@ export interface LokalDomComponent {
     _title: Scalars['String']
     description: Scalars['String']
     floor: (Scalars['Float'] | null)
+    floorPlanFile: (BlockFile | null)
     gallery: Gallery_1
     governmentReportingEnabled: Scalars['Boolean']
     includedInPriceNotes: (Scalars['String'] | null)
@@ -495,7 +496,7 @@ export interface LokalDomComponent {
     __typename: 'LokalDomComponent'
 }
 
-export type LokalDomComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'description__ASC' | 'description__DESC' | 'floor__ASC' | 'floor__DESC' | 'gallery__ASC' | 'gallery__DESC' | 'governmentReportingEnabled__ASC' | 'governmentReportingEnabled__DESC' | 'includedInPriceNotes__ASC' | 'includedInPriceNotes__DESC' | 'plotAreaM2__ASC' | 'plotAreaM2__DESC' | 'priceHistory__ASC' | 'priceHistory__DESC' | 'propertyType__ASC' | 'propertyType__DESC' | 'rooms__ASC' | 'rooms__DESC' | 'slug__ASC' | 'slug__DESC' | 'status__ASC' | 'status__DESC' | 'unitNumber__ASC' | 'unitNumber__DESC' | 'usableAreaM2__ASC' | 'usableAreaM2__DESC'
+export type LokalDomComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'description__ASC' | 'description__DESC' | 'floorPlanFile__ASC' | 'floorPlanFile__DESC' | 'floor__ASC' | 'floor__DESC' | 'gallery__ASC' | 'gallery__DESC' | 'governmentReportingEnabled__ASC' | 'governmentReportingEnabled__DESC' | 'includedInPriceNotes__ASC' | 'includedInPriceNotes__DESC' | 'plotAreaM2__ASC' | 'plotAreaM2__DESC' | 'priceHistory__ASC' | 'priceHistory__DESC' | 'propertyType__ASC' | 'propertyType__DESC' | 'rooms__ASC' | 'rooms__DESC' | 'slug__ASC' | 'slug__DESC' | 'status__ASC' | 'status__DESC' | 'unitNumber__ASC' | 'unitNumber__DESC' | 'usableAreaM2__ASC' | 'usableAreaM2__DESC'
 
 export type MediaBlock = (BlockAudio | BlockFile | BlockImage | BlockVideo) & { __isUnion?: true }
 
@@ -1700,6 +1701,7 @@ export interface LokalDomComponentGenqlSelection{
     _title?: boolean | number
     description?: boolean | number
     floor?: boolean | number
+    floorPlanFile?: BlockFileGenqlSelection
     gallery?: (Gallery_1GenqlSelection & { __args?: {
     /** Filter by a field. */
     filter?: (ElementGaleriiComponentFilterInput | null), 

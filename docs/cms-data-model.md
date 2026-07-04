@@ -111,6 +111,7 @@ Recommended fields:
 - `status`: `available`, `reserved`, `sold`, `hidden`
 - `usableAreaM2`
 - `description`
+- `floorPlanFile`
 - `mainImage`
 - `gallery`
 - `priceHistory`

@@ -15,6 +15,7 @@ interface Props {
   ctaHref?: string;
   secondaryLabel?: string;
   secondaryHref?: string;
+  secondaryHidden?: boolean;
   imageSrc?: string;
   imageGallery?: string[];
   imageAlt?: string;
@@ -28,6 +29,7 @@ const {
   ctaHref = '/inwestycje',
   secondaryLabel = 'O nas',
   secondaryHref = '/o-nas',
+  secondaryHidden = true,
   imageSrc,
   imageGallery = [],
   imageAlt = 'Nowoczesne budynki mieszkalne',
@@ -69,12 +71,14 @@ const galleryImages =
         >
           {ctaLabel}
         </a>
-        <a
-          href={secondaryHref}
-          class="inline-flex min-h-[44px] items-center justify-center rounded-md border-2 border-primary px-6 py-3 text-base font-bold text-primary transition-colors hover:bg-primary hover:text-primary-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-        >
-          {secondaryLabel}
-        </a>
+        {!secondaryHidden && (
+          <a
+            href={secondaryHref}
+            class="inline-flex min-h-[44px] items-center justify-center rounded-md border-2 border-primary px-6 py-3 text-base font-bold text-primary transition-colors hover:bg-primary hover:text-primary-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            {secondaryLabel}
+          </a>
+        )}
       </div>
 
       <a

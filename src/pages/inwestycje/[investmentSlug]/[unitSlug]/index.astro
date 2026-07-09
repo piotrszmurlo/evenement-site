@@ -2,7 +2,6 @@
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import Header from '../../../../components/Header.astro';
 import Footer from '../../../../components/Footer.astro';
-import Banner from '../../../../components/Banner.astro';
 import ImagePlaceholder from '../../../../components/ImagePlaceholder.astro';
 import { Image } from 'astro:assets';
 import { formatAreaM2, formatPropertyTypeLabel, getInvestments } from '../../../../lib/content';
@@ -52,18 +51,16 @@ const formatPriceHistoryDate = (value: string) => {
 <BaseLayout title={`${offerLabel} ${unit.unitNumber} - ${investmentName}`} description={pageDescription}>
   <Header slot="header" />
 
-  <Banner title={`${offerLabel} ${unit.unitNumber}`} />
-
-  <section class="py-section">
+  <section class="pb-section pt-4 sm:pt-6">
     <div class="mx-auto max-w-site px-4 sm:px-6">
       <nav class="mb-8 text-sm" aria-label="Breadcrumb">
-        <ol class="flex items-center gap-2 text-text-muted">
-          <li><a href="/" class="transition-colors hover:text-primary">Główna</a></li>
-          <li>/</li>
+        <ol class="flex flex-wrap items-center gap-1.5 text-text-muted">
+          <li><a href="/" class="transition-colors hover:text-primary">Home</a></li>
+          <li aria-hidden="true" class="text-border">/</li>
           <li><a href="/inwestycje/" class="transition-colors hover:text-primary">Inwestycje</a></li>
-          <li>/</li>
+          <li aria-hidden="true" class="text-border">/</li>
           <li><a href={`/inwestycje/${investmentSlug}/`} class="transition-colors hover:text-primary">{investmentName}</a></li>
-          <li>/</li>
+          <li aria-hidden="true" class="text-border">/</li>
           <li class="font-semibold text-text">{offerLabel} {unit.unitNumber}</li>
         </ol>
       </nav>
@@ -89,7 +86,7 @@ const formatPriceHistoryDate = (value: string) => {
           <div class="flex items-baseline justify-between border-b border-border pb-4">
             <div>
               <span class="text-topper font-bold uppercase tracking-widest text-accent">{investmentName}</span>
-              <h2 class="font-heading text-h2 font-bold uppercase text-text">{offerLabel} {unit.unitNumber}</h2>
+              <h1 class="font-heading text-h2 font-bold uppercase text-text">{offerLabel} {unit.unitNumber}</h1>
             </div>
             <span class:list={[
               'rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white',

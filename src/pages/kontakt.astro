@@ -2,7 +2,6 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import Banner from "../components/Banner.astro";
 import { brand } from "../config/brand";
 import { client } from "../data/client";
 import { getDeveloperContact } from "../lib/content";
@@ -18,10 +17,8 @@ const salesOfficeMapHref = client.salesOffice.mapLink;
 >
   <Header slot="header" />
 
-  <Banner title="Kontakt" />
-
   <!-- Primary contact -->
-  <section class="relative overflow-hidden bg-background py-section">
+  <section class="relative overflow-hidden bg-background pb-section pt-10 sm:pt-14">
     <div
       class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(27,58,107,0.06),_transparent_55%),radial-gradient(ellipse_at_bottom_left,_rgba(249,115,22,0.05),_transparent_50%)]"
       aria-hidden="true"
@@ -30,9 +27,9 @@ const salesOfficeMapHref = client.salesOffice.mapLink;
 
     <div class="relative mx-auto max-w-site px-4 sm:px-6">
       <div class="mx-auto max-w-3xl text-center kontakt-reveal">
-        <h2 class="font-heading text-h2 font-bold uppercase text-text">
+        <h1 class="font-heading text-h2 font-bold uppercase text-text">
           Skontaktuj się z nami
-        </h2>
+        </h1>
         <p class="mx-auto mt-4 max-w-xl text-lead leading-relaxed text-text-muted">
           Masz pytania dotyczące naszych inwestycji? Chętnie udzielimy
           szczegółowych informacji, przygotujemy ofertę lub umówimy spotkanie.

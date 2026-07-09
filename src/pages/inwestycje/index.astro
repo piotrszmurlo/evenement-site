@@ -2,7 +2,6 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import Banner from '../../components/Banner.astro';
 import ImagePlaceholder from '../../components/ImagePlaceholder.astro';
 import { brand } from '../../config/brand';
 import { Image } from 'astro:assets';
@@ -18,49 +17,47 @@ const restActive = activeInvestments.slice(1);
 <BaseLayout title="Inwestycje" description={`Zobacz aktualne inwestycje realizowane przez dewelopera ${brand.name}.`}>
   <Header slot="header" />
 
-  <Banner title="Inwestycje" />
-
-  <section class="pb-section pt-6 sm:pt-8">
-    <div class="mx-auto max-w-site px-4 sm:px-6">
-      {featured && (
-        <a
-          href={`/inwestycje/${featured.slug}/`}
-          class="group relative mb-14 block overflow-hidden rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-        >
-          <div class="relative min-h-[min(80vh,760px)] w-full">
-            {featured.coverImage ? (
-              <Image
-                src={featured.coverImage}
-                alt={featured.name}
-                width={1600}
-                height={900}
-                class="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-              />
-            ) : (
-              <ImagePlaceholder label="Placeholder inwestycji do uzupełnienia" class="absolute inset-0 size-full min-h-[min(80vh,760px)]" />
-            )}
-            <div class="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/45 to-dark/10"></div>
-            <div class="absolute inset-x-0 bottom-0 p-6 sm:p-10 lg:p-14">
-              <span class="mb-4 inline-block rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary-fg">
-                W sprzedaży
-              </span>
-              <h2 class="font-heading text-display font-bold uppercase text-primary-fg">{featured.name}</h2>
-              <p class="mt-3 flex max-w-xl items-center gap-1.5 text-sm text-primary-fg/85 sm:text-base">
-                <svg class="size-4 shrink-0 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                {featured.locationAddress}
-              </p>
-              <p class="mt-4 max-w-2xl text-sm leading-relaxed text-primary-fg/75 sm:text-base">{featured.summary}</p>
-              <span class="mt-8 inline-flex min-h-[44px] items-center justify-center rounded-md bg-accent px-6 py-3 text-sm font-bold text-accent-fg shadow-sm transition-opacity group-hover:opacity-90">
-                Zobacz szczegóły inwestycji
-              </span>
-            </div>
+  <section class="pb-section pt-0">
+    {featured && (
+      <a
+        href={`/inwestycje/${featured.slug}/`}
+        class="group relative mb-14 block overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      >
+        <div class="relative min-h-[min(90vh,920px)] w-full">
+          {featured.coverImage ? (
+            <Image
+              src={featured.coverImage}
+              alt={featured.name}
+              width={1920}
+              height={1080}
+              class="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+            />
+          ) : (
+            <ImagePlaceholder label="Placeholder inwestycji do uzupełnienia" class="absolute inset-0 size-full min-h-[min(90vh,920px)]" />
+          )}
+          <div class="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/45 to-dark/10"></div>
+          <div class="absolute inset-x-0 bottom-0 mx-auto max-w-site px-4 py-6 sm:px-6 sm:py-10 lg:py-14">
+            <span class="mb-4 inline-block rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary-fg">
+              W sprzedaży
+            </span>
+            <h1 class="font-heading text-display font-bold uppercase text-primary-fg">{featured.name}</h1>
+            <p class="mt-3 flex max-w-xl items-center gap-1.5 text-sm text-primary-fg/85 sm:text-base">
+              <svg class="size-4 shrink-0 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              {featured.locationAddress}
+            </p>
+            <p class="mt-4 max-w-2xl text-sm leading-relaxed text-primary-fg/75 sm:text-base">{featured.summary}</p>
+            <span class="mt-8 inline-flex min-h-[44px] items-center justify-center rounded-md bg-accent px-6 py-3 text-sm font-bold text-accent-fg shadow-sm transition-opacity group-hover:opacity-90">
+              Zobacz szczegóły inwestycji
+            </span>
           </div>
-        </a>
-      )}
+        </div>
+      </a>
+    )}
 
+    <div class="mx-auto max-w-site px-4 sm:px-6">
       {restActive.length > 0 && (
         <div class="mb-16">
           <h2 class="mb-8 text-center font-heading text-h2 font-bold uppercase text-text">
@@ -113,7 +110,7 @@ const restActive = activeInvestments.slice(1);
       {completedInvestments.length > 0 && (
         <div class="border-t border-border pt-14">
           <div class="mx-auto mb-10 max-w-2xl text-center">
-            <h2 class="font-heading text-h2 font-bold uppercase text-text">Zrealizowane projekty</h2>
+            <h2 class="font-heading text-h2 font-bold uppercase text-text">Zrealizowane inwestycje</h2>
           </div>
 
           <div class="mx-auto grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-2">

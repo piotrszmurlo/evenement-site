@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import Banner from '../components/Banner.astro';
 import CTA from '../components/CTA.astro';
 import { Image } from 'astro:assets';
 import { renderBasehubRichText } from '../lib/basehub-rich-text';
@@ -17,10 +16,8 @@ const pageDescription = 'Dowiedz się więcej o firmie EVENEMENT, naszej histori
 <BaseLayout title="O nas" description={pageDescription}>
   <Header slot="header" />
 
-  <Banner title="O nas" />
-
   <!-- Story -->
-  <section class="py-section">
+  <section class="pb-section pt-10 sm:pt-14">
     <div class="mx-auto grid max-w-site grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:gap-14">
       <div class="overflow-hidden rounded-lg shadow-lg">
         {storyImageUrl && (
@@ -36,7 +33,7 @@ const pageDescription = 'Dowiedz się więcej o firmie EVENEMENT, naszej histori
       </div>
       <div class="space-y-5">
         <span class="text-topper font-bold uppercase tracking-widest text-accent">{aboutPage.storyEyebrow}</span>
-        <h2 class="font-heading text-h2 font-bold uppercase text-text">{aboutPage.storyHeading}</h2>
+        <h1 class="font-heading text-h2 font-bold uppercase text-text">{aboutPage.storyHeading}</h1>
         <div class="prose prose-slate max-w-none text-text-muted" set:html={storyContentHtml} />
       </div>
     </div>

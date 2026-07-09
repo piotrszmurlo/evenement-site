@@ -2,7 +2,6 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
-import Banner from '../../../components/Banner.astro';
 import ImagePlaceholder from '../../../components/ImagePlaceholder.astro';
 import { Image } from 'astro:assets';
 import { formatAreaM2, getInvestments } from '../../../lib/content';
@@ -26,10 +25,18 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzedaży' : 'Zako�
 <BaseLayout title={investment.name} description={investment.summary}>
   <Header slot="header" />
 
-  <Banner title={investment.name} />
-
-  <section class="py-section">
+  <section class="pb-section pt-4 sm:pt-6">
     <div class="mx-auto max-w-site px-4 sm:px-6">
+      <nav aria-label="Breadcrumb" class="mb-6">
+        <ol class="flex flex-wrap items-center gap-1.5 text-sm text-text-muted">
+          <li><a href="/" class="transition-colors hover:text-primary">Home</a></li>
+          <li aria-hidden="true" class="text-border">/</li>
+          <li><a href="/inwestycje/" class="transition-colors hover:text-primary">Inwestycje</a></li>
+          <li aria-hidden="true" class="text-border">/</li>
+          <li class="font-semibold text-text" aria-current="page">{investment.name}</li>
+        </ol>
+      </nav>
+
       <div class="space-y-12">
         <div class="overflow-hidden rounded-2xl border border-border bg-background shadow-lg">
           {galleryImages.length > 0 ? (
@@ -50,9 +57,9 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzedaży' : 'Zako�
                         <Image
                           src={src}
                           alt={`${investment.name} - zdjęcie ${index + 1}`}
-                          width={1400}
-                          height={780}
-                          class="aspect-[1400/780] w-full object-cover"
+                          width={1600}
+                          height={1000}
+                          class="aspect-[16/10] min-h-[min(58vh,560px)] w-full object-cover"
                           loading={index === 0 ? 'eager' : 'lazy'}
                         />
                       </button>
@@ -116,7 +123,7 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzedaży' : 'Zako�
             )}
           </div>
           ) : (
-            <ImagePlaceholder label="Galeria inwestycji pojawi się po dodaniu zdjęć" class="aspect-[1400/780] w-full" />
+            <ImagePlaceholder label="Galeria inwestycji pojawi się po dodaniu zdjęć" class="aspect-[16/10] min-h-[min(58vh,560px)] w-full" />
           )}
         </div>
 
@@ -205,7 +212,7 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzedaży' : 'Zako�
         )}
 
         <div class="max-w-3xl space-y-6">
-          <h2 class="flex flex-wrap items-center gap-3 font-heading text-h2 font-bold uppercase leading-none text-text">
+          <h1 class="flex flex-wrap items-center gap-3 font-heading text-h2 font-bold uppercase leading-none text-text">
             <span>{investment.name}</span>
             <span class:list={[
               'inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest',
@@ -215,7 +222,7 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzedaży' : 'Zako�
             ]}>
               {salesLabel}
             </span>
-          </h2>
+          </h1>
           <p class="flex items-center gap-1 text-sm text-text-muted">
             <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />

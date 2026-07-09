@@ -233,113 +233,119 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzedaży' : 'Zako�
           <div class="prose prose-slate max-w-none text-sm leading-7 text-text-muted" set:html={investmentDescriptionHtml} />
         </div>
 
-        <div class="border-t border-border pt-12">
-          <div class="mb-8">
-            <h3 class="font-heading text-h3 font-bold uppercase text-text">Lista dostępnych nieruchomości</h3>
-          </div>
+        {(investment.units.length > 0 || investment.prospectusUrl) && (
+          <div class="border-t border-border pt-12">
+            {investment.units.length > 0 && (
+              <>
+                <div class="mb-8">
+                  <h3 class="font-heading text-h3 font-bold uppercase text-text">Lista dostępnych nieruchomości</h3>
+                </div>
 
-          <div class="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
-            <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-border text-left text-sm">
-                <thead class="bg-surface text-xs uppercase tracking-wider text-text-muted">
-                  <tr>
-                    <th scope="col" class="px-4 py-3">Budynek</th>
-                    <th scope="col" class="px-4 py-3">Pow. budynku</th>
-                    <th scope="col" class="px-4 py-3">Pow. działki</th>
-                    <th scope="col" class="px-4 py-3">Status</th>
-                    <th scope="col" class="px-4 py-3">Cena brutto</th>
-                    <th scope="col" class="px-4 py-3">Cena za m²</th>
-                    <th scope="col" class="px-4 py-3">Rzuty</th>
-                    <th scope="col" class="px-4 py-3">Szczegóły</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-border bg-background">
-                  {investment.units.map((unit) => {
-                    const currentPrice = unit.currentPrice;
-                    const statusLabel =
-                      unit.status === 'available'
-                        ? 'Dostępny'
-                        : unit.status === 'reserved'
-                          ? 'Rezerwacja'
-                          : 'Sprzedany';
-
-                    return (
-                      <tr class="align-top">
-                        <td class="px-4 py-4 font-semibold text-text">{unit.unitNumber.toUpperCase()}</td>
-                        <td class="px-4 py-4 text-text-muted">{formatAreaM2(unit.usableAreaM2)} m²</td>
-                        <td class="px-4 py-4 text-text-muted">{formatAreaM2(unit.plotAreaM2)} m²</td>
-                        <td class="px-4 py-4">
-                          <span class:list={[
-                            'inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white',
+                <div class="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-border text-left text-sm">
+                      <thead class="bg-surface text-xs uppercase tracking-wider text-text-muted">
+                        <tr>
+                          <th scope="col" class="px-4 py-3">Budynek</th>
+                          <th scope="col" class="px-4 py-3">Pow. budynku</th>
+                          <th scope="col" class="px-4 py-3">Pow. działki</th>
+                          <th scope="col" class="px-4 py-3">Status</th>
+                          <th scope="col" class="px-4 py-3">Cena brutto</th>
+                          <th scope="col" class="px-4 py-3">Cena za m²</th>
+                          <th scope="col" class="px-4 py-3">Rzuty</th>
+                          <th scope="col" class="px-4 py-3">Szczegóły</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-border bg-background">
+                        {investment.units.map((unit) => {
+                          const currentPrice = unit.currentPrice;
+                          const statusLabel =
                             unit.status === 'available'
-                              ? 'bg-green-600'
+                              ? 'Dostępny'
                               : unit.status === 'reserved'
-                                ? 'bg-amber-600'
-                                : 'bg-red-600',
-                          ]}>
-                            {statusLabel}
-                          </span>
-                        </td>
-                        <td class="px-4 py-4 font-semibold text-text">
-                          {currentPrice ? `${currentPrice.totalPrice.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
-                        </td>
-                        <td class="px-4 py-4 font-semibold text-text">
-                          {currentPrice ? `${currentPrice.pricePerM2.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
-                        </td>
-                        <td class="px-4 py-4">
-                          {unit.floorPlanUrl ? (
-                            <a
-                              href={unit.floorPlanUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              class="inline-flex w-fit items-center gap-1.5 rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
-                            >
-                              Rzuty
-                              <svg class="size-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                              </svg>
-                            </a>
-                          ) : (
-                            <span class="inline-flex w-fit items-center rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted">
-                              Brak
-                            </span>
-                          )}
-                        </td>
-                        <td class="px-4 py-4">
-                          <a
-                            href={`/inwestycje/${investmentSlug}/${unit.slug}/`}
-                            class="inline-flex w-fit items-center gap-1.5 rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
-                          >
-                            Szczegóły
-                            <svg class="size-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                              <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                          </a>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                                ? 'Rezerwacja'
+                                : 'Sprzedany';
 
-          {investment.prospectusUrl && (
-            <div class="mt-10 flex justify-center">
-              <a
-                href={investment.prospectusUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-primary px-8 py-3 text-sm font-bold uppercase tracking-wider text-primary-fg shadow-sm transition-opacity hover:opacity-90"
-              >
-                Prospekt informacyjny
-                <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </a>
-            </div>
-          )}
-        </div>
+                          return (
+                            <tr class="align-top">
+                              <td class="px-4 py-4 font-semibold text-text">{unit.unitNumber.toUpperCase()}</td>
+                              <td class="px-4 py-4 text-text-muted">{formatAreaM2(unit.usableAreaM2)} m²</td>
+                              <td class="px-4 py-4 text-text-muted">{formatAreaM2(unit.plotAreaM2)} m²</td>
+                              <td class="px-4 py-4">
+                                <span class:list={[
+                                  'inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white',
+                                  unit.status === 'available'
+                                    ? 'bg-green-600'
+                                    : unit.status === 'reserved'
+                                      ? 'bg-amber-600'
+                                      : 'bg-red-600',
+                                ]}>
+                                  {statusLabel}
+                                </span>
+                              </td>
+                              <td class="px-4 py-4 font-semibold text-text">
+                                {currentPrice ? `${currentPrice.totalPrice.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
+                              </td>
+                              <td class="px-4 py-4 font-semibold text-text">
+                                {currentPrice ? `${currentPrice.pricePerM2.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
+                              </td>
+                              <td class="px-4 py-4">
+                                {unit.floorPlanUrl ? (
+                                  <a
+                                    href={unit.floorPlanUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="inline-flex w-fit items-center gap-1.5 rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
+                                  >
+                                    Rzuty
+                                    <svg class="size-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                      <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                  </a>
+                                ) : (
+                                  <span class="inline-flex w-fit items-center rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted">
+                                    Brak
+                                  </span>
+                                )}
+                              </td>
+                              <td class="px-4 py-4">
+                                <a
+                                  href={`/inwestycje/${investmentSlug}/${unit.slug}/`}
+                                  class="inline-flex w-fit items-center gap-1.5 rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
+                                >
+                                  Szczegóły
+                                  <svg class="size-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                                  </svg>
+                                </a>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {investment.prospectusUrl && (
+              <div class:list={['flex justify-center', investment.units.length > 0 && 'mt-10']}>
+                <a
+                  href={investment.prospectusUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-primary px-8 py-3 text-sm font-bold uppercase tracking-wider text-primary-fg shadow-sm transition-opacity hover:opacity-90"
+                >
+                  Prospekt informacyjny
+                  <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </a>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   </section>

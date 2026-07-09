@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns2:datasets xmlns:ns2="urn:otwarte-dane:harvester:1.13" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <dataset status="published">
+    <extIdent>81b7c87ccf3f4473a9fe2db1520ba094</extIdent>
+    <title>
+      <polish>Ceny ofertowe mieszkań dewelopera &quot;EVENEMENT M. Szmurło&quot; Marek Szmurło — inwestycja Słoneczna Polana IV etap</polish>
+    </title>
+    <description>
+      <polish>Zbiór danych zawiera informacje o cenach ofertowych mieszkań dewelopera &quot;EVENEMENT M. Szmurło&quot; Marek Szmurło w ramach inwestycji Słoneczna Polana IV etap, udostępniane zgodnie z art. 19b. ust. 1 Ustawy z dnia 20 maja 2021 r. o ochronie praw nabywcy lokalu mieszkalnego lub domu jednorodzinnego oraz Deweloperskim Funduszu Gwarancyjnym (Dz. U. z 2024 r. poz. 695).</polish>
+    </description>
+    <updateFrequency>daily</updateFrequency>
+    <hasDynamicData>false</hasDynamicData>
+    <hasHighValueData>true</hasHighValueData>
+    <hasHighValueDataFromEuropeanCommissionList>false</hasHighValueDataFromEuropeanCommissionList>
+    <hasResearchData>false</hasResearchData>
+    <categories>
+      <category>ECON</category>
+    </categories>
+    <resources>
+    <resource status="published">
+      <extIdent>res04e219fdaa81b7c87ccf3f4473a9fe2db</extIdent>
+      <url>https://evenement24.com/otwarte-dane/sloneczna-polana-iv/ceny-ofertowe-evenement-m-szmur-o-marek-szmur-o-sloneczna-polana-iv-2026-07-09.csv</url>
+      <title>
+        <polish>Ceny ofertowe mieszkań dewelopera &quot;EVENEMENT M. Szmurło&quot; Marek Szmurło — inwestycja Słoneczna Polana IV etap (2026-07-09)</polish>
+      </title>
+      <description>
+        <polish>Dane dotyczące cen ofertowych mieszkań dewelopera &quot;EVENEMENT M. Szmurło&quot; Marek Szmurło w inwestycji Słoneczna Polana IV etap, udostępnione 2026-07-09 zgodnie z art. 19b. ust. 1 Ustawy z dnia 20 maja 2021 r. o ochronie praw nabywcy lokalu mieszkalnego lub domu jednorodzinnego oraz Deweloperskim Funduszu Gwarancyjnym (Dz. U. z 2024 r. poz. 695).</polish>
+      </description>
+      <availability>local</availability>
+      <dataDate>2026-07-09</dataDate>
+      <specialSigns>
+        <specialSign>X</specialSign>
+      </specialSigns>
+      <hasDynamicData>false</hasDynamicData>
+      <hasHighValueData>true</hasHighValueData>
+      <hasHighValueDataFromEuropeanCommissionList>false</hasHighValueDataFromEuropeanCommissionList>
+      <hasResearchData>false</hasResearchData>
+      <containsProtectedData>false</containsProtectedData>
+    </resource>
+    </resources>
+    <tags>
+      <tag lang="pl">Deweloper</tag>
+    </tags>
+  </dataset>
+</ns2:datasets>

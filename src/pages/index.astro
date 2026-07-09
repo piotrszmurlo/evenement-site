@@ -45,46 +45,56 @@ const heroGallery =
   <Hero imageGallery={heroGallery} imageAlt={featuredInvestment?.name ?? 'Nowoczesne budynki mieszkalne'} />
 
   {featuredInvestment && (
-    <section class="py-section bg-surface">
+    <section class="bg-background py-section">
       <div class="mx-auto max-w-site px-4 sm:px-6">
-        <div class="mx-auto mb-10 max-w-2xl text-center">
-          <span class="text-topper font-bold uppercase tracking-widest text-accent">Aktualna Inwestycja</span>
-          <h2 class="mt-2 font-heading text-h2 font-bold uppercase text-text">Poznaj Nasz Najnowszy Projekt</h2>
+        <div class="mx-auto mb-10 max-w-2xl text-center sm:mb-12">
+          <h2 class="font-heading text-h2 font-bold uppercase text-text">Aktualna inwestycja</h2>
+          <p class="mt-3 text-sm leading-relaxed text-text-muted sm:text-base">
+            Poznaj nasz najnowszy projekt i dostępne oferty.
+          </p>
         </div>
 
         <a
           href={`/inwestycje/${featuredInvestment.slug}/`}
-          class="group mx-auto grid max-w-5xl grid-cols-1 items-center overflow-hidden rounded-lg border border-border bg-background shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface lg:grid-cols-2"
+          class="group relative block min-h-[min(70vh,720px)] overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
-          <div class="h-full min-h-[320px] overflow-hidden">
-            {featuredInvestment.coverImage ? (
-              <Image
-                src={featuredInvestment.coverImage}
-                alt={featuredInvestment.name}
-                width={800}
-                height={500}
-                class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-            ) : (
-              <ImagePlaceholder label="Placeholder inwestycji do uzupełnienia" class="size-full min-h-[320px]" />
-            )}
-          </div>
-          <div class="space-y-6 p-6 sm:p-8 lg:p-10">
-            <h3 class="font-heading text-h3 font-bold uppercase tracking-wide text-text">{featuredInvestment.name}</h3>
-            <p class="flex items-center gap-1 text-sm text-text-muted">
-              <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          {featuredInvestment.coverImage ? (
+            <Image
+              src={featuredInvestment.coverImage}
+              alt={featuredInvestment.name}
+              width={1600}
+              height={900}
+              class="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+            />
+          ) : (
+            <ImagePlaceholder
+              label="Placeholder inwestycji do uzupełnienia"
+              class="absolute inset-0 size-full min-h-[min(70vh,720px)]"
+            />
+          )}
+          <div class="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/40 to-dark/5"></div>
+          <div class="absolute inset-x-0 bottom-0 p-5 sm:p-8 lg:p-10">
+            <span class="mb-4 inline-block rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary-fg">
+              W sprzedaży
+            </span>
+            <h3 class="font-heading text-h2 font-bold uppercase text-primary-fg sm:text-h1">
+              {featuredInvestment.name}
+            </h3>
+            <p class="mt-3 flex max-w-xl items-center gap-1.5 text-sm text-primary-fg/85 sm:text-base">
+              <svg class="size-4 shrink-0 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               {featuredInvestment.locationAddress}
             </p>
-            <p class="text-sm leading-relaxed text-text-muted">
+            <p class="mt-4 max-w-2xl text-sm leading-relaxed text-primary-fg/70 sm:text-base">
               {featuredInvestment.summary}
             </p>
-            <span
-              class="inline-flex min-h-[44px] items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-bold text-primary-fg shadow-sm transition-opacity group-hover:opacity-90"
-            >
+            <span class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-primary-fg transition-colors group-hover:text-accent sm:text-base">
               Zobacz dostępne oferty
+              <svg class="size-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
             </span>
           </div>
         </a>

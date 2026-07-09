@@ -8,7 +8,6 @@ import { heroImage as localHeroImage } from '../config/images';
 const PLACEHOLDER = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80';
 
 interface Props {
-  topper?: string;
   heading?: string;
   description?: string;
   ctaLabel?: string;
@@ -22,7 +21,6 @@ interface Props {
 }
 
 const {
-  topper = 'Sprawdzony Deweloper',
   heading = brand.tagline,
   description = brand.description,
   ctaLabel = 'Zobacz Inwestycje',
@@ -47,10 +45,13 @@ const galleryImages =
 ---
 
 <section class="relative overflow-hidden bg-background py-12 sm:py-16 md:py-20 lg:py-24">
-  <div class="mx-auto grid max-w-site grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:gap-12">
+  <div class="mx-auto grid max-w-site grid-cols-1 items-center gap-8 pl-4 sm:pl-6 lg:grid-cols-[1fr_1.3fr] lg:gap-12">
 
     <!-- Copy -->
-    <div class="order-2 space-y-5 lg:order-1 lg:space-y-6">
+    <div class="order-2 space-y-5 pr-4 sm:pr-6 lg:order-1 lg:space-y-6">
+      <p class="font-heading text-h2 font-bold uppercase leading-none tracking-tight text-primary sm:text-h1">
+        {brand.name}
+      </p>
 
       <h1
         class="font-heading text-display font-bold uppercase leading-none tracking-tight text-text"
@@ -92,13 +93,13 @@ const galleryImages =
       </a>
     </div>
 
-    <!-- Hero image -->
+    <!-- Hero image — flush to content column right edge -->
     <div
-      class="relative order-1 overflow-hidden rounded-lg shadow-xl aspect-4/3 lg:order-2"
+      class="relative order-1 pr-4 sm:pr-6 lg:order-2 lg:pr-0"
       transition:name="hero-image"
       data-hero-gallery-root
     >
-      <div class="embla h-full" data-hero-gallery>
+      <div class="embla aspect-[4/3.9] overflow-hidden rounded-md" data-hero-gallery>
         <div class="embla__viewport h-full overflow-hidden" data-hero-gallery-viewport>
           <div class="embla__container flex h-full touch-pan-y">
             {galleryImages.map((src, index) => (

@@ -4,9 +4,12 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Banner from "../components/Banner.astro";
 import { brand } from "../config/brand";
+import { client } from "../data/client";
 import { getDeveloperContact } from "../lib/content";
 
 const contact = await getDeveloperContact();
+
+const salesOfficeMapHref = client.salesOffice.mapLink;
 ---
 
 <BaseLayout
@@ -17,157 +20,293 @@ const contact = await getDeveloperContact();
 
   <Banner title="Kontakt" />
 
-  <section class="pb-[6.3rem] pt-section sm:pb-[8.8rem] lg:pb-[11.3rem]">
-    <div class="mx-auto max-w-site px-4 sm:px-6">
-      <div class="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-        <!-- Contact details / Company data -->
-        <div class="space-y-8">
-          <div>
-            <span
-              class="text-topper font-bold uppercase tracking-widest text-accent"
-              >Dane firmy</span
-            >
-            <h2 class="mt-2 font-heading text-h2 font-bold uppercase text-text">
-              {contact.name}
-            </h2>
-          </div>
+  <!-- Primary contact -->
+  <section class="relative overflow-hidden bg-background py-section">
+    <div
+      class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(27,58,107,0.06),_transparent_55%),radial-gradient(ellipse_at_bottom_left,_rgba(249,115,22,0.05),_transparent_50%)]"
+      aria-hidden="true"
+    >
+    </div>
 
-          <!-- Company Details & Registration Info -->
-          <div class="rounded-lg border border-border bg-surface p-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div>
-                <h3 class="font-heading text-base font-semibold text-text mb-3">
-                  Siedziba firmy
-                </h3>
-                <p class="text-sm text-text-muted leading-relaxed">
-                  {contact.name}<br />
-                  {contact.registeredAddress.lineOne}<br />
-                  {contact.registeredAddress.lineTwo}
-                </p>
-              </div>
-              <div>
-                <h3 class="font-heading text-base font-semibold text-text mb-3">
-                  Informacje rejestrowe
-                </h3>
-                <ul class="space-y-2 text-sm text-text-muted">
-                  {contact.legalForm && (
-                    <li>
-                      <strong class="text-text">Forma prawna:</strong><br />
-                      {contact.legalForm}
-                    </li>
-                  )}
-                  {contact.nip && (
-                    <li>
-                      <strong class="text-text">NIP:</strong>
-                      {contact.nipFormatted ?? contact.nip}
-                    </li>
-                  )}
-                  {contact.regon && (
-                    <li>
-                      <strong class="text-text">REGON:</strong>
-                      {contact.regon}
-                    </li>
-                  )}
-                </ul>
-              </div>
-            </div>
-            <div class="mt-6 border-t border-border pt-6">
-              <h3 class="font-heading text-base font-semibold text-text mb-3">
+    <div class="relative mx-auto max-w-site px-4 sm:px-6">
+      <div class="mx-auto max-w-3xl text-center kontakt-reveal">
+        <h2 class="font-heading text-h2 font-bold uppercase text-text">
+          Skontaktuj się z nami
+        </h2>
+        <p class="mx-auto mt-4 max-w-xl text-lead leading-relaxed text-text-muted">
+          Masz pytania dotyczące naszych inwestycji? Chętnie udzielimy
+          szczegółowych informacji, przygotujemy ofertę lub umówimy spotkanie.
+        </p>
+      </div>
+
+      <div
+        class="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6"
+      >
+        <a
+          href={`tel:${contact.phoneHref}`}
+          class="kontakt-reveal kontakt-reveal-delay-1 group flex flex-col items-center gap-4 border-b-2 border-accent/40 bg-surface px-6 py-10 text-center transition-colors hover:border-accent hover:bg-primary/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-8"
+        >
+          <span
+            class="flex size-14 items-center justify-center rounded-md bg-primary text-primary-fg transition-transform duration-300 group-hover:scale-105"
+          >
+            <svg
+              class="size-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+              ></path>
+            </svg>
+          </span>
+          <span class="space-y-1">
+            <span
+              class="block text-xs font-semibold uppercase tracking-wider text-text-muted"
+            >
+              Telefon
+            </span>
+            <span
+              class="block font-heading text-h3 font-bold uppercase tracking-wide text-text transition-colors group-hover:text-primary"
+            >
+              {contact.phoneFormatted}
+            </span>
+          </span>
+          <span class="text-sm font-semibold text-accent">Zadzwoń teraz</span>
+        </a>
+
+        <a
+          href={`mailto:${contact.email}`}
+          class="kontakt-reveal kontakt-reveal-delay-2 group flex flex-col items-center gap-4 border-b-2 border-primary/30 bg-surface px-6 py-10 text-center transition-colors hover:border-primary hover:bg-primary/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:px-8"
+        >
+          <span
+            class="flex size-14 items-center justify-center rounded-md bg-primary text-primary-fg transition-transform duration-300 group-hover:scale-105"
+          >
+            <svg
+              class="size-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              ></path>
+            </svg>
+          </span>
+          <span class="space-y-1">
+            <span
+              class="block text-xs font-semibold uppercase tracking-wider text-text-muted"
+            >
+              E-mail
+            </span>
+            <span
+              class="block break-all text-xl font-bold tracking-tight text-text transition-colors group-hover:text-primary"
+            >
+              {contact.email}
+            </span>
+          </span>
+          <span class="text-sm font-semibold text-primary">Napisz wiadomość</span
+          >
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Locations & company data -->
+  <section class="bg-surface py-section">
+    <div class="mx-auto max-w-site px-4 sm:px-6">
+      <div class="kontakt-reveal max-w-2xl">
+        <h2 class="font-heading text-h2 font-bold uppercase text-text">
+          Gdzie nas znajdziesz
+        </h2>
+        <p class="mt-4 text-lead leading-relaxed text-text-muted">
+          Zapraszamy do biura sprzedaży — chętnie omówimy ofertę na miejscu.
+        </p>
+      </div>
+
+      <div class="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
+        <article class="kontakt-reveal kontakt-reveal-delay-1 space-y-5">
+          <div class="flex items-start gap-4">
+            <span
+              class="mt-1 flex size-10 shrink-0 items-center justify-center rounded-md bg-accent text-accent-fg"
+            >
+              <svg
+                class="size-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
+              </svg>
+            </span>
+            <div>
+              <h3
+                class="font-heading text-h3 font-bold uppercase tracking-wide text-text"
+              >
                 Biuro sprzedaży
               </h3>
-              <p class="text-sm text-text-muted leading-relaxed">
+              <p class="mt-3 text-base leading-relaxed text-text-muted">
                 {contact.salesOfficeAddress.lineOne}<br />
                 {contact.salesOfficeAddress.lineTwo}
               </p>
+              <a
+                href={salesOfficeMapHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-5 inline-flex min-h-[44px] items-center gap-2 text-sm font-bold text-primary transition-colors hover:text-accent"
+              >
+                Otwórz w mapach
+                <svg
+                  class="size-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+              </a>
             </div>
           </div>
-        </div>
+        </article>
 
-        <!-- Fast contact -->
-        <div class="flex flex-col justify-center space-y-8 lg:pl-8">
-          <div>
+        <article class="kontakt-reveal kontakt-reveal-delay-2 space-y-6">
+          <div class="flex items-start gap-4">
             <span
-              class="text-topper font-bold uppercase tracking-widest text-accent"
-              >Kontakt</span
+              class="mt-1 flex size-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-fg"
             >
-            <h2 class="mt-2 font-heading text-h2 font-bold uppercase text-text">
-              Skontaktuj się
-            </h2>
-          </div>
-
-          <div class="space-y-6">
-            <div class="flex items-center gap-4">
-              <div
-                class="flex size-12 items-center justify-center rounded-lg bg-primary/10 text-primary"
+              <svg
+                class="size-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
               >
-                <svg
-                  class="size-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                  ></path>
-                </svg>
-              </div>
-              <div>
-                <p
-                  class="text-xs font-semibold uppercase tracking-wider text-text-muted"
-                >
-                  Telefon
-                </p>
-                <a
-                  href={`tel:${contact.phoneHref}`}
-                  class="text-lg font-bold text-text hover:text-primary transition-colors"
-                >
-                  {contact.phoneFormatted}
-                </a>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-4">
-              <div
-                class="flex size-12 items-center justify-center rounded-lg bg-primary/10 text-primary"
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                ></path>
+              </svg>
+            </span>
+            <div class="min-w-0 flex-1">
+              <h3
+                class="font-heading text-h3 font-bold uppercase tracking-wide text-text"
               >
-                <svg
-                  class="size-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  ></path>
-                </svg>
-              </div>
-              <div>
-                <p
-                  class="text-xs font-semibold uppercase tracking-wider text-text-muted"
-                >
-                  E-mail
-                </p>
-                <a
-                  href={`mailto:${contact.email}`}
-                  class="text-lg font-bold text-text hover:text-primary transition-colors"
-                >
-                  {contact.email}
-                </a>
-              </div>
+                Siedziba firmy
+              </h3>
+              <p class="mt-3 text-base leading-relaxed text-text-muted">
+                {contact.name}<br />
+                {contact.registeredAddress.lineOne}
+                {
+                  contact.registeredAddress.lineTwo && (
+                    <> {contact.registeredAddress.lineTwo}</>
+                  )
+                }
+              </p>
+
+              <dl class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-5">
+                {
+                  contact.nip && (
+                    <div>
+                      <dt class="text-xs font-semibold uppercase tracking-wider text-text-muted">
+                        NIP
+                      </dt>
+                      <dd class="mt-1.5 text-base text-text">
+                        {contact.nipFormatted ?? contact.nip}
+                      </dd>
+                    </div>
+                  )
+                }
+                {
+                  contact.regon && (
+                    <div>
+                      <dt class="text-xs font-semibold uppercase tracking-wider text-text-muted">
+                        REGON
+                      </dt>
+                      <dd class="mt-1.5 text-base text-text">
+                        {contact.regon}
+                      </dd>
+                    </div>
+                  )
+                }
+                {
+                  contact.legalForm && (
+                    <div class="sm:col-span-2">
+                      <dt class="text-xs font-semibold uppercase tracking-wider text-text-muted">
+                        Forma prawna
+                      </dt>
+                      <dd class="mt-1.5 text-base text-text">
+                        {contact.legalForm}
+                      </dd>
+                    </div>
+                  )
+                }
+              </dl>
             </div>
           </div>
-        </div>
+        </article>
       </div>
     </div>
   </section>
 
   <Footer slot="footer" />
 </BaseLayout>
+
+<style>
+  @keyframes kontakt-rise {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .kontakt-reveal {
+    animation: kontakt-rise 0.7s ease-out both;
+  }
+
+  .kontakt-reveal-delay-1 {
+    animation-delay: 0.12s;
+  }
+
+  .kontakt-reveal-delay-2 {
+    animation-delay: 0.24s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kontakt-reveal,
+    .kontakt-reveal-delay-1,
+    .kontakt-reveal-delay-2 {
+      animation: none;
+    }
+  }
+</style>

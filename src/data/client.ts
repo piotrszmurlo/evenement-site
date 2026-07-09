@@ -35,7 +35,7 @@ export const client = {
     lineOne: 'ul. Budowlanych 15',
     city: 'Warszawa',
     zip: '01-123',
-    mapLink: 'https://maps.google.com',
+    mapLink: 'https://maps.app.goo.gl/rbNMkR1xbUUue2Y69',
   },
   socials: {
     facebook: 'https://www.facebook.com/',

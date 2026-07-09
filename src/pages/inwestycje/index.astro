@@ -108,53 +108,66 @@ const restActive = activeInvestments.slice(1);
       )}
 
       {completedInvestments.length > 0 && (
-        <div class="border-t border-border pt-14">
-          <div class="mx-auto mb-10 max-w-2xl text-center">
+        <div class="border-t border-border pt-16 sm:pt-20">
+          <div class="mx-auto mb-10 max-w-2xl text-center sm:mb-12">
             <h2 class="font-heading text-h2 font-bold uppercase text-text">Zrealizowane inwestycje</h2>
+            <p class="mt-3 text-sm leading-relaxed text-text-muted sm:text-base">
+              Portfolio ukończonych realizacji — miejsca, które już zamieszkali nasi klienci.
+            </p>
           </div>
 
-          <div class="mx-auto grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-2">
-            {completedInvestments.map((investment) => (
-              <a
-                href={`/inwestycje/${investment.slug}/`}
-                class="group flex flex-col overflow-hidden rounded-lg border border-border bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              >
-                <div class="relative h-52 overflow-hidden">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:gap-6">
+            {completedInvestments.map((investment, index) => {
+              const isLoneLast =
+                completedInvestments.length % 2 === 1 && index === completedInvestments.length - 1;
+
+              return (
+                <a
+                  href={`/inwestycje/${investment.slug}/`}
+                  class:list={[
+                    'group relative block min-h-[22rem] overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:min-h-[26rem]',
+                    isLoneLast && 'sm:col-span-2 sm:min-h-[22rem] lg:min-h-[24rem]',
+                  ]}
+                >
                   {investment.coverImage ? (
                     <Image
                       src={investment.coverImage}
                       alt={investment.name}
-                      width={800}
-                      height={450}
-                      class="size-full object-cover grayscale-[40%] transition-[filter,transform] duration-300 group-hover:scale-105 group-hover:grayscale-[20%]"
+                      width={isLoneLast ? 1600 : 900}
+                      height={isLoneLast ? 700 : 1000}
+                      class="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
                   ) : (
-                    <ImagePlaceholder label="Placeholder inwestycji do uzupełnienia" class="size-full" />
+                    <ImagePlaceholder
+                      label="Placeholder inwestycji do uzupełnienia"
+                      class="absolute inset-0 size-full"
+                    />
                   )}
-                  <div class="pointer-events-none absolute inset-0 bg-dark/25"></div>
-                  <span class="absolute right-4 top-4 rounded-full bg-dark px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary-fg ring-1 ring-primary-fg/25">
-                    Zakończona
-                  </span>
-                </div>
-
-                <div class="flex flex-1 flex-col p-5">
-                  <h3 class="mb-2 font-heading text-h3 font-bold text-text">{investment.name}</h3>
-                  <p class="mb-3 flex items-center gap-1 text-sm text-text-muted">
-                    <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    {investment.locationAddress}
-                  </p>
-                  <p class="mb-5 line-clamp-3 flex-1 text-sm leading-relaxed text-text-muted">
-                    {investment.summary}
-                  </p>
-                  <span class="inline-flex min-h-[44px] w-fit items-center justify-center rounded-md border border-border bg-background px-5 py-2.5 text-sm font-bold text-text transition-colors group-hover:border-primary group-hover:text-primary">
-                    Zobacz inwestycję
-                  </span>
-                </div>
-              </a>
-            ))}
+                  <div class="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/40 to-dark/5"></div>
+                  <div class="absolute inset-x-0 bottom-0 p-5 sm:p-7">
+                    <h3 class="font-heading text-h3 font-bold uppercase text-primary-fg sm:text-h2">
+                      {investment.name}
+                    </h3>
+                    <p class="mt-2 flex items-center gap-1.5 text-sm text-primary-fg/80">
+                      <svg class="size-4 shrink-0 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      {investment.locationAddress}
+                    </p>
+                    <p class="mt-3 max-w-xl line-clamp-2 text-sm leading-relaxed text-primary-fg/70">
+                      {investment.summary}
+                    </p>
+                    <span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary-fg transition-colors group-hover:text-accent">
+                      Zobacz inwestycję
+                      <svg class="size-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+              );
+            })}
           </div>
         </div>
       )}

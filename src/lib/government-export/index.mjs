@@ -10,6 +10,8 @@ const GOVERNMENT_NAMESPACE = 'urn:otwarte-dane:harvester:1.13'
 const DEFAULT_BASE_URL = 'https://evenement24.com'
 const DEFAULT_OUTPUT_DIR = path.resolve(process.cwd(), 'public/otwarte-dane')
 const DEFAULT_BUYER_CONTACT_METHOD = 'Telefonicznie lub mailowo'
+const ART_19B_CITATION =
+  'art. 19b. ust. 1 Ustawy z dnia 20 maja 2021 r. o ochronie praw nabywcy lokalu mieszkalnego lub domu jednorodzinnego oraz Deweloperskim Funduszu Gwarancyjnym (Dz. U. z 2024 r. poz. 695)'
 const FEED_PATH = 'feed.xml'
 const FEED_MD5_PATH = 'feed.md5'
 const CSV_REFERENCE_PATH = path.resolve(
@@ -288,8 +290,8 @@ function buildDatasetExport({ developer, investment, exportDate, baseUrl, existi
   const currentResource = {
     extIdent: buildStableExtIdent('res', `${investment.dataset.extIdent}-${exportDate}`),
     url: resourceUrl,
-    title: `Ceny ofertowe inwestycji ${investment.name} ${exportDate}`,
-    description: `Dane dotyczace cen ofertowych inwestycji ${investment.name} udostepnione ${exportDate}.`,
+    title: buildResourceTitle(developer.name, investment.name, exportDate),
+    description: buildResourceDescription(developer.name, investment.name, exportDate),
     dataDate: exportDate,
     relativePath,
   }
@@ -422,14 +424,14 @@ function normalizeInvestment(investment, investmentIndex, developer, exportDate,
 
   const title =
     normalizeOptionalString(investment?.governmentDatasetTitle) ??
-    `Ceny ofertowe inwestycji ${investment.name}`
+    buildDatasetTitle(developer.name, investment.name)
 
   const description =
     normalizeOptionalString(investment?.governmentDatasetDescription) ??
-    buildDatasetDescription(investment, exportDate)
+    buildDatasetDescription(developer.name, investment)
 
   validateTextLength(errors, `${label}.datasetTitle`, title, 300)
-  validateTextLength(errors, `${label}.datasetDescription`, description, 10000)
+  validateTextLength(errors, `${label}.datasetDescription`, description, 1000)
 
   return {
     name: investment.name.trim(),
@@ -536,17 +538,31 @@ function createOfferRow({ developer, investment, unit, currentPrice }) {
   }
 }
 
-function buildDatasetDescription(investment) {
-  const base = `Zbior danych zawiera informacje o cenach ofertowych inwestycji ${investment.name} udostepniane zgodnie z art. 19b ust. 1 ustawy deweloperskiej.`
+function buildDatasetTitle(developerName, investmentName) {
+  return `Ceny ofertowe mieszkań dewelopera ${developerName} — inwestycja ${investmentName}`
+}
+
+function buildDatasetDescription(developerName, investment) {
+  const investmentName = investment.name.trim()
+  let description = `Zbiór danych zawiera informacje o cenach ofertowych mieszkań dewelopera ${developerName} w ramach inwestycji ${investmentName}, udostępniane zgodnie z ${ART_19B_CITATION}.`
+
   if (investment.salesStatus === 'ended' && investment.salesEndedAt) {
-    return `${base} Sprzedaz inwestycji zakonczyla sie z dniem ${investment.salesEndedAt}.`
+    return `${description} Sprzedaż inwestycji zakończyła się z dniem ${investment.salesEndedAt}.`
   }
 
   if (investment.salesStatus === 'ended' && normalizeOptionalString(investment.salesEndedNote)) {
-    return `${base} ${investment.salesEndedNote.trim()}`
+    return `${description} ${investment.salesEndedNote.trim()}`
   }
 
-  return base
+  return description
+}
+
+function buildResourceTitle(developerName, investmentName, exportDate) {
+  return `Ceny ofertowe mieszkań dewelopera ${developerName} — inwestycja ${investmentName} (${exportDate})`
+}
+
+function buildResourceDescription(developerName, investmentName, exportDate) {
+  return `Dane dotyczące cen ofertowych mieszkań dewelopera ${developerName} w inwestycji ${investmentName}, udostępnione ${exportDate} zgodnie z ${ART_19B_CITATION}.`
 }
 
 export function parseExistingFeedResources(feedXml) {
@@ -628,8 +644,7 @@ export function buildFeedXml(feedModel) {
 ${resourcesXml}
     </resources>
     <tags>
-      <tag lang="pl">deweloper</tag>
-      <tag lang="pl">ceny mieszkan</tag>
+      <tag lang="pl">Deweloper</tag>
     </tags>
   </dataset>`
     })

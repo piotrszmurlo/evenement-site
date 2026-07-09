@@ -225,7 +225,7 @@ test('feed keeps historical daily resources for active dataset', async () => {
         <dataDate>2026-06-21</dataDate>
       </resource>
     </resources>
-    <tags><tag lang="pl">deweloper</tag></tags>
+    <tags><tag lang="pl">Deweloper</tag></tags>
   </dataset>
 </ns2:datasets>`
 
@@ -242,6 +242,13 @@ test('feed keeps historical daily resources for active dataset', async () => {
     dataset.resources.map((resource) => resource.dataDate),
     ['2026-06-21', '2026-06-22'],
   )
+  assert.match(dataset.title, /Ceny ofertowe mieszkań/)
+  assert.match(dataset.description, /art\. 19b\. ust\. 1 Ustawy z dnia 20 maja 2021/)
+  assert.match(dataset.resources[1].title, /\(2026-06-22\)/)
+  assert.match(dataset.resources[1].description, /art\. 19b\. ust\. 1/)
+  assert.doesNotMatch(result.feedXml, /<english>/)
+  assert.match(result.feedXml, /<tag lang="pl">Deweloper<\/tag>/)
+  assert.doesNotMatch(result.feedXml, /ceny mieszkan/)
 
   const parsed = parseExistingFeedResources(result.feedXml)
   assert.equal(parsed.get(dataset.extIdent).length, 2)

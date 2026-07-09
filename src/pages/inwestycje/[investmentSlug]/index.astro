@@ -20,6 +20,7 @@ const { investmentSlug } = Astro.params;
 const { investment } = Astro.props;
 const galleryImages = investment.gallery;
 const investmentDescriptionHtml = renderBasehubRichText(investment.description);
+const salesLabel = investment.salesStatus === 'active' ? 'W sprzedaży' : 'Zakończona';
 ---
 
 <BaseLayout title={investment.name} description={investment.summary}>
@@ -203,57 +204,26 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
           </dialog>
         )}
 
-        <div class="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-start">
-          <div class="space-y-6">
-            <span class="text-topper font-bold uppercase tracking-widest text-accent">Inwestycja</span>
-            <h2 class="font-heading text-h2 font-bold uppercase text-text">{investment.name}</h2>
-            <p class="flex items-center gap-1 text-sm text-text-muted">
-              <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              {investment.locationAddress}
-            </p>
-            <div class="prose prose-slate max-w-none text-sm leading-7 text-text-muted" set:html={investmentDescriptionHtml} />
-          </div>
-
-          <div class="rounded-2xl border border-border bg-surface p-6 shadow-sm">
-            <h3 class="font-heading text-xl font-bold uppercase text-text">Szybkie informacje</h3>
-            <dl class="mt-5 space-y-4 text-sm">
-              <div class="flex items-start justify-between gap-4 border-b border-border pb-3">
-                <dt class="text-text-muted">Lokale</dt>
-                <dd class="font-semibold text-text">{investment.units.length}</dd>
-              </div>
-              <div class="flex items-start justify-between gap-4 border-b border-border pb-3">
-                <dt class="text-text-muted">Status sprzedaży</dt>
-                <dd class="font-semibold text-text">
-                  {investment.salesStatus === 'active' ? 'Aktywna' : 'Zakończona'}
-                </dd>
-              </div>
-              <div class="flex items-start justify-between gap-4">
-                <dt class="text-text-muted">Prospekt</dt>
-                <dd class="font-semibold text-text">
-                  {investment.prospectusUrl ? 'Dostępny' : 'Brak'}
-                </dd>
-              </div>
-            </dl>
-
-            {investment.prospectusUrl && (
-              <div class="pt-6">
-                <a
-                  href={investment.prospectusUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md border border-border bg-background px-5 py-2.5 text-sm font-semibold text-text transition-colors hover:bg-border"
-                >
-                  <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                  Pobierz prospekt informacyjny (PDF)
-                </a>
-              </div>
-            )}
-          </div>
+        <div class="max-w-3xl space-y-6">
+          <h2 class="flex flex-wrap items-center gap-3 font-heading text-h2 font-bold uppercase leading-none text-text">
+            <span>{investment.name}</span>
+            <span class:list={[
+              'inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest',
+              investment.salesStatus === 'active'
+                ? 'bg-primary text-primary-fg'
+                : 'bg-dark text-primary-fg ring-1 ring-primary-fg/25',
+            ]}>
+              {salesLabel}
+            </span>
+          </h2>
+          <p class="flex items-center gap-1 text-sm text-text-muted">
+            <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {investment.locationAddress}
+          </p>
+          <div class="prose prose-slate max-w-none text-sm leading-7 text-text-muted" set:html={investmentDescriptionHtml} />
         </div>
 
         <div class="border-t border-border pt-12">
@@ -310,29 +280,33 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
                           {currentPrice ? `${currentPrice.pricePerM2.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
                         </td>
                         <td class="px-4 py-4">
-                          <div class="flex flex-col gap-3">
-                            {unit.floorPlanUrl ? (
-                              <a
-                                href={unit.floorPlanUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="inline-flex w-fit items-center rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
-                              >
-                                Rzuty
-                              </a>
-                            ) : (
-                              <span class="inline-flex w-fit items-center rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted">
-                                Brak
-                              </span>
-                            )}
-                          </div>
+                          {unit.floorPlanUrl ? (
+                            <a
+                              href={unit.floorPlanUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="inline-flex w-fit items-center gap-1.5 rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
+                            >
+                              Rzuty
+                              <svg class="size-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                              </svg>
+                            </a>
+                          ) : (
+                            <span class="inline-flex w-fit items-center rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted">
+                              Brak
+                            </span>
+                          )}
                         </td>
-                                                <td class="px-4 py-4">
+                        <td class="px-4 py-4">
                           <a
                             href={`/inwestycje/${investmentSlug}/${unit.slug}/`}
-                            class="inline-flex w-fit items-center rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
+                            class="inline-flex w-fit items-center gap-1.5 rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
                           >
                             Szczegóły
+                            <svg class="size-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                              <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
                           </a>
                         </td>
                       </tr>
@@ -342,6 +316,22 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
               </table>
             </div>
           </div>
+
+          {investment.prospectusUrl && (
+            <div class="mt-10 flex justify-center">
+              <a
+                href={investment.prospectusUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-primary px-8 py-3 text-sm font-bold uppercase tracking-wider text-primary-fg shadow-sm transition-opacity hover:opacity-90"
+              >
+                Prospekt informacyjny
+                <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>

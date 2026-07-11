@@ -1,0 +1,152 @@
+---
+/**
+ * PROTOTYPE Variant C — Stacked unit dossiers (no table).
+ * Question: kill unit detail page; embed description + price history here instead.
+ * Structure: each unit is a self-contained section with stats, prose, timeline, CTA.
+ */
+import type { Unit } from '../../../lib/content';
+import { formatAreaM2, formatPropertyTypeLabel } from '../../../lib/content';
+
+interface Props {
+  units: Unit[];
+  investmentSlug: string;
+}
+
+const { units } = Astro.props;
+
+const formatPriceHistoryDate = (value: string) => {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat('pl-PL', {
+    timeZone: 'UTC',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+};
+
+const statusLabel = (status: Unit['status']) =>
+  status === 'available' ? 'Dostępny' : status === 'reserved' ? 'Rezerwacja' : 'Sprzedany';
+---
+
+<div class="border-t border-border pt-12" data-prototype-variant="C" hidden>
+  <div class="mb-3 rounded-md border border-dashed border-accent/40 bg-accent/5 px-3 py-2 text-xs text-text-muted">
+    PROTOTYPE C — Unit dossiers · no table · each unit is a full section
+  </div>
+
+  <div class="mb-10">
+    <h3 class="font-heading text-h3 font-bold uppercase text-text">Nieruchomości w inwestycji</h3>
+    <p class="mt-2 max-w-2xl text-sm text-text-muted">
+      Opis i historia ceny są częścią oferty — bez osobnej strony szczegółów.
+    </p>
+  </div>
+
+  <div class="space-y-14">
+    {units.map((unit) => {
+      const currentPrice = unit.currentPrice;
+      return (
+        <article class="scroll-mt-24 border-b border-border pb-14 last:border-b-0 last:pb-0" id={`unit-${unit.slug}`}>
+          <header class="mb-6 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p class="text-topper font-bold uppercase tracking-widest text-accent">
+                {formatPropertyTypeLabel(unit.propertyType)}
+              </p>
+              <h4 class="font-heading text-h2 font-bold uppercase text-text">{unit.unitNumber.toUpperCase()}</h4>
+            </div>
+            <span
+              class:list={[
+                'inline-flex rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-wider',
+                unit.status === 'available'
+                  ? 'bg-accent text-accent-fg'
+                  : unit.status === 'reserved'
+                    ? 'bg-secondary/15 text-secondary ring-1 ring-secondary/35'
+                    : 'bg-primary-light text-primary-fg',
+              ]}
+            >
+              {statusLabel(unit.status)}
+            </span>
+          </header>
+
+          <dl class="mb-6 grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
+            <div>
+              <dt class="text-xs uppercase tracking-wider text-text-muted">Pow. użytkowa</dt>
+              <dd class="text-base font-semibold text-text">{formatAreaM2(unit.usableAreaM2)} m²</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-wider text-text-muted">Działka</dt>
+              <dd class="text-base font-semibold text-text">{formatAreaM2(unit.plotAreaM2)} m²</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-wider text-text-muted">Pokoje</dt>
+              <dd class="text-base font-semibold text-text">{unit.rooms}</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-wider text-text-muted">Cena</dt>
+              <dd class="text-base font-semibold text-text">
+                {currentPrice ? `${currentPrice.totalPrice.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
+              </dd>
+              {currentPrice && (
+                <p class="text-xs text-text-muted">{currentPrice.pricePerM2.toLocaleString('pl-PL')} zł/m²</p>
+              )}
+            </div>
+          </dl>
+
+          <div class="grid gap-8 lg:grid-cols-[1.35fr_1fr] lg:gap-12">
+            <div>
+              <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-text-muted">Opis</p>
+              <p class="text-sm leading-relaxed text-text-muted">{unit.description}</p>
+              <div class="mt-5 flex flex-wrap gap-3">
+                {unit.status !== 'sold' && (
+                  <a
+                    href="/kontakt/"
+                    class="inline-flex min-h-[44px] items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-bold text-accent-fg transition-opacity hover:opacity-90"
+                  >
+                    Zapytaj o {unit.unitNumber.toUpperCase()}
+                  </a>
+                )}
+                {unit.floorPlanUrl && (
+                  <a
+                    href={unit.floorPlanUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-md border border-border bg-surface px-5 py-2.5 text-sm font-semibold text-text transition-colors hover:bg-border"
+                  >
+                    Rzuty
+                    <svg class="size-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-text-muted">Historia ceny</p>
+              {unit.priceHistory.length > 0 ? (
+                <ol class="relative space-y-0 border-l-2 border-border">
+                  {unit.priceHistory.map((entry, index) => (
+                    <li class="relative pb-5 pl-5 last:pb-0">
+                      <span
+                        class:list={[
+                          'absolute -left-[5px] top-1.5 size-2 rounded-full',
+                          index === 0 ? 'bg-accent' : 'bg-border',
+                        ]}
+                      ></span>
+                      <p class="text-xs text-text-muted">{formatPriceHistoryDate(entry.validFrom)}</p>
+                      <p class:list={['text-sm font-semibold', index === 0 ? 'text-accent' : 'text-text']}>
+                        {entry.totalPrice.toLocaleString('pl-PL')} zł
+                      </p>
+                      <p class="text-xs text-text-muted">{entry.pricePerM2.toLocaleString('pl-PL')} zł/m²</p>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <p class="text-sm text-text-muted">Brak historii ceny.</p>
+              )}
+            </div>
+          </div>
+        </article>
+      );
+    })}
+  </div>
+</div>

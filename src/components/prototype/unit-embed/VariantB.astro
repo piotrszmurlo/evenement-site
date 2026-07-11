@@ -1,0 +1,295 @@
+---
+/**
+ * PROTOTYPE Variant B — Side sheet on row click.
+ * Question: kill unit detail page; embed description + price history here instead.
+ * Structure: comparison table only; selecting a unit opens a slide-over with detail.
+ */
+import type { Unit } from '../../../lib/content';
+import { formatAreaM2, formatPropertyTypeLabel } from '../../../lib/content';
+
+interface Props {
+  units: Unit[];
+  investmentSlug: string;
+}
+
+const { units } = Astro.props;
+
+const formatPriceHistoryDate = (value: string) => {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat('pl-PL', {
+    timeZone: 'UTC',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+};
+
+const statusLabel = (status: Unit['status']) =>
+  status === 'available' ? 'Dostępny' : status === 'reserved' ? 'Rezerwacja' : 'Sprzedany';
+---
+
+<div class="border-t border-border pt-12" data-prototype-variant="B" hidden>
+  <div class="mb-3 rounded-md border border-dashed border-accent/40 bg-accent/5 px-3 py-2 text-xs text-text-muted">
+    PROTOTYPE B — Side sheet · click a row · detail lives in a panel, not a page
+  </div>
+
+  <div class="mb-8">
+    <h3 class="font-heading text-h3 font-bold uppercase text-text">Lista dostępnych nieruchomości</h3>
+    <p class="mt-2 text-sm text-text-muted">Kliknij wiersz, aby zobaczyć opis i historię ceny.</p>
+  </div>
+
+  <div class="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-border text-left text-sm">
+        <thead class="bg-surface text-xs uppercase tracking-wider text-text-muted">
+          <tr>
+            <th scope="col" class="px-4 py-3">Budynek</th>
+            <th scope="col" class="px-4 py-3">Pow. budynku</th>
+            <th scope="col" class="px-4 py-3">Pow. działki</th>
+            <th scope="col" class="px-4 py-3">Status</th>
+            <th scope="col" class="px-4 py-3">Cena brutto</th>
+            <th scope="col" class="px-4 py-3">Cena za m²</th>
+            <th scope="col" class="px-4 py-3">Rzuty</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border bg-background">
+          {units.map((unit) => {
+            const currentPrice = unit.currentPrice;
+            return (
+              <tr
+                class="cursor-pointer align-middle transition-colors hover:bg-surface"
+                data-sheet-open={unit.slug}
+                tabindex="0"
+                role="button"
+                aria-label={`Pokaż szczegóły ${unit.unitNumber}`}
+              >
+                <td class="px-4 py-4 font-semibold text-text">{unit.unitNumber.toUpperCase()}</td>
+                <td class="px-4 py-4 text-text-muted">{formatAreaM2(unit.usableAreaM2)} m²</td>
+                <td class="px-4 py-4 text-text-muted">{formatAreaM2(unit.plotAreaM2)} m²</td>
+                <td class="px-4 py-4">
+                  <span
+                    class:list={[
+                      'inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider',
+                      unit.status === 'available'
+                        ? 'bg-accent text-accent-fg'
+                        : unit.status === 'reserved'
+                          ? 'bg-secondary/15 text-secondary ring-1 ring-secondary/35'
+                          : 'bg-primary-light text-primary-fg',
+                    ]}
+                  >
+                    {statusLabel(unit.status)}
+                  </span>
+                </td>
+                <td class="px-4 py-4 font-semibold text-text">
+                  {currentPrice ? `${currentPrice.totalPrice.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
+                </td>
+                <td class="px-4 py-4 font-semibold text-text">
+                  {currentPrice ? `${currentPrice.pricePerM2.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
+                </td>
+                <td class="px-4 py-4" data-sheet-ignore>
+                  {unit.floorPlanUrl ? (
+                    <a
+                      href={unit.floorPlanUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex w-fit items-center gap-1.5 rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
+                    >
+                      Rzuty
+                    </a>
+                  ) : (
+                    <span class="text-xs text-text-muted">—</span>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div
+    class="fixed inset-0 z-[80] hidden"
+    data-sheet-root
+    aria-hidden="true"
+  >
+    <button
+      type="button"
+      class="absolute inset-0 bg-black/45"
+      data-sheet-backdrop
+      aria-label="Zamknij panel"
+    ></button>
+    <aside
+      class="absolute inset-y-0 right-0 flex w-full max-w-md flex-col border-l border-border bg-background shadow-2xl"
+      data-sheet-panel
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="sheet-title"
+    >
+      <div class="flex items-start justify-between gap-4 border-b border-border px-5 py-4">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-widest text-accent" data-sheet-type></p>
+          <h4 id="sheet-title" class="font-heading text-xl font-bold uppercase text-text" data-sheet-title></h4>
+        </div>
+        <button
+          type="button"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-text transition-colors hover:bg-surface"
+          data-sheet-close
+          aria-label="Zamknij"
+        >
+          <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex-1 space-y-6 overflow-y-auto px-5 py-5">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider" data-sheet-status></span>
+          <span class="text-sm text-text-muted" data-sheet-meta></span>
+        </div>
+
+        <div>
+          <p class="mb-1 text-2xl font-bold text-text" data-sheet-price></p>
+          <p class="text-xs text-text-muted" data-sheet-ppm></p>
+        </div>
+
+        <div>
+          <p class="mb-1 text-xs font-semibold uppercase tracking-wider text-text-muted">Opis</p>
+          <p class="text-sm leading-relaxed text-text-muted" data-sheet-description></p>
+        </div>
+
+        <div>
+          <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-text-muted">Historia ceny ofertowej</p>
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse border border-border text-left text-sm">
+              <thead>
+                <tr class="bg-surface">
+                  <th class="border border-border px-3 py-2 text-xs uppercase tracking-wider">Data</th>
+                  <th class="border border-border px-3 py-2 text-xs uppercase tracking-wider">zł/m²</th>
+                  <th class="border border-border px-3 py-2 text-xs uppercase tracking-wider">Razem</th>
+                </tr>
+              </thead>
+              <tbody data-sheet-history></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-border px-5 py-4" data-sheet-footer>
+        <a
+          href="/kontakt/"
+          class="inline-flex min-h-[44px] w-full items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-bold text-accent-fg transition-opacity hover:opacity-90"
+          data-sheet-cta
+        >
+          Zapytaj o tę ofertę
+        </a>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script define:vars={{ unitsJson: JSON.stringify(units.map((unit) => ({
+  slug: unit.slug,
+  unitNumber: unit.unitNumber,
+  propertyType: formatPropertyTypeLabel(unit.propertyType),
+  status: unit.status,
+  statusLabel: statusLabel(unit.status),
+  usableAreaM2: formatAreaM2(unit.usableAreaM2),
+  plotAreaM2: formatAreaM2(unit.plotAreaM2),
+  rooms: unit.rooms,
+  description: unit.description,
+  sold: unit.status === 'sold',
+  price: unit.currentPrice
+    ? `${unit.currentPrice.totalPrice.toLocaleString('pl-PL')} zł`
+    : 'Cena na zapytanie',
+  ppm: unit.currentPrice
+    ? `${unit.currentPrice.pricePerM2.toLocaleString('pl-PL')} zł/m²`
+    : '',
+  priceHistory: unit.priceHistory.map((entry) => ({
+    date: formatPriceHistoryDate(entry.validFrom),
+    ppm: `${entry.pricePerM2.toLocaleString('pl-PL')} zł/m²`,
+    total: `${entry.totalPrice.toLocaleString('pl-PL')} zł`,
+  })),
+}))) }}>
+  const root = document.querySelector('[data-prototype-variant="B"]');
+  if (root) {
+    const units = JSON.parse(unitsJson);
+    const bySlug = Object.fromEntries(units.map((u) => [u.slug, u]));
+    const sheetRoot = root.querySelector('[data-sheet-root]');
+    const statusEl = root.querySelector('[data-sheet-status]');
+    const typeEl = root.querySelector('[data-sheet-type]');
+    const titleEl = root.querySelector('[data-sheet-title]');
+    const metaEl = root.querySelector('[data-sheet-meta]');
+    const priceEl = root.querySelector('[data-sheet-price]');
+    const ppmEl = root.querySelector('[data-sheet-ppm]');
+    const descEl = root.querySelector('[data-sheet-description]');
+    const historyEl = root.querySelector('[data-sheet-history]');
+    const footerEl = root.querySelector('[data-sheet-footer]');
+    const ctaEl = root.querySelector('[data-sheet-cta]');
+
+    const statusClasses = {
+      available: 'bg-accent text-accent-fg',
+      reserved: 'bg-secondary/15 text-secondary ring-1 ring-secondary/35',
+      sold: 'bg-primary-light text-primary-fg',
+    };
+
+    const openSheet = (slug) => {
+      const unit = bySlug[slug];
+      if (!unit || !sheetRoot) return;
+
+      typeEl.textContent = unit.propertyType;
+      titleEl.textContent = unit.unitNumber.toUpperCase();
+      statusEl.textContent = unit.statusLabel;
+      statusEl.className = `rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${statusClasses[unit.status] || ''}`;
+      metaEl.textContent = `${unit.usableAreaM2} m² · ${unit.rooms} pokoje · działka ${unit.plotAreaM2} m²`;
+      priceEl.textContent = unit.price;
+      ppmEl.textContent = unit.ppm ? `Cena za m²: ${unit.ppm}` : '';
+      descEl.textContent = unit.description;
+      historyEl.innerHTML = unit.priceHistory.length
+        ? unit.priceHistory
+            .map(
+              (entry) =>
+                `<tr><td class="border border-border px-3 py-2 font-medium text-text">${entry.date}</td><td class="border border-border px-3 py-2 text-text-muted">${entry.ppm}</td><td class="border border-border px-3 py-2 font-semibold text-text">${entry.total}</td></tr>`,
+            )
+            .join('')
+        : '<tr><td class="border border-border px-3 py-2 text-text-muted" colspan="3">Brak historii ceny.</td></tr>';
+      footerEl.hidden = unit.sold;
+      if (ctaEl) ctaEl.textContent = `Zapytaj o ${unit.unitNumber.toUpperCase()}`;
+
+      sheetRoot.classList.remove('hidden');
+      sheetRoot.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeSheet = () => {
+      if (!sheetRoot) return;
+      sheetRoot.classList.add('hidden');
+      sheetRoot.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+
+    root.querySelectorAll('[data-sheet-open]').forEach((row) => {
+      const activate = (event) => {
+        if (event.target.closest('[data-sheet-ignore]')) return;
+        openSheet(row.getAttribute('data-sheet-open'));
+      };
+      row.addEventListener('click', activate);
+      row.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          activate(event);
+        }
+      });
+    });
+
+    root.querySelector('[data-sheet-close]')?.addEventListener('click', closeSheet);
+    root.querySelector('[data-sheet-backdrop]')?.addEventListener('click', closeSheet);
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && sheetRoot && !sheetRoot.classList.contains('hidden')) {
+        closeSheet();
+      }
+    });
+  }
+</script>

@@ -1,0 +1,178 @@
+---
+/**
+ * PROTOTYPE Variant A — Expandable table rows.
+ * Question: kill unit detail page; embed description + price history here instead.
+ * Structure: lean table; expand a row in-place for description + price history.
+ */
+import type { Unit } from '../../../lib/content';
+import { formatAreaM2 } from '../../../lib/content';
+
+interface Props {
+  units: Unit[];
+  investmentSlug: string;
+}
+
+const { units } = Astro.props;
+
+const formatPriceHistoryDate = (value: string) => {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat('pl-PL', {
+    timeZone: 'UTC',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+};
+
+const statusLabel = (status: Unit['status']) =>
+  status === 'available' ? 'Dostępny' : status === 'reserved' ? 'Rezerwacja' : 'Sprzedany';
+---
+
+<div class="border-t border-border pt-12" data-prototype-variant="A">
+  <div class="mb-3 rounded-md border border-dashed border-accent/40 bg-accent/5 px-3 py-2 text-xs text-text-muted">
+    PROTOTYPE A — Expandable rows · no detail page · description + price history inline
+  </div>
+
+  <div class="mb-8">
+    <h3 class="font-heading text-h3 font-bold uppercase text-text">Lista dostępnych nieruchomości</h3>
+    <p class="mt-2 text-sm text-text-muted">Rozwiń wiersz, aby zobaczyć opis i historię ceny.</p>
+  </div>
+
+  <div class="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-border text-left text-sm">
+        <thead class="bg-surface text-xs uppercase tracking-wider text-text-muted">
+          <tr>
+            <th scope="col" class="px-4 py-3">Budynek</th>
+            <th scope="col" class="px-4 py-3">Pow. budynku</th>
+            <th scope="col" class="px-4 py-3">Pow. działki</th>
+            <th scope="col" class="px-4 py-3">Status</th>
+            <th scope="col" class="px-4 py-3">Cena brutto</th>
+            <th scope="col" class="px-4 py-3">Cena za m²</th>
+            <th scope="col" class="px-4 py-3">Rzuty</th>
+            <th scope="col" class="px-4 py-3"><span class="sr-only">Rozwiń</span></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border bg-background">
+          {units.map((unit) => {
+            const currentPrice = unit.currentPrice;
+            return (
+              <>
+                <tr class="align-middle" data-expand-row={unit.slug}>
+                  <td class="px-4 py-4 font-semibold text-text">{unit.unitNumber.toUpperCase()}</td>
+                  <td class="px-4 py-4 text-text-muted">{formatAreaM2(unit.usableAreaM2)} m²</td>
+                  <td class="px-4 py-4 text-text-muted">{formatAreaM2(unit.plotAreaM2)} m²</td>
+                  <td class="px-4 py-4">
+                    <span
+                      class:list={[
+                        'inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider',
+                        unit.status === 'available'
+                          ? 'bg-accent text-accent-fg'
+                          : unit.status === 'reserved'
+                            ? 'bg-secondary/15 text-secondary ring-1 ring-secondary/35'
+                            : 'bg-primary-light text-primary-fg',
+                      ]}
+                    >
+                      {statusLabel(unit.status)}
+                    </span>
+                  </td>
+                  <td class="px-4 py-4 font-semibold text-text">
+                    {currentPrice ? `${currentPrice.totalPrice.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
+                  </td>
+                  <td class="px-4 py-4 font-semibold text-text">
+                    {currentPrice ? `${currentPrice.pricePerM2.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
+                  </td>
+                  <td class="px-4 py-4">
+                    {unit.floorPlanUrl ? (
+                      <a
+                        href={unit.floorPlanUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex w-fit items-center gap-1.5 rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
+                      >
+                        Rzuty
+                      </a>
+                    ) : (
+                      <span class="text-xs text-text-muted">—</span>
+                    )}
+                  </td>
+                  <td class="px-4 py-4">
+                    <button
+                      type="button"
+                      class="inline-flex min-h-[36px] items-center gap-1 rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
+                      data-expand-toggle={unit.slug}
+                      aria-expanded="false"
+                      aria-controls={`expand-${unit.slug}`}
+                    >
+                      Opis
+                      <svg class="size-3 transition-transform" data-expand-chevron={unit.slug} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr id={`expand-${unit.slug}`} hidden data-expand-panel={unit.slug}>
+                  <td colspan="8" class="bg-surface-muted px-4 py-5 sm:px-6">
+                    <div class="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+                      <div>
+                        <p class="mb-1 text-xs font-semibold uppercase tracking-wider text-text-muted">Opis</p>
+                        <p class="text-sm leading-relaxed text-text">{unit.description}</p>
+                        {unit.status !== 'sold' && (
+                          <a
+                            href="/kontakt/"
+                            class="mt-4 inline-flex min-h-[40px] items-center rounded-md bg-accent px-4 py-2 text-sm font-bold text-accent-fg transition-opacity hover:opacity-90"
+                          >
+                            Zapytaj o {unit.unitNumber.toUpperCase()}
+                          </a>
+                        )}
+                      </div>
+                      <div>
+                        <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-text-muted">Historia ceny</p>
+                        {unit.priceHistory.length > 0 ? (
+                          <ul class="space-y-2 border-l border-border pl-3">
+                            {unit.priceHistory.map((entry, index) => (
+                              <li class="text-sm">
+                                <span class="font-medium text-text">{formatPriceHistoryDate(entry.validFrom)}</span>
+                                <span class="mx-1.5 text-border">·</span>
+                                <span class="text-text-muted">{entry.pricePerM2.toLocaleString('pl-PL')} zł/m²</span>
+                                <span class="mx-1.5 text-border">·</span>
+                                <span class:list={['font-semibold', index === 0 ? 'text-accent' : 'text-text']}>
+                                  {entry.totalPrice.toLocaleString('pl-PL')} zł
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p class="text-sm text-text-muted">Brak historii ceny.</p>
+                        )}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector('[data-prototype-variant="A"]');
+  if (root) {
+    root.querySelectorAll('[data-expand-toggle]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const slug = button.getAttribute('data-expand-toggle');
+        const panel = root.querySelector(`[data-expand-panel="${slug}"]`);
+        const chevron = root.querySelector(`[data-expand-chevron="${slug}"]`);
+        if (!panel) return;
+        const open = panel.hasAttribute('hidden');
+        panel.toggleAttribute('hidden', !open);
+        button.setAttribute('aria-expanded', String(open));
+        chevron?.classList.toggle('rotate-180', open);
+      });
+    });
+  }
+</script>

@@ -45,10 +45,10 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
               <div class="embla__viewport overflow-hidden" data-embla-viewport>
                 <div class="embla__container flex touch-pan-y">
                   {galleryImages.map((src, index) => (
-                    <div class="embla__slide min-w-0 flex-[0_0_100%]">
+                    <div class="embla__slide min-w-0 flex-[0_0_100%] touch-pan-y">
                       <button
                         type="button"
-                        class="block w-full cursor-zoom-in focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/70"
+                        class="block w-full touch-pan-y cursor-zoom-in focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/70"
                         data-gallery-open
                         data-index={index}
                         data-src={src}
@@ -72,7 +72,7 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
                 <>
                   <button
                     type="button"
-                    class="embla__button absolute left-4 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/45 text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-black/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+                    class="embla__button absolute left-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-primary-fg/20 bg-dark/45 text-primary-fg shadow-lg backdrop-blur-sm transition-colors hover:bg-dark/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:inline-flex"
                     data-embla-prev
                     aria-label="Poprzednie zdjƒôcie"
                   >
@@ -83,7 +83,7 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
 
                   <button
                     type="button"
-                    class="embla__button absolute right-4 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/45 text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-black/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+                    class="embla__button absolute right-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-primary-fg/20 bg-dark/45 text-primary-fg shadow-lg backdrop-blur-sm transition-colors hover:bg-dark/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:inline-flex"
                     data-embla-next
                     aria-label="Nastƒôpne zdjƒôcie"
                   >
@@ -129,16 +129,16 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
 
         {galleryImages.length > 0 && (
           <dialog
-            class="fixed inset-0 m-0 h-dvh max-h-none w-dvw max-w-none overflow-hidden bg-slate-900/90 p-0 text-white backdrop:bg-slate-950/65"
+            class="fixed inset-0 m-0 h-dvh max-h-none w-dvw max-w-none overflow-hidden bg-dark/90 p-0 text-primary-fg backdrop:bg-dark/65"
             data-gallery-viewer
             aria-label={`Galeria inwestycji ${investment.name}`}
           >
             <div class="fixed inset-0 grid h-dvh w-dvw min-w-0 grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto]">
               <div class="flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
-                <p class="text-sm font-semibold uppercase tracking-wider text-white/80" data-gallery-counter></p>
+                <p class="text-sm font-semibold uppercase tracking-wider text-primary-fg/80" data-gallery-counter></p>
                 <button
                   type="button"
-                  class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+                  class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-primary-fg/20 bg-primary-fg/10 text-primary-fg transition-colors hover:bg-primary-fg/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80"
                   data-gallery-close
                   aria-label="Zamknij podglƒÖd"
                 >
@@ -148,12 +148,15 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
                 </button>
               </div>
 
-              <div class="relative flex min-h-0 min-w-0 items-center justify-center overflow-hidden px-4 py-2 sm:px-20">
+              <div
+                class="relative flex min-h-0 min-w-0 touch-pan-y items-center justify-center overflow-hidden px-4 py-2 sm:px-20"
+                data-gallery-viewer-stage
+              >
                 {galleryImages.length > 1 && (
                   <>
                     <button
                       type="button"
-                      class="absolute left-3 top-1/2 z-10 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-slate-900/70 text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-slate-900/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:left-6"
+                      class="absolute left-3 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-primary-fg/20 bg-dark/70 text-primary-fg shadow-lg backdrop-blur-sm transition-colors hover:bg-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:left-6 sm:inline-flex"
                       data-gallery-prev
                       aria-label="Poprzednie zdjƒôcie"
                     >
@@ -164,7 +167,7 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
 
                     <button
                       type="button"
-                      class="absolute right-3 top-1/2 z-10 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-slate-900/70 text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-slate-900/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:right-6"
+                      class="absolute right-3 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-primary-fg/20 bg-dark/70 text-primary-fg shadow-lg backdrop-blur-sm transition-colors hover:bg-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:right-6 sm:inline-flex"
                       data-gallery-next
                       aria-label="Nastƒôpne zdjƒôcie"
                     >
@@ -178,17 +181,18 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
                 <img
                   src={galleryImages[0]}
                   alt=""
-                  class="h-full w-full object-contain"
+                  class="pointer-events-none h-full w-full select-none object-contain"
+                  draggable="false"
                   data-gallery-viewer-image
                 />
               </div>
 
-              <div class="border-t border-white/10 bg-slate-950/25 px-4 py-4 sm:px-6">
+              <div class="border-t border-primary-fg/10 bg-dark-surface/40 px-4 py-4 sm:px-6">
                 <div class="flex w-full min-w-0 gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]" data-gallery-viewer-thumbs aria-label="Miniatury powiƒôkszonej galerii">
                   {galleryImages.map((src, index) => (
                     <button
                       type="button"
-                      class="relative aspect-[4/3] w-20 shrink-0 overflow-hidden rounded-lg border border-white/20 bg-slate-800/70 opacity-70 transition-all hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:w-24"
+                      class="relative aspect-[4/3] w-20 shrink-0 overflow-hidden rounded-lg border border-primary-fg/20 bg-dark-surface/70 opacity-70 transition-all hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:w-24"
                       data-gallery-viewer-thumb
                       data-index={index}
                       aria-label={`Poka≈º zdjƒôcie ${index + 1}`}
@@ -230,7 +234,7 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
             </svg>
             {investment.locationAddress}
           </p>
-          <div class="prose prose-slate max-w-none text-sm leading-7 text-text-muted" set:html={investmentDescriptionHtml} />
+          <div class="prose max-w-none text-sm leading-7 text-text-muted prose-headings:text-text prose-a:text-accent prose-strong:text-text" set:html={investmentDescriptionHtml} />
         </div>
 
         {(investment.units.length > 0 || investment.prospectusUrl) && (
@@ -293,6 +297,7 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
         loop: false,
         align: 'start',
         skipSnaps: false,
+        watchDrag: true,
       });
       const imageSources = openBtns
         .map((button) => button.getAttribute('data-src'))
@@ -300,6 +305,11 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
       let viewerIndex = 0;
       let lastFocusedElement = null;
       let previousBodyOverflow = '';
+      const viewerStage = viewer?.querySelector('[data-gallery-viewer-stage]');
+      const SWIPE_THRESHOLD_PX = 50;
+      let swipeStartX = 0;
+      let swipeStartY = 0;
+      let swipeActive = false;
 
       const setSelected = () => {
         const selectedIndex = embla.selectedScrollSnap();
@@ -344,7 +354,7 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
           const active = thumbIndex === viewerIndex;
           thumb.setAttribute('aria-pressed', String(active));
           thumb.classList.toggle('border-2', active);
-          thumb.classList.toggle('border-white', active);
+          thumb.classList.toggle('border-primary-fg', active);
           thumb.classList.toggle('opacity-100', active);
           thumb.classList.toggle('opacity-70', !active);
 
@@ -395,11 +405,38 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
         }
       };
 
-      const addListener = (target, eventName, handler) => {
+      const onViewerPointerDown = (event) => {
+        if (imageSources.length <= 1) return;
+        if (event.target instanceof Element && event.target.closest('button')) return;
+
+        swipeActive = true;
+        swipeStartX = event.clientX;
+        swipeStartY = event.clientY;
+      };
+
+      const onViewerPointerUp = (event) => {
+        if (!swipeActive) return;
+        swipeActive = false;
+
+        const deltaX = event.clientX - swipeStartX;
+        const deltaY = event.clientY - swipeStartY;
+
+        if (Math.abs(deltaX) < SWIPE_THRESHOLD_PX) return;
+        if (Math.abs(deltaX) <= Math.abs(deltaY)) return;
+
+        if (deltaX < 0) showViewerNext();
+        else showViewerPrev();
+      };
+
+      const onViewerPointerCancel = () => {
+        swipeActive = false;
+      };
+
+      const addListener = (target, eventName, handler, options) => {
         if (!target) return;
 
-        target.addEventListener(eventName, handler);
-        cleanupFns.push(() => target.removeEventListener(eventName, handler));
+        target.addEventListener(eventName, handler, options);
+        cleanupFns.push(() => target.removeEventListener(eventName, handler, options));
       };
 
       thumbs.forEach((thumb, index) => {
@@ -424,6 +461,10 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
       addListener(viewerCloseBtn, 'click', closeViewer);
       addListener(viewerPrevBtn, 'click', showViewerPrev);
       addListener(viewerNextBtn, 'click', showViewerNext);
+      addListener(viewerStage, 'pointerdown', onViewerPointerDown);
+      addListener(viewerStage, 'pointerup', onViewerPointerUp);
+      addListener(viewerStage, 'pointercancel', onViewerPointerCancel);
+      addListener(viewerStage, 'pointerleave', onViewerPointerCancel);
       addListener(viewer, 'close', onViewerCancel);
       addListener(document, 'keydown', onKeydown);
       embla.on('select', setSelected);

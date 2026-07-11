@@ -20,6 +20,8 @@ const { investment } = Astro.props;
 const galleryImages = investment.gallery;
 const investmentDescriptionHtml = renderBasehubRichText(investment.description);
 const salesLabel = investment.salesStatus === 'active' ? 'W sprzedaży' : 'Zakończona';
+const mapEmbedUrl = investment.mapEmbedUrl;
+const mapLink = investment.mapLink;
 ---
 
 <BaseLayout title={investment.name} description={investment.summary}>
@@ -52,11 +54,22 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzedaży' : 'Zako�
               </span>
             </h1>
             <p class="flex items-center gap-1 text-sm text-text-muted">
-              <svg class="size-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg class="size-4 shrink-0 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              {investment.locationAddress}
+              {mapLink ? (
+                <a
+                  href={mapLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="transition-colors hover:text-primary"
+                >
+                  {investment.locationAddress}
+                </a>
+              ) : (
+                investment.locationAddress
+              )}
             </p>
           </div>
 
@@ -238,7 +251,36 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzedaży' : 'Zako�
         )}
         </div>
 
-        <div class="prose max-w-none text-sm leading-7 text-text-muted prose-headings:text-text prose-a:text-accent prose-strong:text-text" set:html={investmentDescriptionHtml} />
+        <div class="prose max-w-3xl text-sm leading-7 text-text-muted prose-headings:text-text prose-a:text-accent prose-strong:text-text" set:html={investmentDescriptionHtml} />
+
+        {mapEmbedUrl && (
+          <div class="space-y-4">
+            <h2 class="font-heading text-h3 font-bold uppercase text-text">Lokalizacja na mapie</h2>
+            <div class="overflow-hidden rounded-2xl border border-border bg-background shadow-lg">
+              <iframe
+                title={`Mapa inwestycji ${investment.name}`}
+                src={mapEmbedUrl}
+                class="aspect-[16/10] w-full border-0"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>
+            </div>
+            {mapLink && (
+              <a
+                href={mapLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex min-h-[44px] items-center gap-2 text-sm font-bold text-primary transition-colors hover:text-accent"
+              >
+                Otwórz w Google Maps
+                <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </a>
+            )}
+          </div>
+        )}
 
         {(investment.units.length > 0 || investment.prospectusUrl) && (
           <div>

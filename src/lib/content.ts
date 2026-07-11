@@ -74,6 +74,8 @@ interface CmsInvestment {
   summary: string;
   description: BasehubRichTextDocument | null;
   locationAddress: string;
+  mapEmbedUrl?: string | null;
+  mapLink?: string | null;
   prospectusFile?: CmsAsset | null;
   salesStatus: SalesStatus;
   gallery: CmsGalleryItem[];
@@ -113,6 +115,8 @@ export interface Investment {
   summary: string;
   description: BasehubRichTextDocument | null;
   locationAddress: string;
+  mapEmbedUrl?: string;
+  mapLink?: string;
   prospectusUrl?: string;
   salesStatus: SalesStatus;
   gallery: string[];
@@ -206,6 +210,8 @@ const SITE_CONTENT_QUERY = {
           },
         },
         locationAddress: true,
+        mapEmbedUrl: true,
+        mapLink: true,
         prospectusFile: {
           url: true,
         },
@@ -512,6 +518,8 @@ async function loadBasehubContent(): Promise<SiteContent & CmsHomepageContent> {
       summary: investment.summary,
       description: investment.description,
       locationAddress: investment.locationAddress,
+      mapEmbedUrl: investment.mapEmbedUrl,
+      mapLink: investment.mapLink,
       prospectusFile: investment.prospectusFile?.url
         ? { url: investment.prospectusFile.url }
         : null,
@@ -727,6 +735,8 @@ function normalizeAndValidate(content: SiteContent, label: string): Investment[]
       summary: investment.summary,
       description: investment.description,
       locationAddress: investment.locationAddress,
+      mapEmbedUrl: investment.mapEmbedUrl?.trim() || undefined,
+      mapLink: investment.mapLink?.trim() || undefined,
       prospectusUrl: investment.prospectusFile?.url || undefined,
       salesStatus: investment.salesStatus,
       gallery,

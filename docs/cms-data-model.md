@@ -80,6 +80,8 @@ Recommended fields:
 - `summary`
 - `description`
 - `locationAddress`
+- `mapEmbedUrl` (optional Google Maps iframe `src`)
+- `mapLink` (optional Google Maps share/open URL)
 - `heroImage`
 - `gallery`
 - `prospectusUrl`

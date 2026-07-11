@@ -577,6 +577,8 @@ export interface StronaRaportInwestycjaComponent {
     investmentAddress: InvestmentAddressComponent
     isReportedToGovernment: Scalars['Boolean']
     locationAddress: Scalars['String']
+    mapEmbedUrl: (Scalars['String'] | null)
+    mapLink: (Scalars['String'] | null)
     name: Scalars['String']
     prospectusFile: (BlockFile | null)
     /** ISO 8601 date string. */
@@ -589,7 +591,7 @@ export interface StronaRaportInwestycjaComponent {
     __typename: 'StronaRaportInwestycjaComponent'
 }
 
-export type StronaRaportInwestycjaComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'description__ASC' | 'description__DESC' | 'gallery__ASC' | 'gallery__DESC' | 'governmentDatasetDescription__ASC' | 'governmentDatasetDescription__DESC' | 'governmentDatasetExtIdent__ASC' | 'governmentDatasetExtIdent__DESC' | 'governmentDatasetTitle__ASC' | 'governmentDatasetTitle__DESC' | 'investmentAddress__ASC' | 'investmentAddress__DESC' | 'isReportedToGovernment__ASC' | 'isReportedToGovernment__DESC' | 'locationAddress__ASC' | 'locationAddress__DESC' | 'name__ASC' | 'name__DESC' | 'prospectusFile__ASC' | 'prospectusFile__DESC' | 'salesEndedAt__ASC' | 'salesEndedAt__DESC' | 'salesEndedNote__ASC' | 'salesEndedNote__DESC' | 'salesStatus__ASC' | 'salesStatus__DESC' | 'slug__ASC' | 'slug__DESC' | 'summary__ASC' | 'summary__DESC' | 'units__ASC' | 'units__DESC'
+export type StronaRaportInwestycjaComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'description__ASC' | 'description__DESC' | 'gallery__ASC' | 'gallery__DESC' | 'governmentDatasetDescription__ASC' | 'governmentDatasetDescription__DESC' | 'governmentDatasetExtIdent__ASC' | 'governmentDatasetExtIdent__DESC' | 'governmentDatasetTitle__ASC' | 'governmentDatasetTitle__DESC' | 'investmentAddress__ASC' | 'investmentAddress__DESC' | 'isReportedToGovernment__ASC' | 'isReportedToGovernment__DESC' | 'locationAddress__ASC' | 'locationAddress__DESC' | 'mapEmbedUrl__ASC' | 'mapEmbedUrl__DESC' | 'mapLink__ASC' | 'mapLink__DESC' | 'name__ASC' | 'name__DESC' | 'prospectusFile__ASC' | 'prospectusFile__DESC' | 'salesEndedAt__ASC' | 'salesEndedAt__DESC' | 'salesEndedNote__ASC' | 'salesEndedNote__DESC' | 'salesStatus__ASC' | 'salesStatus__DESC' | 'slug__ASC' | 'slug__DESC' | 'summary__ASC' | 'summary__DESC' | 'units__ASC' | 'units__DESC'
 
 export interface StronaRaportLokalLubDomComponent {
     _analyticsKey: Scalars['String']
@@ -1867,6 +1869,8 @@ export interface StronaRaportInwestycjaComponentGenqlSelection{
     investmentAddress?: InvestmentAddressComponentGenqlSelection
     isReportedToGovernment?: boolean | number
     locationAddress?: boolean | number
+    mapEmbedUrl?: boolean | number
+    mapLink?: boolean | number
     name?: boolean | number
     prospectusFile?: BlockFileGenqlSelection
     /** ISO 8601 date string. */
@@ -1890,7 +1894,7 @@ export interface StronaRaportInwestycjaComponentGenqlSelection{
     __fragmentOn?: "StronaRaportInwestycjaComponent"
 }
 
-export interface StronaRaportInwestycjaComponentFilterInput {AND?: (StronaRaportInwestycjaComponentFilterInput | null),OR?: (StronaRaportInwestycjaComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),gallery?: (ListFilter | null),governmentDatasetDescription?: (StringFilter | null),governmentDatasetExtIdent?: (StringFilter | null),governmentDatasetTitle?: (StringFilter | null),investmentAddress?: (StronaRaportInwestycjaComponentFilterInput__investmentAddress | null),isReportedToGovernment?: (Scalars['Boolean'] | null),locationAddress?: (StringFilter | null),name?: (StringFilter | null),salesEndedAt?: (DateFilter | null),salesEndedNote?: (StringFilter | null),salesStatus?: (SelectFilter | null),slug?: (StringFilter | null),summary?: (StringFilter | null),units?: (ListFilter | null)}
+export interface StronaRaportInwestycjaComponentFilterInput {AND?: (StronaRaportInwestycjaComponentFilterInput | null),OR?: (StronaRaportInwestycjaComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),gallery?: (ListFilter | null),governmentDatasetDescription?: (StringFilter | null),governmentDatasetExtIdent?: (StringFilter | null),governmentDatasetTitle?: (StringFilter | null),investmentAddress?: (StronaRaportInwestycjaComponentFilterInput__investmentAddress | null),isReportedToGovernment?: (Scalars['Boolean'] | null),locationAddress?: (StringFilter | null),mapEmbedUrl?: (StringFilter | null),mapLink?: (StringFilter | null),name?: (StringFilter | null),salesEndedAt?: (DateFilter | null),salesEndedNote?: (StringFilter | null),salesStatus?: (SelectFilter | null),slug?: (StringFilter | null),summary?: (StringFilter | null),units?: (ListFilter | null)}
 
 export interface StronaRaportInwestycjaComponentFilterInput__investmentAddress {_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),buildingNumber?: (StringFilter | null),city?: (StringFilter | null),county?: (StringFilter | null),municipality?: (StringFilter | null),postalCode?: (StringFilter | null),street?: (StringFilter | null),unitNumber?: (StringFilter | null),voivodeship?: (StringFilter | null)}
 

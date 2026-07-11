@@ -1,15 +1,9 @@
 ---
-/**
- * PROTOTYPE Variant B — Side sheet on row click.
- * Question: kill unit detail page; embed description + price history here instead.
- * Structure: comparison table only; selecting a unit opens a slide-over with detail.
- */
-import type { Unit } from '../../../lib/content';
-import { formatAreaM2, formatPropertyTypeLabel } from '../../../lib/content';
+import type { Unit } from '../lib/content';
+import { formatAreaM2, formatPropertyTypeLabel } from '../lib/content';
 
 interface Props {
   units: Unit[];
-  investmentSlug: string;
 }
 
 const { units } = Astro.props;
@@ -27,13 +21,33 @@ const formatPriceHistoryDate = (value: string) => {
 
 const statusLabel = (status: Unit['status']) =>
   status === 'available' ? 'Dostępny' : status === 'reserved' ? 'Rezerwacja' : 'Sprzedany';
+
+const unitsForSheet = units.map((unit) => ({
+  slug: unit.slug,
+  unitNumber: unit.unitNumber,
+  propertyType: formatPropertyTypeLabel(unit.propertyType),
+  status: unit.status,
+  statusLabel: statusLabel(unit.status),
+  usableAreaM2: formatAreaM2(unit.usableAreaM2),
+  plotAreaM2: formatAreaM2(unit.plotAreaM2),
+  rooms: unit.rooms,
+  description: unit.description,
+  sold: unit.status === 'sold',
+  price: unit.currentPrice
+    ? `${unit.currentPrice.totalPrice.toLocaleString('pl-PL')} zł`
+    : 'Cena na zapytanie',
+  ppm: unit.currentPrice
+    ? `${unit.currentPrice.pricePerM2.toLocaleString('pl-PL')} zł/m²`
+    : '',
+  priceHistory: unit.priceHistory.map((entry) => ({
+    date: formatPriceHistoryDate(entry.validFrom),
+    ppm: `${entry.pricePerM2.toLocaleString('pl-PL')} zł/m²`,
+    total: `${entry.totalPrice.toLocaleString('pl-PL')} zł`,
+  })),
+}));
 ---
 
-<div class="border-t border-border pt-12" data-prototype-variant="B" hidden>
-  <div class="mb-3 rounded-md border border-dashed border-accent/40 bg-accent/5 px-3 py-2 text-xs text-text-muted">
-    PROTOTYPE B — Side sheet · click a row · detail lives in a panel, not a page
-  </div>
-
+<div class="border-t border-border pt-12" data-unit-sheet>
   <div class="mb-8">
     <h3 class="font-heading text-h3 font-bold uppercase text-text">Lista dostępnych nieruchomości</h3>
     <p class="mt-2 text-sm text-text-muted">Kliknij wiersz, aby zobaczyć opis i historię ceny.</p>
@@ -96,9 +110,14 @@ const statusLabel = (status: Unit['status']) =>
                       class="inline-flex w-fit items-center gap-1.5 rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
                     >
                       Rzuty
+                      <svg class="size-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
                     </a>
                   ) : (
-                    <span class="text-xs text-text-muted">—</span>
+                    <span class="inline-flex w-fit items-center rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted">
+                      Brak
+                    </span>
                   )}
                 </td>
               </tr>
@@ -109,11 +128,7 @@ const statusLabel = (status: Unit['status']) =>
     </div>
   </div>
 
-  <div
-    class="fixed inset-0 z-[80] hidden"
-    data-sheet-root
-    aria-hidden="true"
-  >
+  <div class="fixed inset-0 z-[80] hidden" data-sheet-root aria-hidden="true">
     <button
       type="button"
       class="absolute inset-0 bg-black/45"
@@ -125,12 +140,12 @@ const statusLabel = (status: Unit['status']) =>
       data-sheet-panel
       role="dialog"
       aria-modal="true"
-      aria-labelledby="sheet-title"
+      aria-labelledby="unit-sheet-title"
     >
       <div class="flex items-start justify-between gap-4 border-b border-border px-5 py-4">
         <div>
           <p class="text-xs font-semibold uppercase tracking-widest text-accent" data-sheet-type></p>
-          <h4 id="sheet-title" class="font-heading text-xl font-bold uppercase text-text" data-sheet-title></h4>
+          <h4 id="unit-sheet-title" class="font-heading text-xl font-bold uppercase text-text" data-sheet-title></h4>
         </div>
         <button
           type="button"
@@ -190,33 +205,11 @@ const statusLabel = (status: Unit['status']) =>
   </div>
 </div>
 
-<script define:vars={{ unitsJson: JSON.stringify(units.map((unit) => ({
-  slug: unit.slug,
-  unitNumber: unit.unitNumber,
-  propertyType: formatPropertyTypeLabel(unit.propertyType),
-  status: unit.status,
-  statusLabel: statusLabel(unit.status),
-  usableAreaM2: formatAreaM2(unit.usableAreaM2),
-  plotAreaM2: formatAreaM2(unit.plotAreaM2),
-  rooms: unit.rooms,
-  description: unit.description,
-  sold: unit.status === 'sold',
-  price: unit.currentPrice
-    ? `${unit.currentPrice.totalPrice.toLocaleString('pl-PL')} zł`
-    : 'Cena na zapytanie',
-  ppm: unit.currentPrice
-    ? `${unit.currentPrice.pricePerM2.toLocaleString('pl-PL')} zł/m²`
-    : '',
-  priceHistory: unit.priceHistory.map((entry) => ({
-    date: formatPriceHistoryDate(entry.validFrom),
-    ppm: `${entry.pricePerM2.toLocaleString('pl-PL')} zł/m²`,
-    total: `${entry.totalPrice.toLocaleString('pl-PL')} zł`,
-  })),
-}))) }}>
-  const root = document.querySelector('[data-prototype-variant="B"]');
+<script define:vars={{ unitsJson: JSON.stringify(unitsForSheet) }}>
+  const root = document.querySelector('[data-unit-sheet]');
   if (root) {
     const units = JSON.parse(unitsJson);
-    const bySlug = Object.fromEntries(units.map((u) => [u.slug, u]));
+    const bySlug = Object.fromEntries(units.map((unit) => [unit.slug, unit]));
     const sheetRoot = root.querySelector('[data-sheet-root]');
     const statusEl = root.querySelector('[data-sheet-status]');
     const typeEl = root.querySelector('[data-sheet-type]');

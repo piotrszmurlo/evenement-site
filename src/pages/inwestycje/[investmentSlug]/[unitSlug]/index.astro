@@ -1,11 +1,7 @@
 ---
-import BaseLayout from '../../../../layouts/BaseLayout.astro';
-import Header from '../../../../components/Header.astro';
-import Footer from '../../../../components/Footer.astro';
-import ImagePlaceholder from '../../../../components/ImagePlaceholder.astro';
-import { Image } from 'astro:assets';
-import { formatAreaM2, formatPropertyTypeLabel, getInvestments } from '../../../../lib/content';
+import { getInvestments } from '../../../../lib/content';
 
+/** Old unit detail URLs redirect to the investment page (details live in the side sheet). */
 export async function getStaticPaths() {
   const investments = await getInvestments();
   return investments.flatMap((investment) =>
@@ -15,172 +11,12 @@ export async function getStaticPaths() {
         unitSlug: unit.slug,
       },
       props: {
-        unit,
-        investmentCoverImage: investment.coverImage,
-        investmentName: investment.name,
         investmentSlug: investment.slug,
       },
     })),
   );
 }
 
-const { unit, investmentCoverImage, investmentName, investmentSlug } = Astro.props;
-const currentPrice = unit.currentPrice;
-const isSold = unit.status === 'sold';
-const heroImage = unit.coverImage ?? investmentCoverImage;
-const propertyTypeLabel = formatPropertyTypeLabel(unit.propertyType);
-const offerLabel = 'Nieruchomość';
-const pageDescription = `${offerLabel} ${unit.unitNumber} w inwestycji ${investmentName}. ${formatAreaM2(unit.usableAreaM2)} m² powierzchni użytkowej, ${unit.rooms} pokoje, działka ${formatAreaM2(unit.plotAreaM2)} m².`;
-
-const formatPriceHistoryDate = (value: string) => {
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return new Intl.DateTimeFormat('pl-PL', {
-    timeZone: 'UTC',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).format(date);
-};
+const { investmentSlug } = Astro.props;
+return Astro.redirect(`/inwestycje/${investmentSlug}/`, 301);
 ---
-
-<BaseLayout title={`${offerLabel} ${unit.unitNumber} - ${investmentName}`} description={pageDescription}>
-  <Header slot="header" />
-
-  <section class="pb-section pt-4 sm:pt-6">
-    <div class="mx-auto max-w-site px-4 sm:px-6">
-      <nav class="mb-8 text-sm" aria-label="Breadcrumb">
-        <ol class="flex flex-wrap items-center gap-1.5 text-text-muted">
-          <li><a href="/" class="transition-colors hover:text-primary">Home</a></li>
-          <li aria-hidden="true" class="text-border">/</li>
-          <li><a href="/inwestycje/" class="transition-colors hover:text-primary">Inwestycje</a></li>
-          <li aria-hidden="true" class="text-border">/</li>
-          <li><a href={`/inwestycje/${investmentSlug}/`} class="transition-colors hover:text-primary">{investmentName}</a></li>
-          <li aria-hidden="true" class="text-border">/</li>
-          <li class="font-semibold text-text">{offerLabel} {unit.unitNumber}</li>
-        </ol>
-      </nav>
-
-      <div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-14">
-        <div class="space-y-4">
-          <div class="overflow-hidden rounded-lg shadow-lg">
-            {heroImage ? (
-              <Image
-                src={heroImage}
-                alt={`${offerLabel} ${unit.unitNumber}`}
-                width={800}
-                height={600}
-                class="w-full object-cover"
-              />
-            ) : (
-              <ImagePlaceholder label="Zdjęcie oferty pojawi się po dodaniu galerii" class="min-h-[320px] w-full" />
-            )}
-          </div>
-        </div>
-
-        <div class="space-y-6">
-          <div class="flex items-baseline justify-between border-b border-border pb-4">
-            <div>
-              <span class="text-topper font-bold uppercase tracking-widest text-accent">{investmentName}</span>
-              <h1 class="font-heading text-h2 font-bold uppercase text-text">{offerLabel} {unit.unitNumber}</h1>
-            </div>
-            <span class:list={[
-              'rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-wider',
-              unit.status === 'available'
-                ? 'bg-accent text-accent-fg'
-                : unit.status === 'reserved'
-                  ? 'bg-secondary/15 text-secondary ring-1 ring-secondary/35'
-                  : 'bg-primary-light text-primary-fg',
-            ]}>
-              {unit.status === 'available' ? 'Dostępne' : unit.status === 'reserved' ? 'Rezerwacja' : 'Sprzedane'}
-            </span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4 border-b border-border pb-6">
-            <div>
-              <p class="text-xs uppercase tracking-wider text-text-muted">Typ nieruchomości</p>
-              <p class="text-base font-semibold text-text">{propertyTypeLabel}</p>
-            </div>
-            <div>
-              <p class="text-xs uppercase tracking-wider text-text-muted">Powierzchnia użytkowa</p>
-              <p class="text-base font-semibold text-text">{formatAreaM2(unit.usableAreaM2)} m²</p>
-            </div>
-            <div>
-              <p class="text-xs uppercase tracking-wider text-text-muted">Liczba pokoi</p>
-              <p class="text-base font-semibold text-text">{unit.rooms}</p>
-            </div>
-            <div>
-              <p class="text-xs uppercase tracking-wider text-text-muted">Działka</p>
-              <p class="text-base font-semibold text-text">{formatAreaM2(unit.plotAreaM2)} m²</p>
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <h3 class="font-heading text-lg font-bold uppercase tracking-wide text-text">Opis nieruchomości</h3>
-            <p class="text-sm leading-relaxed text-text-muted">{unit.description}</p>
-          </div>
-
-          {!isSold && (
-            <div class="rounded-lg border border-border bg-surface p-6">
-              <p class="mb-1 text-xs uppercase tracking-wider text-text-muted">Cena ofertowa</p>
-              <div class="mb-2 text-2xl font-bold text-text">
-                {currentPrice ? `${currentPrice.totalPrice.toLocaleString('pl-PL')} zł` : 'Cena na zapytanie'}
-              </div>
-              {currentPrice && (
-                <p class="text-xs text-text-muted">
-                  Cena za m²: <strong class="text-text">{currentPrice.pricePerM2.toLocaleString('pl-PL')} zł/m²</strong>
-                </p>
-              )}
-              <div class="mt-4 border-t border-border pt-4">
-                <a
-                  href="/kontakt/"
-                  class="inline-flex min-h-[44px] w-full items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-bold text-accent-fg shadow-sm transition-opacity hover:opacity-90"
-                >
-                  Zapytaj o tę ofertę
-                </a>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div class="mt-16 border-t border-border pt-12">
-        <h3 class="mb-6 font-heading text-h3 font-bold uppercase text-text">Historia ceny ofertowej</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full border-collapse border border-border text-left">
-            <thead>
-              <tr class="bg-surface">
-                <th class="border border-border px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text">Data obowiązywania</th>
-                <th class="border border-border px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text">Cena za m²</th>
-                <th class="border border-border px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text">Cena całkowita</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-border text-sm text-text-muted">
-              {unit.priceHistory.length > 0 ? (
-                unit.priceHistory.map((entry) => (
-                  <tr>
-                    <td class="border border-border px-4 py-3 font-medium text-text">{formatPriceHistoryDate(entry.validFrom)}</td>
-                    <td class="border border-border px-4 py-3">{entry.pricePerM2.toLocaleString('pl-PL')} zł/m²</td>
-                    <td class="border border-border px-4 py-3 font-semibold text-text">{entry.totalPrice.toLocaleString('pl-PL')} zł</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td class="border border-border px-4 py-3" colspan="3">
-                    Cena i historia cenowa nie zostały jeszcze opublikowane dla tej inwestycji.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <Footer slot="footer" />
-</BaseLayout>

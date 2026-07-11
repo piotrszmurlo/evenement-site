@@ -12,22 +12,26 @@
 
 @theme {
   /* ── Brand Colors ───────────────────────────────────────────────── */
-  --color-primary:       #1B3A6B;
-  --color-primary-light: #2563EB;
-  --color-primary-fg:    #ffffff;
-  --color-accent:        #F97316;
-  --color-accent-fg:     #ffffff;
+  --color-primary:         #292728;
+  --color-primary-light:   #4F4C4D;
+  --color-primary-fg:      #F9F8F3;
+  --color-accent:          #F87216;
+  --color-accent-fg:       #ffffff;
+  --color-secondary:       #414728;
+  --color-secondary-fg:    #F9F8F3;
+  --color-secondary-light: #5C6540;
 
-  /* ── Neutral Scale ──────────────────────────────────────────────── */
-  --color-background:    #ffffff;
-  --color-surface:       #F8FAFC;
-  --color-border:        #E2E8F0;
-  --color-text:          #0F172A;
-  --color-text-muted:    #475569;
+  /* ── Neutral Scale (warm light) ─────────────────────────────────── */
+  --color-background:      #FFFFFF;
+  --color-surface:         #F9F8F3;
+  --color-surface-muted:   #F3F2ED;
+  --color-border:          #E5E4DF;
+  --color-text:            #292728;
+  --color-text-muted:      #6B6866;
 
   /* ── Dark Mode ──────────────────────────────────────────────────── */
-  --color-dark:          #0F172A;
-  --color-dark-surface:  #1E293B;
+  --color-dark:            #292728;
+  --color-dark-surface:    #3A3839;
 
   /* ── Border Radius ──────────────────────────────────────────────── */
   --radius-sm:   0.375rem;
@@ -48,7 +52,6 @@
   --container-site:  80rem;
   --spacing-section: clamp(3.75rem, 7.82vw, 6.25rem);
 }
-
 /*
  * ── Font wiring ─────────────────────────────────────────────────────────────
  * Astro injects --font-body and --font-display at runtime via the Fonts API.

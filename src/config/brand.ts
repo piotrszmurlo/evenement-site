@@ -30,25 +30,37 @@ export const brand = {
   },
 
   // ── Colour Palette ─────────────────────────────────────────────────────────
-  // These values are written to CSS custom properties in theme.css.
-  // Tailwind v4 @theme picks them up automatically.
+  // Core: cream #F9F8F3 · orange #F87216 · charcoal #292728 · olive #414728
+  // Neutrals = warm light gray/white spectrum. Olive is special-use only.
+  // Mirror these hex values in src/styles/theme.css.
   colors: {
-    primary:      '#1B3A6B',
-    primaryLight: '#2563EB',
-    primaryFg:    '#ffffff',
+    // Charcoal — brand emphasis (nav active, badges, secondary buttons)
+    primary:      '#292728',
+    primaryLight: '#4F4C4D',
+    primaryFg:    '#F9F8F3',
 
-    accent:       '#F97316',
+    // Orange — CTAs and highlights
+    accent:       '#F87216',
     accentFg:     '#ffffff',
 
-    background:   '#ffffff',
-    surface:      '#F8FAFC',
-    border:       '#E2E8F0',
+    // Olive — secondary/tertiary, use sparingly for special moments
+    secondary:    '#414728',
+    secondaryFg:  '#F9F8F3',
+    secondaryLight: '#5C6540',
 
-    text:         '#0F172A',
-    textMuted:    '#475569',
+    // Warm light spectrum
+    background:   '#FFFFFF',
+    surface:      '#F9F8F3',
+    surfaceMuted: '#F3F2ED',
+    border:       '#E5E4DF',
 
-    dark:         '#0F172A',
-    darkSurface:  '#1E293B',
+    // Text on light backgrounds
+    text:         '#292728',
+    textMuted:    '#6B6866',
+
+    // Dark sections (footer, CTA bands)
+    dark:         '#292728',
+    darkSurface:  '#3A3839',
   },
 
   // ── Border radius ──────────────────────────────────────────────────────────

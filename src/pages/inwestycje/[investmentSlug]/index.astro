@@ -217,8 +217,8 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
             <span class:list={[
               'inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest',
               investment.salesStatus === 'active'
-                ? 'bg-primary text-primary-fg'
-                : 'bg-dark text-primary-fg ring-1 ring-primary-fg/25',
+                ? 'bg-accent text-accent-fg'
+                : 'bg-surface-muted text-text-muted ring-1 ring-border',
             ]}>
               {salesLabel}
             </span>
@@ -273,12 +273,12 @@ const salesLabel = investment.salesStatus === 'active' ? 'W sprzeda≈ºy' : 'Zako≈
                               <td class="px-4 py-4 text-text-muted">{formatAreaM2(unit.plotAreaM2)} m¬≤</td>
                               <td class="px-4 py-4">
                                 <span class:list={[
-                                  'inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white',
+                                  'inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider',
                                   unit.status === 'available'
-                                    ? 'bg-green-600'
+                                    ? 'bg-accent text-accent-fg'
                                     : unit.status === 'reserved'
-                                      ? 'bg-amber-600'
-                                      : 'bg-red-600',
+                                      ? 'bg-secondary/15 text-secondary ring-1 ring-secondary/35'
+                                      : 'bg-primary-light text-primary-fg',
                                 ]}>
                                   {statusLabel}
                                 </span>

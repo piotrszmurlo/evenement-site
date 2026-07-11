@@ -89,8 +89,12 @@ const formatPriceHistoryDate = (value: string) => {
               <h1 class="font-heading text-h2 font-bold uppercase text-text">{offerLabel} {unit.unitNumber}</h1>
             </div>
             <span class:list={[
-              'rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white',
-              unit.status === 'available' ? 'bg-green-600' : unit.status === 'reserved' ? 'bg-amber-600' : 'bg-red-600',
+              'rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-wider',
+              unit.status === 'available'
+                ? 'bg-accent text-accent-fg'
+                : unit.status === 'reserved'
+                  ? 'bg-secondary/15 text-secondary ring-1 ring-secondary/35'
+                  : 'bg-primary-light text-primary-fg',
             ]}>
               {unit.status === 'available' ? 'Dostępne' : unit.status === 'reserved' ? 'Rezerwacja' : 'Sprzedane'}
             </span>

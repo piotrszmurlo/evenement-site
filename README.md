@@ -105,10 +105,11 @@ export const brand = {
   },
 
   colors: {
-    primary:    '#1B3A6B',  // Main brand color (nav, buttons, headings)
-    primaryFg:  '#ffffff',  // Text color on top of primary backgrounds
-    accent:     '#F97316',  // CTA buttons, highlights
-    // ... see file for full list
+    primary:    '#292728',  // Charcoal — nav active, badges, emphasis
+    primaryFg:  '#F9F8F3',  // Text on primary / dark overlays
+    accent:     '#F87216',  // Orange — CTA buttons, highlights
+    secondary:  '#414728',  // Olive — special-use only
+    // ... see file for full list (warm cream/white neutrals)
   },
 };
 ```

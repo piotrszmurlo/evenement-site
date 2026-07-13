@@ -48,6 +48,7 @@ const unitsForSheet = units.map((unit) => ({
 ---
 
 <div class="border-t border-border pt-12" data-unit-sheet>
+  <script type="application/json" data-unit-sheet-data set:html={JSON.stringify(unitsForSheet).replace(/</g, '\\u003c')} />
   <div class="mb-8">
     <h3 class="font-heading text-h3 font-bold uppercase text-text">Lista dostępnych nieruchomości</h3>
     <p class="mt-2 text-sm text-text-muted">Kliknij wiersz, aby zobaczyć opis i historię ceny.</p>
@@ -205,10 +206,45 @@ const unitsForSheet = units.map((unit) => ({
   </div>
 </div>
 
-<script define:vars={{ unitsJson: JSON.stringify(unitsForSheet) }}>
-  const root = document.querySelector('[data-unit-sheet]');
-  if (root) {
-    const units = JSON.parse(unitsJson);
+<script>
+  const UNIT_SHEET_KEY = '__unitSheetCleanup';
+
+  const destroyUnitSheet = () => {
+    const root = document.querySelector('[data-unit-sheet]');
+    const cleanup = root?.[UNIT_SHEET_KEY];
+    if (typeof cleanup === 'function') cleanup();
+  };
+
+  const initUnitSheet = () => {
+    const root = document.querySelector('[data-unit-sheet]');
+    if (!root) return;
+    destroyUnitSheet();
+
+    const dataEl = root.querySelector('[data-unit-sheet-data]');
+    if (!dataEl?.textContent) return;
+
+    /** @type {Array<{
+      slug: string;
+      unitNumber: string;
+      propertyType: string;
+      status: string;
+      statusLabel: string;
+      usableAreaM2: string;
+      plotAreaM2: string;
+      rooms: number;
+      description: string;
+      sold: boolean;
+      price: string;
+      ppm: string;
+      priceHistory: Array<{ date: string; ppm: string; total: string }>;
+    }>} */
+    let units;
+    try {
+      units = JSON.parse(dataEl.textContent);
+    } catch {
+      return;
+    }
+
     const bySlug = Object.fromEntries(units.map((unit) => [unit.slug, unit]));
     const sheetRoot = root.querySelector('[data-sheet-root]');
     const statusEl = root.querySelector('[data-sheet-status]');
@@ -221,6 +257,7 @@ const unitsForSheet = units.map((unit) => ({
     const historyEl = root.querySelector('[data-sheet-history]');
     const footerEl = root.querySelector('[data-sheet-footer]');
     const ctaEl = root.querySelector('[data-sheet-cta]');
+    const cleanupFns = [];
 
     const statusClasses = {
       available: 'bg-accent text-accent-fg',
@@ -263,13 +300,19 @@ const unitsForSheet = units.map((unit) => ({
       document.body.style.overflow = '';
     };
 
+    const addListener = (target, eventName, handler, options) => {
+      if (!target) return;
+      target.addEventListener(eventName, handler, options);
+      cleanupFns.push(() => target.removeEventListener(eventName, handler, options));
+    };
+
     root.querySelectorAll('[data-sheet-open]').forEach((row) => {
       const activate = (event) => {
-        if (event.target.closest('[data-sheet-ignore]')) return;
+        if (event.target instanceof Element && event.target.closest('[data-sheet-ignore]')) return;
         openSheet(row.getAttribute('data-sheet-open'));
       };
-      row.addEventListener('click', activate);
-      row.addEventListener('keydown', (event) => {
+      addListener(row, 'click', activate);
+      addListener(row, 'keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
           activate(event);
@@ -277,12 +320,22 @@ const unitsForSheet = units.map((unit) => ({
       });
     });
 
-    root.querySelector('[data-sheet-close]')?.addEventListener('click', closeSheet);
-    root.querySelector('[data-sheet-backdrop]')?.addEventListener('click', closeSheet);
-    document.addEventListener('keydown', (event) => {
+    addListener(root.querySelector('[data-sheet-close]'), 'click', closeSheet);
+    addListener(root.querySelector('[data-sheet-backdrop]'), 'click', closeSheet);
+    addListener(document, 'keydown', (event) => {
       if (event.key === 'Escape' && sheetRoot && !sheetRoot.classList.contains('hidden')) {
         closeSheet();
       }
     });
-  }
+
+    root[UNIT_SHEET_KEY] = () => {
+      closeSheet();
+      cleanupFns.forEach((cleanup) => cleanup());
+      delete root[UNIT_SHEET_KEY];
+    };
+  };
+
+  initUnitSheet();
+  document.addEventListener('astro:page-load', initUnitSheet);
+  document.addEventListener('astro:before-swap', destroyUnitSheet);
 </script>

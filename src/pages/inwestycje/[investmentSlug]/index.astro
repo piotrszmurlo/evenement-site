@@ -164,7 +164,7 @@ const mapLink = investment.mapLink;
 
         {galleryImages.length > 0 && (
           <dialog
-            class="fixed inset-0 m-0 h-dvh max-h-none w-dvw max-w-none overflow-hidden bg-dark/90 p-0 text-primary-fg backdrop:bg-dark/65"
+            class="fixed inset-0 z-[100] m-0 h-dvh max-h-none w-dvw max-w-none overflow-hidden bg-dark/90 p-0 text-primary-fg open:block backdrop:bg-dark/65"
             data-gallery-viewer
             aria-label={`Galeria inwestycji ${investment.name}`}
           >
@@ -409,10 +409,14 @@ const mapLink = investment.mapLink;
         });
       };
 
+      const unlockBodyScroll = () => {
+        document.body.style.overflow = previousBodyOverflow;
+      };
+
       const openViewer = (index, trigger) => {
         if (!viewer || typeof viewer.showModal !== 'function') return;
 
-        lastFocusedElement = trigger;
+        lastFocusedElement = trigger instanceof HTMLElement ? trigger : null;
         previousBodyOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
         setViewerImage(index);
@@ -421,18 +425,27 @@ const mapLink = investment.mapLink;
       };
 
       const closeViewer = () => {
-        if (!viewer || !viewer.open) return;
+        if (!viewer) return;
 
-        viewer.close();
+        if (viewer.open) viewer.close();
+        // `close` handler below also unlocks; call here so button-close never depends on the event.
+        unlockBodyScroll();
+
+        if (lastFocusedElement instanceof HTMLElement) {
+          lastFocusedElement.focus();
+          lastFocusedElement = null;
+        }
       };
 
       const showViewerPrev = () => setViewerImage(viewerIndex - 1);
       const showViewerNext = () => setViewerImage(viewerIndex + 1);
 
-      const onViewerCancel = () => {
-        document.body.style.overflow = previousBodyOverflow;
+      const onViewerClose = () => {
+        // Escape / any non-button dismiss path — clear scroll lock and restore focus.
+        unlockBodyScroll();
         if (lastFocusedElement instanceof HTMLElement) {
           lastFocusedElement.focus();
+          lastFocusedElement = null;
         }
       };
 
@@ -510,15 +523,17 @@ const mapLink = investment.mapLink;
       addListener(viewerStage, 'pointerup', onViewerPointerUp);
       addListener(viewerStage, 'pointercancel', onViewerPointerCancel);
       addListener(viewerStage, 'pointerleave', onViewerPointerCancel);
-      addListener(viewer, 'close', onViewerCancel);
+      addListener(viewer, 'close', onViewerClose);
       addListener(document, 'keydown', onKeydown);
       embla.on('select', setSelected);
       embla.on('reInit', setSelected);
       setSelected();
 
       root[GALLERY_KEY] = () => {
+        // Unlock/close before removing listeners so Escape/nav cleanup never leaks overflow:hidden.
+        if (viewer?.open) viewer.close();
+        unlockBodyScroll();
         cleanupFns.forEach((cleanup) => cleanup());
-        if (viewer?.open) closeViewer();
         embla.destroy();
         delete root[GALLERY_KEY];
       };

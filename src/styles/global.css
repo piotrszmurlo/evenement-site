@@ -39,4 +39,10 @@
       scroll-behavior: auto !important;
     }
   }
+
+  /* Closed gallery dialog must never intercept clicks (Safari / custom dialog CSS edge cases). */
+  dialog[data-gallery-viewer]:not([open]) {
+    display: none !important;
+    pointer-events: none !important;
+  }
 }

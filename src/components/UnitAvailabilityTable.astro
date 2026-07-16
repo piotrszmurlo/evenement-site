@@ -91,8 +91,8 @@ const roomsLabel = (rooms: number) => {
             </div>
           </div>
 
-          <div class="mt-4 flex flex-wrap items-start justify-between gap-x-5 gap-y-3">
-            <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
+          <div class="mt-4 flex items-start justify-between gap-4">
+            <div class="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-2">
               {unit.floorPlanUrl && (
                 <a
                   href={unit.floorPlanUrl}
@@ -120,7 +120,7 @@ const roomsLabel = (rooms: number) => {
               )}
             </div>
 
-            <details class="group/history max-w-md sm:text-right">
+            <details class="group/history relative shrink-0" data-price-history>
               <summary class="inline-flex min-h-[44px] cursor-pointer list-none items-center gap-1.5 text-sm text-text-muted transition-colors hover:text-text [&::-webkit-details-marker]:hidden">
                 Historia zmian ceny
                 <svg
@@ -132,21 +132,24 @@ const roomsLabel = (rooms: number) => {
                   <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
               </summary>
-              {priceHistory.length > 0 ? (
-                <ul class="mt-2 space-y-2 sm:ml-auto">
-                  {priceHistory.map((entry) => (
-                    <li class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-sm sm:justify-end">
-                      <span class="text-text-muted">{entry.date}</span>
-                      <span class="font-medium text-text">
-                        {entry.total}
-                        <span class="ml-2 font-normal text-text-muted">{entry.ppm}</span>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p class="mt-2 text-sm text-text-muted">Brak wcześniejszych zmian ceny.</p>
-              )}
+
+              <div class="absolute right-0 top-full z-20 mt-1.5 w-max min-w-[15rem] max-w-[min(22rem,calc(100vw-2rem))] border border-border/80 bg-background/95 px-3.5 py-3 backdrop-blur-sm">
+                {priceHistory.length > 0 ? (
+                  <ul class="space-y-2">
+                    {priceHistory.map((entry) => (
+                      <li class="flex items-baseline justify-between gap-x-6 text-sm">
+                        <span class="shrink-0 text-text-muted">{entry.date}</span>
+                        <span class="text-right tabular-nums">
+                          <span class="text-text">{entry.total}</span>
+                          <span class="ml-2 text-text-muted">{entry.ppm}</span>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p class="text-sm text-text-muted">Brak wcześniejszych zmian ceny.</p>
+                )}
+              </div>
             </details>
           </div>
         </article>
@@ -154,3 +157,49 @@ const roomsLabel = (rooms: number) => {
     })}
   </div>
 </div>
+
+<script>
+  const PRICE_HISTORY_KEY = '__priceHistoryCleanup';
+
+  const destroyPriceHistory = () => {
+    const cleanup = document.documentElement[PRICE_HISTORY_KEY];
+    if (typeof cleanup === 'function') cleanup();
+  };
+
+  const initPriceHistory = () => {
+    destroyPriceHistory();
+
+    const closeOpen = (except) => {
+      document.querySelectorAll('[data-price-history][open]').forEach((details) => {
+        if (details !== except) details.removeAttribute('open');
+      });
+    };
+
+    const onPointerDown = (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const openDetails = target.closest('[data-price-history]');
+      if (openDetails?.hasAttribute('open')) return;
+
+      closeOpen();
+    };
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') closeOpen();
+    };
+
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+
+    document.documentElement[PRICE_HISTORY_KEY] = () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+      delete document.documentElement[PRICE_HISTORY_KEY];
+    };
+  };
+
+  initPriceHistory();
+  document.addEventListener('astro:page-load', initPriceHistory);
+  document.addEventListener('astro:before-swap', destroyPriceHistory);
+</script>

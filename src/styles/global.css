@@ -46,3 +46,27 @@
     pointer-events: none !important;
   }
 }
+
+@layer components {
+  /* Solid CTA — one recipe site-wide (accent or primary). */
+  .btn-accent {
+    @apply inline-flex min-h-[48px] items-center justify-center bg-accent px-7 py-3 text-sm font-semibold tracking-wide text-accent-fg transition-[transform,opacity] duration-300 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.98];
+  }
+
+  .btn-primary {
+    @apply inline-flex min-h-[48px] items-center justify-center bg-primary px-7 py-3 text-sm font-semibold tracking-wide text-primary-fg transition-[transform,opacity] duration-300 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:scale-[0.98];
+  }
+
+  /* Section / field label — matches investment toppers. */
+  .topper {
+    @apply text-topper font-semibold tracking-[0.18em];
+  }
+
+  /* Soft dark halo so toppers stay readable on photo heroes. */
+  .topper-on-media {
+    @apply font-bold;
+    text-shadow:
+      0 1px 2px rgb(0 0 0 / 0.55),
+      0 2px 14px rgb(0 0 0 / 0.4);
+  }
+}

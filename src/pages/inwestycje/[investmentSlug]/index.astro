@@ -70,8 +70,8 @@ const mapLink = investment.mapLink;
       <div class="space-y-16 sm:space-y-20">
         <div>
           {galleryImages.length > 0 ? (
-            <div class="embla overflow-hidden border border-border" data-embla>
-              <div class="relative">
+            <div class="embla" data-embla>
+              <div class="relative overflow-hidden">
                 <div class="embla__viewport overflow-hidden" data-embla-viewport>
                   <div class="embla__container flex touch-pan-y">
                     {galleryImages.map((src, index) => (
@@ -102,23 +102,23 @@ const mapLink = investment.mapLink;
                   <>
                     <button
                       type="button"
-                      class="embla__button absolute left-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center border border-primary-fg/20 bg-dark/50 text-primary-fg backdrop-blur-sm transition-colors hover:bg-dark/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:inline-flex"
+                      class="embla__button absolute left-3 top-1/2 z-10 hidden size-10 -translate-y-1/2 items-center justify-center text-primary-fg/80 transition-colors hover:text-primary-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:left-4 sm:inline-flex"
                       data-embla-prev
                       aria-label="Poprzednie zdjęcie"
                     >
-                      <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <svg class="size-6 drop-shadow-sm" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                       </svg>
                     </button>
 
                     <button
                       type="button"
-                      class="embla__button absolute right-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center border border-primary-fg/20 bg-dark/50 text-primary-fg backdrop-blur-sm transition-colors hover:bg-dark/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:inline-flex"
+                      class="embla__button absolute right-3 top-1/2 z-10 hidden size-10 -translate-y-1/2 items-center justify-center text-primary-fg/80 transition-colors hover:text-primary-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:right-4 sm:inline-flex"
                       data-embla-next
                       aria-label="Następne zdjęcie"
                     >
-                      <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <svg class="size-6 drop-shadow-sm" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                       </svg>
                     </button>
                   </>
@@ -126,12 +126,12 @@ const mapLink = investment.mapLink;
               </div>
 
               {galleryImages.length > 1 && (
-                <div class="border-t border-border bg-surface px-4 py-4 sm:px-5">
-                  <div class="flex gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]" data-embla-thumbs aria-label="Miniatury galerii">
+                <div class="mt-4 flex items-end justify-between gap-4 sm:mt-5">
+                  <div class="flex min-w-0 flex-1 gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]" data-embla-thumbs aria-label="Miniatury galerii">
                     {galleryImages.map((src, index) => (
                       <button
                         type="button"
-                        class="relative aspect-[4/3] w-20 shrink-0 overflow-hidden border border-border bg-border opacity-70 transition-all hover:opacity-100 sm:w-24"
+                        class="relative aspect-[4/3] w-24 shrink-0 overflow-hidden opacity-40 transition-opacity hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:w-28"
                         data-embla-thumb
                         data-index={index}
                         aria-label={`Przejdź do zdjęcia ${index + 1}`}
@@ -149,13 +149,20 @@ const mapLink = investment.mapLink;
                       </button>
                     ))}
                   </div>
+                  <p
+                    class="hidden shrink-0 text-topper font-semibold tracking-[0.18em] text-text-muted sm:block"
+                    data-gallery-caption
+                    aria-hidden="true"
+                  >
+                    1 / {galleryImages.length}
+                  </p>
                 </div>
               )}
             </div>
           ) : (
             <ImagePlaceholder
               label="Galeria inwestycji pojawi się po dodaniu zdjęć"
-              class="aspect-[16/10] min-h-[min(58vh,560px)] w-full border border-border"
+              class="aspect-[16/10] min-h-[min(58vh,560px)] w-full"
             />
           )}
 
@@ -167,15 +174,15 @@ const mapLink = investment.mapLink;
             >
               <div class="fixed inset-0 grid h-dvh w-dvw min-w-0 grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto]">
                 <div class="flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
-                  <p class="text-sm font-medium tracking-wide text-primary-fg/80" data-gallery-counter></p>
+                  <p class="text-topper font-semibold tracking-[0.18em] text-primary-fg/70" data-gallery-counter></p>
                   <button
                     type="button"
-                    class="inline-flex h-11 w-11 items-center justify-center border border-primary-fg/20 bg-primary-fg/10 text-primary-fg transition-colors hover:bg-primary-fg/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80"
+                    class="inline-flex size-11 items-center justify-center text-primary-fg/80 transition-colors hover:text-primary-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80"
                     data-gallery-close
                     aria-label="Zamknij podgląd"
                   >
                     <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+                      <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                     </svg>
                   </button>
                 </div>
@@ -188,23 +195,23 @@ const mapLink = investment.mapLink;
                     <>
                       <button
                         type="button"
-                        class="absolute left-3 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center border border-primary-fg/20 bg-dark/70 text-primary-fg backdrop-blur-sm transition-colors hover:bg-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:left-6 sm:inline-flex"
+                        class="absolute left-2 top-1/2 z-10 hidden size-12 -translate-y-1/2 items-center justify-center text-primary-fg/80 transition-colors hover:text-primary-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:left-4 sm:inline-flex"
                         data-gallery-prev
                         aria-label="Poprzednie zdjęcie"
                       >
-                        <svg class="size-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <svg class="size-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                       </button>
 
                       <button
                         type="button"
-                        class="absolute right-3 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center border border-primary-fg/20 bg-dark/70 text-primary-fg backdrop-blur-sm transition-colors hover:bg-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:right-6 sm:inline-flex"
+                        class="absolute right-2 top-1/2 z-10 hidden size-12 -translate-y-1/2 items-center justify-center text-primary-fg/80 transition-colors hover:text-primary-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:right-4 sm:inline-flex"
                         data-gallery-next
                         aria-label="Następne zdjęcie"
                       >
-                        <svg class="size-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <svg class="size-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                       </button>
                     </>
@@ -219,12 +226,12 @@ const mapLink = investment.mapLink;
                   />
                 </div>
 
-                <div class="border-t border-primary-fg/10 bg-dark-surface/40 px-4 py-4 sm:px-6">
+                <div class="px-4 py-4 sm:px-6">
                   <div class="flex w-full min-w-0 gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]" data-gallery-viewer-thumbs aria-label="Miniatury powiększonej galerii">
                     {galleryImages.map((src, index) => (
                       <button
                         type="button"
-                        class="relative aspect-[4/3] w-20 shrink-0 overflow-hidden border border-primary-fg/20 bg-dark-surface/70 opacity-70 transition-all hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:w-24"
+                        class="relative aspect-[4/3] w-24 shrink-0 overflow-hidden opacity-40 transition-opacity hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:w-28"
                         data-gallery-viewer-thumb
                         data-index={index}
                         aria-label={`Pokaż zdjęcie ${index + 1}`}
@@ -334,6 +341,7 @@ const mapLink = investment.mapLink;
       const nextBtn = root.querySelector('[data-embla-next]');
       const thumbs = Array.from(root.querySelectorAll('[data-embla-thumb]'));
       const openBtns = Array.from(root.querySelectorAll('[data-gallery-open]'));
+      const caption = root.querySelector('[data-gallery-caption]');
       const viewer = document.querySelector('[data-gallery-viewer]');
       const viewerImage = viewer?.querySelector('[data-gallery-viewer-image]');
       const viewerCounter = viewer?.querySelector('[data-gallery-counter]');
@@ -363,17 +371,22 @@ const mapLink = investment.mapLink;
       let swipeStartY = 0;
       let swipeActive = false;
 
+      const setThumbActive = (thumb, active) => {
+        thumb.setAttribute('aria-pressed', String(active));
+        thumb.classList.toggle('opacity-100', active);
+        thumb.classList.toggle('opacity-40', !active);
+      };
+
       const setSelected = () => {
         const selectedIndex = embla.selectedScrollSnap();
 
         thumbs.forEach((thumb, index) => {
-          const active = index === selectedIndex;
-          thumb.setAttribute('aria-pressed', String(active));
-          thumb.classList.toggle('border-2', active);
-          thumb.classList.toggle('border-primary', active);
-          thumb.classList.toggle('opacity-100', active);
-          thumb.classList.toggle('opacity-70', !active);
+          setThumbActive(thumb, index === selectedIndex);
         });
+
+        if (caption) {
+          caption.textContent = `${selectedIndex + 1} / ${imageSources.length || thumbs.length}`;
+        }
 
         const canPrev = embla.canScrollPrev();
         const canNext = embla.canScrollNext();
@@ -399,18 +412,13 @@ const mapLink = investment.mapLink;
         viewerImage.setAttribute('alt', `${viewerIndex + 1}. zdjęcie inwestycji`);
 
         if (viewerCounter) {
-          viewerCounter.textContent = `Zdjęcie ${viewerIndex + 1} / ${imageSources.length}`;
+          viewerCounter.textContent = `${viewerIndex + 1} / ${imageSources.length}`;
         }
 
         viewerThumbs.forEach((thumb, thumbIndex) => {
-          const active = thumbIndex === viewerIndex;
-          thumb.setAttribute('aria-pressed', String(active));
-          thumb.classList.toggle('border-2', active);
-          thumb.classList.toggle('border-primary-fg', active);
-          thumb.classList.toggle('opacity-100', active);
-          thumb.classList.toggle('opacity-70', !active);
+          setThumbActive(thumb, thumbIndex === viewerIndex);
 
-          if (active && viewer?.open) {
+          if (thumbIndex === viewerIndex && viewer?.open) {
             thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
           }
         });

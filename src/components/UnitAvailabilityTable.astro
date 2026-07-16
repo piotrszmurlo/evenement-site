@@ -1,6 +1,6 @@
 ---
 import type { Unit } from '../lib/content';
-import { formatAreaM2, formatPropertyTypeLabel } from '../lib/content';
+import { formatAreaM2 } from '../lib/content';
 
 interface Props {
   units: Unit[];
@@ -22,323 +22,135 @@ const formatPriceHistoryDate = (value: string) => {
 const statusLabel = (status: Unit['status']) =>
   status === 'available' ? 'Dostępny' : status === 'reserved' ? 'Rezerwacja' : 'Sprzedany';
 
-const unitsForSheet = units.map((unit) => ({
-  slug: unit.slug,
-  unitNumber: unit.unitNumber,
-  propertyType: formatPropertyTypeLabel(unit.propertyType),
-  status: unit.status,
-  statusLabel: statusLabel(unit.status),
-  usableAreaM2: formatAreaM2(unit.usableAreaM2),
-  plotAreaM2: formatAreaM2(unit.plotAreaM2),
-  rooms: unit.rooms,
-  description: unit.description,
-  sold: unit.status === 'sold',
-  price: unit.currentPrice
-    ? `${unit.currentPrice.totalPrice.toLocaleString('pl-PL')} zł`
-    : 'Cena na zapytanie',
-  ppm: unit.currentPrice
-    ? `${unit.currentPrice.pricePerM2.toLocaleString('pl-PL')} zł/m²`
-    : '',
-  priceHistory: unit.priceHistory.map((entry) => ({
-    date: formatPriceHistoryDate(entry.validFrom),
-    ppm: `${entry.pricePerM2.toLocaleString('pl-PL')} zł/m²`,
-    total: `${entry.totalPrice.toLocaleString('pl-PL')} zł`,
-  })),
-}));
+const roomsLabel = (rooms: number) => {
+  if (rooms === 1) return '1 pokój';
+  if (rooms >= 2 && rooms <= 4) return `${rooms} pokoje`;
+  return `${rooms} pokoi`;
+};
 ---
 
-<div class="border-t border-border pt-12" data-unit-sheet>
-  <script type="application/json" data-unit-sheet-data set:html={JSON.stringify(unitsForSheet).replace(/</g, '\\u003c')} />
-  <div class="mb-8">
+<div class="border-t border-border pt-12">
+  <div class="mb-8 max-w-2xl">
     <h3 class="font-heading text-h3 font-semibold tracking-tight text-text">Dostępne nieruchomości</h3>
-    <p class="mt-2 text-sm text-text-muted">Kliknij wiersz, aby zobaczyć opis i historię ceny.</p>
+    <p class="mt-2 text-sm leading-relaxed text-text-muted">
+      Aktualna oferta — metraż, cena i dostępność.
+    </p>
   </div>
 
-  <div class="overflow-hidden border border-border bg-background">
-    <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-border text-left text-sm">
-        <thead class="bg-surface text-xs font-semibold tracking-wider text-text-muted">
-          <tr>
-            <th scope="col" class="px-4 py-3">Budynek</th>
-            <th scope="col" class="px-4 py-3">Pow. budynku</th>
-            <th scope="col" class="px-4 py-3">Pow. działki</th>
-            <th scope="col" class="px-4 py-3">Status</th>
-            <th scope="col" class="px-4 py-3">Cena brutto</th>
-            <th scope="col" class="px-4 py-3">Cena za m²</th>
-            <th scope="col" class="px-4 py-3">Rzuty</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-border bg-background">
-          {units.map((unit) => {
-            const currentPrice = unit.currentPrice;
-            return (
-              <tr
-                class="cursor-pointer align-middle transition-colors hover:bg-surface"
-                data-sheet-open={unit.slug}
-                tabindex="0"
-                role="button"
-                aria-label={`Pokaż szczegóły ${unit.unitNumber}`}
-              >
-                <td class="px-4 py-4 font-semibold text-text">{unit.unitNumber.toUpperCase()}</td>
-                <td class="px-4 py-4 text-text-muted">{formatAreaM2(unit.usableAreaM2)} m²</td>
-                <td class="px-4 py-4 text-text-muted">{formatAreaM2(unit.plotAreaM2)} m²</td>
-                <td class="px-4 py-4">
-                  <span
-                    class:list={[
-                      'text-xs font-semibold tracking-wide',
-                      unit.status === 'available'
-                        ? 'text-accent'
-                        : unit.status === 'reserved'
-                          ? 'text-secondary'
-                          : 'text-text-muted',
-                    ]}
-                  >
-                    {statusLabel(unit.status)}
-                  </span>
-                </td>
-                <td class="px-4 py-4 font-semibold text-text">
-                  {currentPrice ? `${currentPrice.totalPrice.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
-                </td>
-                <td class="px-4 py-4 font-semibold text-text">
-                  {currentPrice ? `${currentPrice.pricePerM2.toLocaleString('pl-PL')} zł` : 'Zapytaj'}
-                </td>
-                <td class="px-4 py-4" data-sheet-ignore>
-                  {unit.floorPlanUrl ? (
-                    <a
-                      href={unit.floorPlanUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="inline-flex w-fit items-center gap-1.5 border border-border bg-surface px-2.5 py-1 text-xs font-semibold text-text transition-colors hover:border-primary hover:text-primary"
-                    >
-                      Rzuty
-                      <svg class="size-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                    </a>
-                  ) : (
-                    <span class="text-xs font-medium text-text-muted">Brak</span>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <div class="divide-y divide-border border-y border-border">
+    {units.map((unit) => {
+      const currentPrice = unit.currentPrice;
+      const priceLabel = currentPrice
+        ? `${currentPrice.totalPrice.toLocaleString('pl-PL')} zł`
+        : 'Cena na zapytanie';
+      const ppmLabel = currentPrice
+        ? `${currentPrice.pricePerM2.toLocaleString('pl-PL')} zł/m²`
+        : '';
+      const priceHistory = unit.priceHistory.map((entry) => ({
+        date: formatPriceHistoryDate(entry.validFrom),
+        ppm: `${entry.pricePerM2.toLocaleString('pl-PL')} zł/m²`,
+        total: `${entry.totalPrice.toLocaleString('pl-PL')} zł`,
+      }));
 
-  <div class="fixed inset-0 z-[80] hidden" data-sheet-root aria-hidden="true">
-    <button
-      type="button"
-      class="absolute inset-0 bg-dark/50"
-      data-sheet-backdrop
-      aria-label="Zamknij panel"
-    ></button>
-    <aside
-      class="absolute inset-y-0 right-0 flex w-full max-w-md flex-col border-l border-border bg-background"
-      data-sheet-panel
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="unit-sheet-title"
-    >
-      <div class="flex items-start justify-between gap-4 border-b border-border px-5 py-5 sm:px-6">
-        <div class="min-w-0">
-          <p class="text-topper font-semibold tracking-[0.18em] text-accent" data-sheet-type></p>
-          <h4
-            id="unit-sheet-title"
-            class="mt-2 font-heading text-h3 font-semibold tracking-tight text-text"
-            data-sheet-title
-          ></h4>
-        </div>
-        <button
-          type="button"
-          class="inline-flex h-10 w-10 shrink-0 items-center justify-center border border-border text-text transition-colors hover:bg-surface"
-          data-sheet-close
-          aria-label="Zamknij"
-        >
-          <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
-          </svg>
-        </button>
-      </div>
+      return (
+        <article class="py-6 sm:py-7">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start sm:gap-8">
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h4 class="font-heading text-lg font-semibold tracking-tight text-text sm:text-xl">
+                  {unit.unitNumber}
+                </h4>
+                <span
+                  class:list={[
+                    'text-sm font-semibold tracking-wide',
+                    unit.status === 'available'
+                      ? 'text-accent'
+                      : unit.status === 'reserved'
+                        ? 'text-secondary'
+                        : 'text-text-muted',
+                  ]}
+                >
+                  {statusLabel(unit.status)}
+                </span>
+              </div>
+              {unit.description && (
+                <p class="mt-1.5 text-sm leading-relaxed text-text">{unit.description}</p>
+              )}
+              <p class="mt-2 text-sm leading-relaxed text-text-muted">
+                {formatAreaM2(unit.usableAreaM2)} m² · działka {formatAreaM2(unit.plotAreaM2)} m² · {roomsLabel(unit.rooms)}
+              </p>
+            </div>
 
-      <div class="flex-1 space-y-8 overflow-y-auto px-5 py-6 sm:px-6">
-        <div class="space-y-2">
-          <p class="text-sm font-semibold tracking-wide" data-sheet-status></p>
-          <p class="text-sm text-text-muted" data-sheet-meta></p>
-        </div>
-
-        <div>
-          <p class="font-heading text-h3 font-semibold tracking-tight text-text" data-sheet-price></p>
-          <p class="mt-1 text-sm text-text-muted" data-sheet-ppm></p>
-        </div>
-
-        <div>
-          <p class="mb-2 text-xs font-semibold tracking-wider text-text-muted">Opis</p>
-          <p class="text-sm leading-relaxed text-text-muted" data-sheet-description></p>
-        </div>
-
-        <div>
-          <p class="mb-3 text-xs font-semibold tracking-wider text-text-muted">Historia ceny ofertowej</p>
-          <div class="overflow-x-auto border border-border">
-            <table class="w-full border-collapse text-left text-sm">
-              <thead>
-                <tr class="bg-surface">
-                  <th class="border-b border-border px-3 py-2.5 text-xs font-semibold tracking-wider text-text-muted">Data</th>
-                  <th class="border-b border-border px-3 py-2.5 text-xs font-semibold tracking-wider text-text-muted">zł/m²</th>
-                  <th class="border-b border-border px-3 py-2.5 text-xs font-semibold tracking-wider text-text-muted">Razem</th>
-                </tr>
-              </thead>
-              <tbody data-sheet-history></tbody>
-            </table>
+            <div class="sm:pt-0.5 sm:text-right">
+              <p class="font-heading text-lg font-semibold tracking-tight text-text sm:text-xl">
+                {priceLabel}
+              </p>
+              {ppmLabel && (
+                <p class="mt-1 text-sm text-text-muted">{ppmLabel}</p>
+              )}
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div class="border-t border-border px-5 py-4 sm:px-6" data-sheet-footer>
-        <a
-          href="/kontakt/"
-          class="inline-flex min-h-[48px] w-full items-center justify-center bg-accent px-5 py-3 text-sm font-semibold tracking-wide text-accent-fg transition-opacity hover:opacity-90"
-          data-sheet-cta
-        >
-          Zapytaj o tę ofertę
-        </a>
-      </div>
-    </aside>
+          <div class="mt-4 flex flex-wrap items-start justify-between gap-x-5 gap-y-3">
+            <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
+              {unit.floorPlanUrl && (
+                <a
+                  href={unit.floorPlanUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-text transition-colors hover:text-accent"
+                >
+                  Rzuty
+                  <svg class="size-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </a>
+              )}
+
+              {unit.status !== 'sold' && (
+                <a
+                  href="/kontakt/"
+                  class="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-text transition-colors hover:text-accent"
+                >
+                  Zapytaj o {unit.unitNumber}
+                  <svg class="size-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </a>
+              )}
+            </div>
+
+            <details class="group/history max-w-md sm:text-right">
+              <summary class="inline-flex min-h-[44px] cursor-pointer list-none items-center gap-1.5 text-sm text-text-muted transition-colors hover:text-text [&::-webkit-details-marker]:hidden">
+                Historia zmian ceny
+                <svg
+                  class="size-3.5 transition-transform group-open/history:rotate-180"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </summary>
+              {priceHistory.length > 0 ? (
+                <ul class="mt-2 space-y-2 sm:ml-auto">
+                  {priceHistory.map((entry) => (
+                    <li class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-sm sm:justify-end">
+                      <span class="text-text-muted">{entry.date}</span>
+                      <span class="font-medium text-text">
+                        {entry.total}
+                        <span class="ml-2 font-normal text-text-muted">{entry.ppm}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="mt-2 text-sm text-text-muted">Brak wcześniejszych zmian ceny.</p>
+              )}
+            </details>
+          </div>
+        </article>
+      );
+    })}
   </div>
 </div>
-
-<script>
-  const UNIT_SHEET_KEY = '__unitSheetCleanup';
-
-  const destroyUnitSheet = () => {
-    const root = document.querySelector('[data-unit-sheet]');
-    const cleanup = root?.[UNIT_SHEET_KEY];
-    if (typeof cleanup === 'function') cleanup();
-  };
-
-  const initUnitSheet = () => {
-    const root = document.querySelector('[data-unit-sheet]');
-    if (!root) return;
-    destroyUnitSheet();
-
-    const dataEl = root.querySelector('[data-unit-sheet-data]');
-    if (!dataEl?.textContent) return;
-
-    /** @type {Array<{
-      slug: string;
-      unitNumber: string;
-      propertyType: string;
-      status: string;
-      statusLabel: string;
-      usableAreaM2: string;
-      plotAreaM2: string;
-      rooms: number;
-      description: string;
-      sold: boolean;
-      price: string;
-      ppm: string;
-      priceHistory: Array<{ date: string; ppm: string; total: string }>;
-    }>} */
-    let units;
-    try {
-      units = JSON.parse(dataEl.textContent);
-    } catch {
-      return;
-    }
-
-    const bySlug = Object.fromEntries(units.map((unit) => [unit.slug, unit]));
-    const sheetRoot = root.querySelector('[data-sheet-root]');
-    const statusEl = root.querySelector('[data-sheet-status]');
-    const typeEl = root.querySelector('[data-sheet-type]');
-    const titleEl = root.querySelector('[data-sheet-title]');
-    const metaEl = root.querySelector('[data-sheet-meta]');
-    const priceEl = root.querySelector('[data-sheet-price]');
-    const ppmEl = root.querySelector('[data-sheet-ppm]');
-    const descEl = root.querySelector('[data-sheet-description]');
-    const historyEl = root.querySelector('[data-sheet-history]');
-    const footerEl = root.querySelector('[data-sheet-footer]');
-    const ctaEl = root.querySelector('[data-sheet-cta]');
-    const cleanupFns = [];
-
-    const statusClasses = {
-      available: 'text-sm font-semibold tracking-wide text-accent',
-      reserved: 'text-sm font-semibold tracking-wide text-secondary',
-      sold: 'text-sm font-semibold tracking-wide text-text-muted',
-    };
-
-    const openSheet = (slug) => {
-      const unit = bySlug[slug];
-      if (!unit || !sheetRoot) return;
-
-      typeEl.textContent = unit.propertyType;
-      titleEl.textContent = unit.unitNumber.toUpperCase();
-      statusEl.textContent = unit.statusLabel;
-      statusEl.className = statusClasses[unit.status] || statusClasses.sold;
-      metaEl.textContent = `${unit.usableAreaM2} m² · ${unit.rooms} pokoje · działka ${unit.plotAreaM2} m²`;
-      priceEl.textContent = unit.price;
-      ppmEl.textContent = unit.ppm ? `Cena za m²: ${unit.ppm}` : '';
-      descEl.textContent = unit.description;
-      historyEl.innerHTML = unit.priceHistory.length
-        ? unit.priceHistory
-            .map(
-              (entry) =>
-                `<tr class="border-b border-border last:border-b-0"><td class="px-3 py-2.5 font-medium text-text">${entry.date}</td><td class="px-3 py-2.5 text-text-muted">${entry.ppm}</td><td class="px-3 py-2.5 font-semibold text-text">${entry.total}</td></tr>`,
-            )
-            .join('')
-        : '<tr><td class="px-3 py-2.5 text-text-muted" colspan="3">Brak historii ceny.</td></tr>';
-      footerEl.hidden = unit.sold;
-      if (ctaEl) ctaEl.textContent = `Zapytaj o ${unit.unitNumber.toUpperCase()}`;
-
-      sheetRoot.classList.remove('hidden');
-      sheetRoot.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      root.querySelector('[data-sheet-close]')?.focus();
-    };
-
-    const closeSheet = () => {
-      if (!sheetRoot) return;
-      sheetRoot.classList.add('hidden');
-      sheetRoot.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-    };
-
-    const addListener = (target, eventName, handler, options) => {
-      if (!target) return;
-      target.addEventListener(eventName, handler, options);
-      cleanupFns.push(() => target.removeEventListener(eventName, handler, options));
-    };
-
-    root.querySelectorAll('[data-sheet-open]').forEach((row) => {
-      const activate = (event) => {
-        if (event.target instanceof Element && event.target.closest('[data-sheet-ignore]')) return;
-        openSheet(row.getAttribute('data-sheet-open'));
-      };
-      addListener(row, 'click', activate);
-      addListener(row, 'keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          activate(event);
-        }
-      });
-    });
-
-    addListener(root.querySelector('[data-sheet-close]'), 'click', closeSheet);
-    addListener(root.querySelector('[data-sheet-backdrop]'), 'click', closeSheet);
-    addListener(document, 'keydown', (event) => {
-      if (event.key === 'Escape' && sheetRoot && !sheetRoot.classList.contains('hidden')) {
-        closeSheet();
-      }
-    });
-
-    root[UNIT_SHEET_KEY] = () => {
-      closeSheet();
-      cleanupFns.forEach((cleanup) => cleanup());
-      delete root[UNIT_SHEET_KEY];
-    };
-  };
-
-  initUnitSheet();
-  document.addEventListener('astro:page-load', initUnitSheet);
-  document.addEventListener('astro:before-swap', destroyUnitSheet);
-</script>

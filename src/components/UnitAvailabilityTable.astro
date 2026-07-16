@@ -85,12 +85,12 @@ const unitsForSheet = units.map((unit) => ({
                 <td class="px-4 py-4">
                   <span
                     class:list={[
-                      'inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider',
+                      'text-xs font-semibold tracking-wide',
                       unit.status === 'available'
-                        ? 'bg-accent text-accent-fg'
+                        ? 'text-accent'
                         : unit.status === 'reserved'
-                          ? 'bg-secondary/15 text-secondary ring-1 ring-secondary/35'
-                          : 'bg-primary-light text-primary-fg',
+                          ? 'text-secondary'
+                          : 'text-text-muted',
                     ]}
                   >
                     {statusLabel(unit.status)}
@@ -108,7 +108,7 @@ const unitsForSheet = units.map((unit) => ({
                       href={unit.floorPlanUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="inline-flex w-fit items-center gap-1.5 rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text transition-colors hover:bg-border"
+                      class="inline-flex w-fit items-center gap-1.5 border border-border bg-surface px-2.5 py-1 text-xs font-semibold text-text transition-colors hover:border-primary hover:text-primary"
                     >
                       Rzuty
                       <svg class="size-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -116,9 +116,7 @@ const unitsForSheet = units.map((unit) => ({
                       </svg>
                     </a>
                   ) : (
-                    <span class="inline-flex w-fit items-center rounded border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted">
-                      Brak
-                    </span>
+                    <span class="text-xs font-medium text-text-muted">Brak</span>
                   )}
                 </td>
               </tr>
@@ -132,25 +130,29 @@ const unitsForSheet = units.map((unit) => ({
   <div class="fixed inset-0 z-[80] hidden" data-sheet-root aria-hidden="true">
     <button
       type="button"
-      class="absolute inset-0 bg-dark/45"
+      class="absolute inset-0 bg-dark/50"
       data-sheet-backdrop
       aria-label="Zamknij panel"
     ></button>
     <aside
-      class="absolute inset-y-0 right-0 flex w-full max-w-md flex-col border-l border-border bg-background shadow-2xl"
+      class="absolute inset-y-0 right-0 flex w-full max-w-md flex-col border-l border-border bg-background"
       data-sheet-panel
       role="dialog"
       aria-modal="true"
       aria-labelledby="unit-sheet-title"
     >
-      <div class="flex items-start justify-between gap-4 border-b border-border px-5 py-4">
-        <div>
-          <p class="text-xs font-semibold uppercase tracking-widest text-accent" data-sheet-type></p>
-          <h4 id="unit-sheet-title" class="font-heading text-xl font-bold uppercase text-text" data-sheet-title></h4>
+      <div class="flex items-start justify-between gap-4 border-b border-border px-5 py-5 sm:px-6">
+        <div class="min-w-0">
+          <p class="text-topper font-semibold tracking-[0.18em] text-accent" data-sheet-type></p>
+          <h4
+            id="unit-sheet-title"
+            class="mt-2 font-heading text-h3 font-semibold tracking-tight text-text"
+            data-sheet-title
+          ></h4>
         </div>
         <button
           type="button"
-          class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-text transition-colors hover:bg-surface"
+          class="inline-flex h-10 w-10 shrink-0 items-center justify-center border border-border text-text transition-colors hover:bg-surface"
           data-sheet-close
           aria-label="Zamknij"
         >
@@ -160,31 +162,31 @@ const unitsForSheet = units.map((unit) => ({
         </button>
       </div>
 
-      <div class="flex-1 space-y-6 overflow-y-auto px-5 py-5">
-        <div class="flex flex-wrap items-center gap-2">
-          <span class="rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider" data-sheet-status></span>
-          <span class="text-sm text-text-muted" data-sheet-meta></span>
+      <div class="flex-1 space-y-8 overflow-y-auto px-5 py-6 sm:px-6">
+        <div class="space-y-2">
+          <p class="text-sm font-semibold tracking-wide" data-sheet-status></p>
+          <p class="text-sm text-text-muted" data-sheet-meta></p>
         </div>
 
         <div>
-          <p class="mb-1 text-2xl font-bold text-text" data-sheet-price></p>
-          <p class="text-xs text-text-muted" data-sheet-ppm></p>
+          <p class="font-heading text-h3 font-semibold tracking-tight text-text" data-sheet-price></p>
+          <p class="mt-1 text-sm text-text-muted" data-sheet-ppm></p>
         </div>
 
         <div>
-          <p class="mb-1 text-xs font-semibold uppercase tracking-wider text-text-muted">Opis</p>
+          <p class="mb-2 text-xs font-semibold tracking-wider text-text-muted">Opis</p>
           <p class="text-sm leading-relaxed text-text-muted" data-sheet-description></p>
         </div>
 
         <div>
-          <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-text-muted">Historia ceny ofertowej</p>
-          <div class="overflow-x-auto">
-            <table class="w-full border-collapse border border-border text-left text-sm">
+          <p class="mb-3 text-xs font-semibold tracking-wider text-text-muted">Historia ceny ofertowej</p>
+          <div class="overflow-x-auto border border-border">
+            <table class="w-full border-collapse text-left text-sm">
               <thead>
                 <tr class="bg-surface">
-                  <th class="border border-border px-3 py-2 text-xs uppercase tracking-wider">Data</th>
-                  <th class="border border-border px-3 py-2 text-xs uppercase tracking-wider">zł/m²</th>
-                  <th class="border border-border px-3 py-2 text-xs uppercase tracking-wider">Razem</th>
+                  <th class="border-b border-border px-3 py-2.5 text-xs font-semibold tracking-wider text-text-muted">Data</th>
+                  <th class="border-b border-border px-3 py-2.5 text-xs font-semibold tracking-wider text-text-muted">zł/m²</th>
+                  <th class="border-b border-border px-3 py-2.5 text-xs font-semibold tracking-wider text-text-muted">Razem</th>
                 </tr>
               </thead>
               <tbody data-sheet-history></tbody>
@@ -193,10 +195,10 @@ const unitsForSheet = units.map((unit) => ({
         </div>
       </div>
 
-      <div class="border-t border-border px-5 py-4" data-sheet-footer>
+      <div class="border-t border-border px-5 py-4 sm:px-6" data-sheet-footer>
         <a
           href="/kontakt/"
-          class="inline-flex min-h-[44px] w-full items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-bold text-accent-fg transition-opacity hover:opacity-90"
+          class="inline-flex min-h-[48px] w-full items-center justify-center bg-accent px-5 py-3 text-sm font-semibold tracking-wide text-accent-fg transition-opacity hover:opacity-90"
           data-sheet-cta
         >
           Zapytaj o tę ofertę
@@ -260,9 +262,9 @@ const unitsForSheet = units.map((unit) => ({
     const cleanupFns = [];
 
     const statusClasses = {
-      available: 'bg-accent text-accent-fg',
-      reserved: 'bg-secondary/15 text-secondary ring-1 ring-secondary/35',
-      sold: 'bg-primary-light text-primary-fg',
+      available: 'text-sm font-semibold tracking-wide text-accent',
+      reserved: 'text-sm font-semibold tracking-wide text-secondary',
+      sold: 'text-sm font-semibold tracking-wide text-text-muted',
     };
 
     const openSheet = (slug) => {
@@ -272,7 +274,7 @@ const unitsForSheet = units.map((unit) => ({
       typeEl.textContent = unit.propertyType;
       titleEl.textContent = unit.unitNumber.toUpperCase();
       statusEl.textContent = unit.statusLabel;
-      statusEl.className = `rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${statusClasses[unit.status] || ''}`;
+      statusEl.className = statusClasses[unit.status] || statusClasses.sold;
       metaEl.textContent = `${unit.usableAreaM2} m² · ${unit.rooms} pokoje · działka ${unit.plotAreaM2} m²`;
       priceEl.textContent = unit.price;
       ppmEl.textContent = unit.ppm ? `Cena za m²: ${unit.ppm}` : '';
@@ -281,16 +283,17 @@ const unitsForSheet = units.map((unit) => ({
         ? unit.priceHistory
             .map(
               (entry) =>
-                `<tr><td class="border border-border px-3 py-2 font-medium text-text">${entry.date}</td><td class="border border-border px-3 py-2 text-text-muted">${entry.ppm}</td><td class="border border-border px-3 py-2 font-semibold text-text">${entry.total}</td></tr>`,
+                `<tr class="border-b border-border last:border-b-0"><td class="px-3 py-2.5 font-medium text-text">${entry.date}</td><td class="px-3 py-2.5 text-text-muted">${entry.ppm}</td><td class="px-3 py-2.5 font-semibold text-text">${entry.total}</td></tr>`,
             )
             .join('')
-        : '<tr><td class="border border-border px-3 py-2 text-text-muted" colspan="3">Brak historii ceny.</td></tr>';
+        : '<tr><td class="px-3 py-2.5 text-text-muted" colspan="3">Brak historii ceny.</td></tr>';
       footerEl.hidden = unit.sold;
       if (ctaEl) ctaEl.textContent = `Zapytaj o ${unit.unitNumber.toUpperCase()}`;
 
       sheetRoot.classList.remove('hidden');
       sheetRoot.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
+      root.querySelector('[data-sheet-close]')?.focus();
     };
 
     const closeSheet = () => {

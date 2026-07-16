@@ -50,14 +50,14 @@ const unitsForSheet = units.map((unit) => ({
 <div class="border-t border-border pt-12" data-unit-sheet>
   <script type="application/json" data-unit-sheet-data set:html={JSON.stringify(unitsForSheet).replace(/</g, '\\u003c')} />
   <div class="mb-8">
-    <h3 class="font-heading text-h3 font-bold uppercase text-text">Lista dostępnych nieruchomości</h3>
+    <h3 class="font-heading text-h3 font-semibold tracking-tight text-text">Dostępne nieruchomości</h3>
     <p class="mt-2 text-sm text-text-muted">Kliknij wiersz, aby zobaczyć opis i historię ceny.</p>
   </div>
 
-  <div class="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
+  <div class="overflow-hidden border border-border bg-background">
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-border text-left text-sm">
-        <thead class="bg-surface text-xs uppercase tracking-wider text-text-muted">
+        <thead class="bg-surface text-xs font-semibold tracking-wider text-text-muted">
           <tr>
             <th scope="col" class="px-4 py-3">Budynek</th>
             <th scope="col" class="px-4 py-3">Pow. budynku</th>

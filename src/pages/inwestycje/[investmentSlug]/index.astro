@@ -27,236 +27,265 @@ const mapLink = investment.mapLink;
 <BaseLayout title={investment.name} description={investment.summary}>
   <Header slot="header" />
 
-  <section class="pb-section pt-4 sm:pt-6">
+  <section class="bg-background pb-section pt-8 sm:pt-10">
     <div class="mx-auto max-w-site px-4 sm:px-6">
-      <nav aria-label="Breadcrumb" class="mb-6">
+      <nav aria-label="Okruszki" class="mb-8">
         <ol class="flex flex-wrap items-center gap-1.5 text-sm text-text-muted">
-          <li><a href="/" class="transition-colors hover:text-primary">Home</a></li>
+          <li><a href="/" class="transition-colors hover:text-primary">Strona główna</a></li>
           <li aria-hidden="true" class="text-border">/</li>
           <li><a href="/inwestycje/" class="transition-colors hover:text-primary">Inwestycje</a></li>
           <li aria-hidden="true" class="text-border">/</li>
-          <li class="font-semibold text-text" aria-current="page">{investment.name}</li>
+          <li class="font-medium text-text" aria-current="page">{investment.name}</li>
         </ol>
       </nav>
 
-      <div class="space-y-12">
-        <div>
-          <div class="mb-4 space-y-2">
-            <h1 class="flex flex-wrap items-center gap-3 font-heading text-h2 font-bold uppercase leading-none text-text">
-              <span>{investment.name}</span>
-              <span class:list={[
-                'inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest',
-                investment.salesStatus === 'active'
-                  ? 'bg-accent text-accent-fg'
-                  : 'bg-surface-muted text-text-muted ring-1 ring-border',
-              ]}>
-                {salesLabel}
-              </span>
-            </h1>
-            <p class="flex items-center gap-1 text-sm text-text-muted">
-              <svg class="size-4 shrink-0 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              {mapLink ? (
-                <a
-                  href={mapLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="transition-colors hover:text-primary"
-                >
-                  {investment.locationAddress}
-                </a>
-              ) : (
-                investment.locationAddress
-              )}
-            </p>
-          </div>
-
-          <div class="overflow-hidden rounded-2xl border border-border bg-background shadow-lg">
-          {galleryImages.length > 0 ? (
-          <div class="embla" data-embla>
-            <div class="relative">
-              <div class="embla__viewport overflow-hidden" data-embla-viewport>
-                <div class="embla__container flex touch-pan-y">
-                  {galleryImages.map((src, index) => (
-                    <div class="embla__slide min-w-0 flex-[0_0_100%] touch-pan-y">
-                      <button
-                        type="button"
-                        class="block w-full touch-pan-y cursor-zoom-in focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/70"
-                        data-gallery-open
-                        data-index={index}
-                        data-src={src}
-                        aria-label={`Powiększ zdjęcie ${index + 1}`}
-                      >
-                        <Image
-                          src={src}
-                          alt={`${investment.name} - zdjęcie ${index + 1}`}
-                          width={1600}
-                          height={1000}
-                          class="aspect-[16/10] min-h-[min(58vh,560px)] w-full object-cover"
-                          loading={index === 0 ? 'eager' : 'lazy'}
-                        />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {galleryImages.length > 1 && (
-                <>
-                  <button
-                    type="button"
-                    class="embla__button absolute left-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-primary-fg/20 bg-dark/45 text-primary-fg shadow-lg backdrop-blur-sm transition-colors hover:bg-dark/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:inline-flex"
-                    data-embla-prev
-                    aria-label="Poprzednie zdjęcie"
-                  >
-                    <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                  </button>
-
-                  <button
-                    type="button"
-                    class="embla__button absolute right-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-primary-fg/20 bg-dark/45 text-primary-fg shadow-lg backdrop-blur-sm transition-colors hover:bg-dark/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:inline-flex"
-                    data-embla-next
-                    aria-label="Następne zdjęcie"
-                  >
-                    <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                  </button>
-                </>
-              )}
-            </div>
-
-            {galleryImages.length > 1 && (
-              <div class="border-t border-border bg-surface px-4 py-4 sm:px-5">
-                <div class="flex gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]" data-embla-thumbs aria-label="Miniatury galerii">
-                  {galleryImages.map((src, index) => (
-                    <button
-                      type="button"
-                      class="relative aspect-[4/3] w-20 shrink-0 overflow-hidden rounded-lg border border-border bg-border opacity-70 transition-all hover:opacity-100 sm:w-24"
-                      data-embla-thumb
-                      data-index={index}
-                      aria-label={`Przejdź do zdjęcia ${index + 1}`}
-                      aria-pressed={index === 0 ? 'true' : 'false'}
-                    >
-                      <Image
-                        src={src}
-                        alt=""
-                        aria-hidden="true"
-                        width={240}
-                        height={180}
-                        class="h-full w-full object-cover"
-                        loading="lazy"
-                      />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+      <header class="mb-10 max-w-3xl">
+        <p class="text-topper font-semibold tracking-[0.18em] text-accent">
+          {salesLabel}
+        </p>
+        <h1 class="mt-3 font-heading text-h1 font-semibold tracking-tight text-text">
+          {investment.name}
+        </h1>
+        <p class="mt-4 text-base text-text-muted">
+          {mapLink ? (
+            <a
+              href={mapLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="transition-colors hover:text-primary"
+            >
+              {investment.locationAddress}
+            </a>
           ) : (
-            <ImagePlaceholder label="Galeria inwestycji pojawi się po dodaniu zdjęć" class="aspect-[16/10] min-h-[min(58vh,560px)] w-full" />
+            investment.locationAddress
           )}
-        </div>
+        </p>
+        {investment.summary && (
+          <p class="mt-4 text-base leading-relaxed text-text-muted">
+            {investment.summary}
+          </p>
+        )}
+      </header>
 
-        {galleryImages.length > 0 && (
-          <dialog
-            class="fixed inset-0 z-[100] m-0 h-dvh max-h-none w-dvw max-w-none overflow-hidden bg-dark/90 p-0 text-primary-fg open:block backdrop:bg-dark/65"
-            data-gallery-viewer
-            aria-label={`Galeria inwestycji ${investment.name}`}
-          >
-            <div class="fixed inset-0 grid h-dvh w-dvw min-w-0 grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto]">
-              <div class="flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
-                <p class="text-sm font-semibold uppercase tracking-wider text-primary-fg/80" data-gallery-counter></p>
-                <button
-                  type="button"
-                  class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-primary-fg/20 bg-primary-fg/10 text-primary-fg transition-colors hover:bg-primary-fg/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80"
-                  data-gallery-close
-                  aria-label="Zamknij podgląd"
-                >
-                  <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
-                  </svg>
-                </button>
-              </div>
+      <div class="space-y-16 sm:space-y-20">
+        <div>
+          {galleryImages.length > 0 ? (
+            <div class="embla overflow-hidden border border-border" data-embla>
+              <div class="relative">
+                <div class="embla__viewport overflow-hidden" data-embla-viewport>
+                  <div class="embla__container flex touch-pan-y">
+                    {galleryImages.map((src, index) => (
+                      <div class="embla__slide min-w-0 flex-[0_0_100%] touch-pan-y">
+                        <button
+                          type="button"
+                          class="block w-full touch-pan-y cursor-zoom-in focus:outline-none focus-visible:ring-4 focus-visible:ring-accent/70"
+                          data-gallery-open
+                          data-index={index}
+                          data-src={src}
+                          aria-label={`Powiększ zdjęcie ${index + 1}`}
+                        >
+                          <Image
+                            src={src}
+                            alt={`${investment.name} - zdjęcie ${index + 1}`}
+                            width={1600}
+                            height={1000}
+                            class="aspect-[16/10] min-h-[min(58vh,560px)] w-full object-cover"
+                            loading={index === 0 ? 'eager' : 'lazy'}
+                          />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-              <div
-                class="relative flex min-h-0 min-w-0 touch-pan-y items-center justify-center overflow-hidden px-4 py-2 sm:px-20"
-                data-gallery-viewer-stage
-              >
                 {galleryImages.length > 1 && (
                   <>
                     <button
                       type="button"
-                      class="absolute left-3 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-primary-fg/20 bg-dark/70 text-primary-fg shadow-lg backdrop-blur-sm transition-colors hover:bg-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:left-6 sm:inline-flex"
-                      data-gallery-prev
+                      class="embla__button absolute left-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center border border-primary-fg/20 bg-dark/50 text-primary-fg backdrop-blur-sm transition-colors hover:bg-dark/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:inline-flex"
+                      data-embla-prev
                       aria-label="Poprzednie zdjęcie"
                     >
-                      <svg class="size-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
                       </svg>
                     </button>
 
                     <button
                       type="button"
-                      class="absolute right-3 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-primary-fg/20 bg-dark/70 text-primary-fg shadow-lg backdrop-blur-sm transition-colors hover:bg-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:right-6 sm:inline-flex"
-                      data-gallery-next
+                      class="embla__button absolute right-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center border border-primary-fg/20 bg-dark/50 text-primary-fg backdrop-blur-sm transition-colors hover:bg-dark/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:inline-flex"
+                      data-embla-next
                       aria-label="Następne zdjęcie"
                     >
-                      <svg class="size-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
                       </svg>
                     </button>
                   </>
                 )}
-
-                <img
-                  src={galleryImages[0]}
-                  alt=""
-                  class="pointer-events-none h-full w-full select-none object-contain"
-                  draggable="false"
-                  data-gallery-viewer-image
-                />
               </div>
 
-              <div class="border-t border-primary-fg/10 bg-dark-surface/40 px-4 py-4 sm:px-6">
-                <div class="flex w-full min-w-0 gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]" data-gallery-viewer-thumbs aria-label="Miniatury powiększonej galerii">
-                  {galleryImages.map((src, index) => (
-                    <button
-                      type="button"
-                      class="relative aspect-[4/3] w-20 shrink-0 overflow-hidden rounded-lg border border-primary-fg/20 bg-dark-surface/70 opacity-70 transition-all hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:w-24"
-                      data-gallery-viewer-thumb
-                      data-index={index}
-                      aria-label={`Pokaż zdjęcie ${index + 1}`}
-                      aria-pressed={index === 0 ? 'true' : 'false'}
-                    >
-                      <Image
-                        src={src}
-                        alt=""
-                        aria-hidden="true"
-                        width={240}
-                        height={180}
-                        class="h-full w-full object-cover"
-                        loading="lazy"
-                      />
-                    </button>
-                  ))}
+              {galleryImages.length > 1 && (
+                <div class="border-t border-border bg-surface px-4 py-4 sm:px-5">
+                  <div class="flex gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]" data-embla-thumbs aria-label="Miniatury galerii">
+                    {galleryImages.map((src, index) => (
+                      <button
+                        type="button"
+                        class="relative aspect-[4/3] w-20 shrink-0 overflow-hidden border border-border bg-border opacity-70 transition-all hover:opacity-100 sm:w-24"
+                        data-embla-thumb
+                        data-index={index}
+                        aria-label={`Przejdź do zdjęcia ${index + 1}`}
+                        aria-pressed={index === 0 ? 'true' : 'false'}
+                      >
+                        <Image
+                          src={src}
+                          alt=""
+                          aria-hidden="true"
+                          width={240}
+                          height={180}
+                          class="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <ImagePlaceholder
+              label="Galeria inwestycji pojawi się po dodaniu zdjęć"
+              class="aspect-[16/10] min-h-[min(58vh,560px)] w-full border border-border"
+            />
+          )}
+
+          {galleryImages.length > 0 && (
+            <dialog
+              class="fixed inset-0 z-[100] m-0 h-dvh max-h-none w-dvw max-w-none overflow-hidden bg-dark/90 p-0 text-primary-fg open:block backdrop:bg-dark/65"
+              data-gallery-viewer
+              aria-label={`Galeria inwestycji ${investment.name}`}
+            >
+              <div class="fixed inset-0 grid h-dvh w-dvw min-w-0 grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto]">
+                <div class="flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
+                  <p class="text-sm font-medium tracking-wide text-primary-fg/80" data-gallery-counter></p>
+                  <button
+                    type="button"
+                    class="inline-flex h-11 w-11 items-center justify-center border border-primary-fg/20 bg-primary-fg/10 text-primary-fg transition-colors hover:bg-primary-fg/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80"
+                    data-gallery-close
+                    aria-label="Zamknij podgląd"
+                  >
+                    <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div
+                  class="relative flex min-h-0 min-w-0 touch-pan-y items-center justify-center overflow-hidden px-4 py-2 sm:px-20"
+                  data-gallery-viewer-stage
+                >
+                  {galleryImages.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        class="absolute left-3 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center border border-primary-fg/20 bg-dark/70 text-primary-fg backdrop-blur-sm transition-colors hover:bg-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:left-6 sm:inline-flex"
+                        data-gallery-prev
+                        aria-label="Poprzednie zdjęcie"
+                      >
+                        <svg class="size-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                      </button>
+
+                      <button
+                        type="button"
+                        class="absolute right-3 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center border border-primary-fg/20 bg-dark/70 text-primary-fg backdrop-blur-sm transition-colors hover:bg-dark/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:right-6 sm:inline-flex"
+                        data-gallery-next
+                        aria-label="Następne zdjęcie"
+                      >
+                        <svg class="size-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                      </button>
+                    </>
+                  )}
+
+                  <img
+                    src={galleryImages[0]}
+                    alt=""
+                    class="pointer-events-none h-full w-full select-none object-contain"
+                    draggable="false"
+                    data-gallery-viewer-image
+                  />
+                </div>
+
+                <div class="border-t border-primary-fg/10 bg-dark-surface/40 px-4 py-4 sm:px-6">
+                  <div class="flex w-full min-w-0 gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]" data-gallery-viewer-thumbs aria-label="Miniatury powiększonej galerii">
+                    {galleryImages.map((src, index) => (
+                      <button
+                        type="button"
+                        class="relative aspect-[4/3] w-20 shrink-0 overflow-hidden border border-primary-fg/20 bg-dark-surface/70 opacity-70 transition-all hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-fg/80 sm:w-24"
+                        data-gallery-viewer-thumb
+                        data-index={index}
+                        aria-label={`Pokaż zdjęcie ${index + 1}`}
+                        aria-pressed={index === 0 ? 'true' : 'false'}
+                      >
+                        <Image
+                          src={src}
+                          alt=""
+                          aria-hidden="true"
+                          width={240}
+                          height={180}
+                          class="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          </dialog>
-        )}
+            </dialog>
+          )}
         </div>
 
-        <div class="prose max-w-3xl text-sm leading-7 text-text-muted prose-headings:text-text prose-a:text-accent prose-strong:text-text" set:html={investmentDescriptionHtml} />
+        {investmentDescriptionHtml && (
+          <div
+            class="prose max-w-3xl text-base leading-relaxed text-text-muted prose-headings:font-heading prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-text prose-a:text-accent prose-strong:text-text"
+            set:html={investmentDescriptionHtml}
+          />
+        )}
+
+        {(investment.units.length > 0 || investment.prospectusUrl) && (
+          <div>
+            {investment.units.length > 0 && <UnitAvailabilityTable units={investment.units} />}
+
+            {investment.prospectusUrl && (
+              <div class:list={['flex justify-start', investment.units.length > 0 && 'mt-10']}>
+                <a
+                  href={investment.prospectusUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex min-h-[48px] items-center justify-center gap-2 bg-primary px-8 py-3 text-sm font-semibold tracking-wide text-primary-fg transition-opacity hover:opacity-90"
+                >
+                  Prospekt informacyjny
+                  <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </a>
+              </div>
+            )}
+          </div>
+        )}
 
         {mapEmbedUrl && (
-          <div class="space-y-4">
-            <h2 class="font-heading text-h3 font-bold uppercase text-text">Lokalizacja na mapie</h2>
-            <div class="overflow-hidden rounded-2xl border border-border bg-background shadow-lg">
+          <div class="space-y-5">
+            <div class="max-w-2xl">
+              <h2 class="font-heading text-h2 font-semibold tracking-tight text-text">Lokalizacja</h2>
+              <p class="mt-3 text-base leading-relaxed text-text-muted">
+                Okolica inwestycji — tereny zielone i spokojne sąsiedztwo.
+              </p>
+            </div>
+            <div class="overflow-hidden border border-border bg-background">
               <iframe
                 title={`Mapa inwestycji ${investment.name}`}
                 src={mapEmbedUrl}
@@ -271,35 +300,13 @@ const mapLink = investment.mapLink;
                 href={mapLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex min-h-[44px] items-center gap-2 text-sm font-bold text-primary transition-colors hover:text-accent"
+                class="inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-text transition-colors hover:text-accent"
               >
                 Otwórz w Google Maps
                 <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </a>
-            )}
-          </div>
-        )}
-
-        {(investment.units.length > 0 || investment.prospectusUrl) && (
-          <div>
-            {investment.units.length > 0 && <UnitAvailabilityTable units={investment.units} />}
-
-            {investment.prospectusUrl && (
-              <div class:list={['flex justify-center', investment.units.length > 0 && 'mt-10']}>
-                <a
-                  href={investment.prospectusUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-primary px-8 py-3 text-sm font-bold uppercase tracking-wider text-primary-fg shadow-sm transition-opacity hover:opacity-90"
-                >
-                  Prospekt informacyjny
-                  <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                </a>
-              </div>
             )}
           </div>
         )}
@@ -428,7 +435,6 @@ const mapLink = investment.mapLink;
         if (!viewer) return;
 
         if (viewer.open) viewer.close();
-        // `close` handler below also unlocks; call here so button-close never depends on the event.
         unlockBodyScroll();
 
         if (lastFocusedElement instanceof HTMLElement) {
@@ -441,7 +447,6 @@ const mapLink = investment.mapLink;
       const showViewerNext = () => setViewerImage(viewerIndex + 1);
 
       const onViewerClose = () => {
-        // Escape / any non-button dismiss path — clear scroll lock and restore focus.
         unlockBodyScroll();
         if (lastFocusedElement instanceof HTMLElement) {
           lastFocusedElement.focus();
@@ -530,7 +535,6 @@ const mapLink = investment.mapLink;
       setSelected();
 
       root[GALLERY_KEY] = () => {
-        // Unlock/close before removing listeners so Escape/nav cleanup never leaks overflow:hidden.
         if (viewer?.open) viewer.close();
         unlockBodyScroll();
         cleanupFns.forEach((cleanup) => cleanup());

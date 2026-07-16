@@ -254,6 +254,29 @@ test('feed keeps historical daily resources for active dataset', async () => {
   assert.equal(parsed.get(dataset.extIdent).length, 2)
 })
 
+test('feed keeps registered-name quotes literal and does not re-escape historical resources', async () => {
+  const first = await generateGovernmentFeed({
+    exportDate: '2026-06-22',
+    fixturePath: 'fixtures/sample-content.json',
+    baseUrl: 'https://evenement24.com',
+    existingFeedXml: '',
+  })
+
+  assert.match(first.feedXml, /dewelopera "EVENEMENT M\. Szmurlo" Marek Szmurlo/)
+  assert.doesNotMatch(first.feedXml, /&quot;|&amp;quot;/)
+
+  const second = await generateGovernmentFeed({
+    exportDate: '2026-06-23',
+    fixturePath: 'fixtures/sample-content.json',
+    baseUrl: 'https://evenement24.com',
+    existingFeedXml: first.feedXml,
+  })
+
+  const quoteMatches = second.feedXml.match(/"EVENEMENT M\. Szmurlo"/g) ?? []
+  assert.ok(quoteMatches.length >= 4)
+  assert.doesNotMatch(second.feedXml, /&quot;|&amp;quot;|&amp;amp;/)
+})
+
 test('writeGovernmentFeed writes csv, xml and lowercase md5', async () => {
   const outputDir = await mkdtemp(path.join(os.tmpdir(), 'government-feed-'))
   const result = await generateGovernmentFeed({

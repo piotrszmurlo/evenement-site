@@ -584,8 +584,8 @@ export function parseExistingFeedResources(feedXml) {
       return {
         extIdent: extractXmlTag(resourceXml, 'extIdent'),
         url: extractXmlTag(resourceXml, 'url'),
-        title: extractXmlTag(resourceXml, 'polish'),
-        description: extractSecondXmlTag(resourceXml, 'polish'),
+        title: unescapeXml(extractXmlTag(resourceXml, 'polish')),
+        description: unescapeXml(extractSecondXmlTag(resourceXml, 'polish')),
         dataDate: extractXmlTag(resourceXml, 'dataDate'),
       }
     }).filter((resource) => resource.extIdent && resource.url && resource.title && resource.description && resource.dataDate)
@@ -888,12 +888,29 @@ function escapeCsvValue(value) {
 }
 
 function escapeXml(value) {
+  // Quotes stay literal in element text so registered names like "EVENEMENT ..." render as registered.
   return String(value)
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&apos;')
+}
+
+function unescapeXml(value) {
+  if (value == null) {
+    return value
+  }
+
+  let decoded = String(value)
+  // Collapse nested &amp; from older buggy regenerations before decoding other entities.
+  for (let i = 0; i < 16 && decoded.includes('&amp;'); i += 1) {
+    decoded = decoded.replaceAll('&amp;', '&')
+  }
+
+  return decoded
+    .replaceAll('&lt;', '<')
+    .replaceAll('&gt;', '>')
+    .replaceAll('&quot;', '"')
+    .replaceAll('&apos;', "'")
 }
 
 function extractXmlTag(xml, tagName) {

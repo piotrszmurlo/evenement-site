@@ -13,18 +13,18 @@ export default defineConfig({
   fonts: [
     {
       provider: fontProviders.google(),
-      name: 'Oswald',
+      name: 'Archivo',
       cssVariable: '--font-display',
       subsets: ['latin', 'latin-ext'],
-      weights: ['400', '600', '700'],
+      weights: ['500', '600', '700'],
       styles: ['normal'],
     },
     {
       provider: fontProviders.google(),
-      name: 'Inter',
+      name: 'Source Sans 3',
       cssVariable: '--font-body',
       subsets: ['latin', 'latin-ext'],
-      weights: ['400', '500', '700'],
+      weights: ['400', '500', '600', '700'],
       styles: ['normal'],
     },
   ],

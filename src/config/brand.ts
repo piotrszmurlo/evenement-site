@@ -15,9 +15,9 @@
 export const brand = {
   // ── Site Identity ──────────────────────────────────────────────────────────
   name: 'Evenement',
-  tagline: 'Nowoczesne inwestycje deweloperskie.',
+  tagline: 'Wyjątkowe osiedla domów jednorodzinnych',
   description:
-    'Kameralne i funkcjonalne nieruchomości dopasowane do Twoich potrzeb.',
+    'Kameralne inwestycje w Krupnikach — blisko lasu, ciszy i spokoju.',
   url: 'https://evenement24.com',
   locale: 'pl_PL',
 
@@ -25,49 +25,49 @@ export const brand = {
   // To swap fonts: change the `name` values here AND update astro.config.mjs
   // to match (both must stay in sync so Astro can optimise the correct files).
   fonts: {
-    body: 'Inter',
-    display: 'Oswald',
+    body: 'Source Sans 3',
+    display: 'Archivo',
   },
 
   // ── Colour Palette ─────────────────────────────────────────────────────────
-  // Core: cream #F9F8F3 · orange #F87216 · charcoal #292728 · olive #414728
-  // Neutrals = warm light gray/white spectrum. Olive is special-use only.
+  // Core: white · charcoal #292728 · orange #F87216 · stone secondary
+  // Neutrals stay warm-neutral gray (no green cast). Orange is CTA-only.
   // Mirror these hex values in src/styles/theme.css.
   colors: {
     // Charcoal — brand emphasis (nav active, badges, secondary buttons)
     primary:      '#292728',
     primaryLight: '#4F4C4D',
-    primaryFg:    '#F9F8F3',
+    primaryFg:    '#F7F7F4',
 
     // Orange — CTAs and highlights
     accent:       '#F87216',
     accentFg:     '#ffffff',
 
-    // Olive — secondary/tertiary, use sparingly for special moments
-    secondary:    '#414728',
-    secondaryFg:  '#F9F8F3',
-    secondaryLight: '#5C6540',
+    // Stone — secondary accents (e.g. reserved status), not green
+    secondary:    '#5C5650',
+    secondaryFg:  '#F7F7F4',
+    secondaryLight: '#7A736C',
 
-    // Warm light spectrum
+    // Warm-neutral light spectrum
     background:   '#FFFFFF',
-    surface:      '#F9F8F3',
-    surfaceMuted: '#F3F2ED',
-    border:       '#E5E4DF',
+    surface:      '#F5F4F2',
+    surfaceMuted: '#ECEBE8',
+    border:       '#E0DED9',
 
     // Text on light backgrounds
     text:         '#292728',
     textMuted:    '#6B6866',
 
-    // Dark sections (footer, CTA bands)
-    dark:         '#292728',
-    darkSurface:  '#3A3839',
+    // Dark sections (footer, overlays)
+    dark:         '#1F1E1E',
+    darkSurface:  '#333131',
   },
 
   // ── Border radius ──────────────────────────────────────────────────────────
   radius: {
-    sm:   '0.375rem',
-    md:   '0.625rem',
-    lg:   '1rem',
+    sm:   '0.25rem',
+    md:   '0.375rem',
+    lg:   '0.5rem',
     full: '9999px',
   },
 } as const;

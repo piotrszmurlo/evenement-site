@@ -2,6 +2,13 @@
 import { brand } from "../config/brand";
 import { client } from "../data/client";
 
+interface Props {
+  /** Transparent header over a dark full-bleed hero (homepage). */
+  overlay?: boolean;
+}
+
+const { overlay = false } = Astro.props;
+
 const nav = [
   { label: "Strona główna", href: "/" },
   { label: "Inwestycje", href: "/inwestycje" },
@@ -13,8 +20,11 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header
-  class="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-sm"
-  transition:persist
+  class:list={[
+    "z-50 w-full transition-[background-color,border-color,backdrop-filter] duration-300",
+    overlay ? "fixed top-0 border-b border-transparent" : "sticky top-0 border-b border-border bg-background/95 backdrop-blur-sm",
+  ]}
+  data-header-overlay={overlay ? "true" : undefined}
 >
   <div
     class="mx-auto flex max-w-site items-center justify-between px-4 py-3 sm:px-6"
@@ -30,7 +40,11 @@ const currentPath = Astro.url.pathname;
         alt={brand.name}
         width="136"
         height="40"
-        class="h-9 w-auto"
+        class:list={[
+          "h-9 w-auto transition-[filter] duration-300",
+          overlay && "brightness-0 invert",
+        ]}
+        data-overlay-logo={overlay ? "" : undefined}
         decoding="async"
       />
     </a>
@@ -39,6 +53,7 @@ const currentPath = Astro.url.pathname;
     <nav
       class="hidden items-center gap-1 lg:flex"
       aria-label="Primary navigation"
+      data-overlay-nav={overlay ? "" : undefined}
     >
       {
         nav.filter((item) => !item.hidden).map(({ label, href }) => {
@@ -51,9 +66,13 @@ const currentPath = Astro.url.pathname;
               aria-current={isActive ? "page" : undefined}
               class:list={[
                 "rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-text-muted hover:text-text",
+                overlay
+                  ? isActive
+                    ? "bg-primary-fg/15 text-primary-fg"
+                    : "text-primary-fg/75 hover:text-primary-fg"
+                  : isActive
+                    ? "bg-primary/10 text-primary"
+                    : "text-text-muted hover:text-text",
               ]}
             >
               {label}
@@ -64,7 +83,10 @@ const currentPath = Astro.url.pathname;
     </nav>
 
     <!-- Desktop CTA + phone -->
-    <div class="hidden items-center gap-4 lg:flex">
+    <div
+      class="hidden items-center gap-4 lg:flex"
+      data-overlay-actions={overlay ? "" : undefined}
+    >
       {
         client.license && (
           <span class="rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-text-muted">
@@ -74,13 +96,18 @@ const currentPath = Astro.url.pathname;
       }
       <a
         href={`tel:${client.phoneForTel}`}
-        class="text-sm font-semibold text-text hover:text-primary transition-colors"
+        class:list={[
+          "text-sm font-semibold transition-colors",
+          overlay
+            ? "text-primary-fg/85 hover:text-primary-fg"
+            : "text-text hover:text-primary",
+        ]}
       >
         {client.phoneFormatted}
       </a>
       <a
         href="/kontakt"
-        class="inline-flex min-h-[44px] items-center rounded-md bg-accent px-5 py-2.5 text-sm font-bold text-accent-fg shadow-sm transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        class="inline-flex min-h-[44px] items-center bg-accent px-5 py-2.5 text-sm font-semibold tracking-wide text-accent-fg transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         Kontakt
       </a>
@@ -92,9 +119,15 @@ const currentPath = Astro.url.pathname;
       type="button"
       aria-expanded="false"
       aria-controls="mobile-menu"
-      class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md text-text-muted hover:bg-surface lg:hidden"
+      class:list={[
+        "inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md lg:hidden",
+        overlay
+          ? "text-primary-fg hover:bg-primary-fg/10"
+          : "text-text-muted hover:bg-surface",
+      ]}
+      data-overlay-toggle={overlay ? "" : undefined}
     >
-      <span class="sr-only">Toggle menu</span>
+      <span class="sr-only">Otwórz menu</span>
       <svg
         id="menu-icon-open"
         class="size-6"
@@ -177,7 +210,7 @@ const currentPath = Astro.url.pathname;
       </a>
       <a
         href="/kontakt"
-        class="flex min-h-[44px] items-center justify-center rounded-md bg-accent px-5 py-3 text-base font-bold text-accent-fg shadow-sm transition-opacity hover:opacity-90"
+        class="flex min-h-[44px] items-center justify-center bg-accent px-5 py-3 text-base font-semibold tracking-wide text-accent-fg transition-opacity hover:opacity-90"
       >
         Kontakt
       </a>
@@ -205,6 +238,8 @@ const currentPath = Astro.url.pathname;
     const menu = /** @type {HTMLElement} */ (menuEl);
     const iconOpen = /** @type {HTMLElement} */ (iconOpenEl);
     const iconClose = /** @type {HTMLElement} */ (iconCloseEl);
+    const isOverlay = header.dataset.headerOverlay === "true";
+    const logo = header.querySelector("[data-overlay-logo]");
 
     const activeClasses = ["bg-primary/10", "text-primary"];
     const inactiveDesktop = ["text-text-muted", "hover:text-text"];
@@ -216,12 +251,90 @@ const currentPath = Astro.url.pathname;
 
     const isDesktop = () => window.matchMedia("(min-width: 1024px)").matches;
 
+    const setOverlaySolid = (solid) => {
+      if (!isOverlay) return;
+
+      header.classList.toggle("border-border", solid);
+      header.classList.toggle("border-transparent", !solid);
+      header.classList.toggle("bg-background/95", solid);
+      header.classList.toggle("backdrop-blur-sm", solid);
+
+      if (logo) {
+        logo.classList.toggle("brightness-0", !solid);
+        logo.classList.toggle("invert", !solid);
+      }
+
+      const navLinks = header.querySelectorAll(
+        'nav[aria-label="Primary navigation"] a',
+      );
+      navLinks.forEach((link) => {
+        const isActive = link.getAttribute("aria-current") === "page";
+        link.classList.remove(
+          "bg-primary-fg/15",
+          "text-primary-fg",
+          "text-primary-fg/75",
+          "hover:text-primary-fg",
+          "bg-primary/10",
+          "text-primary",
+          "text-text-muted",
+          "hover:text-text",
+        );
+        if (solid) {
+          if (isActive) {
+            link.classList.add("bg-primary/10", "text-primary");
+          } else {
+            link.classList.add("text-text-muted", "hover:text-text");
+          }
+        } else if (isActive) {
+          link.classList.add("bg-primary-fg/15", "text-primary-fg");
+        } else {
+          link.classList.add("text-primary-fg/75", "hover:text-primary-fg");
+        }
+      });
+
+      const phone = header.querySelector("[data-overlay-actions] a[href^='tel:']");
+      if (phone) {
+        phone.classList.remove(
+          "text-primary-fg/85",
+          "hover:text-primary-fg",
+          "text-text",
+          "hover:text-primary",
+        );
+        if (solid) {
+          phone.classList.add("text-text", "hover:text-primary");
+        } else {
+          phone.classList.add("text-primary-fg/85", "hover:text-primary-fg");
+        }
+      }
+
+      btn.classList.remove(
+        "text-primary-fg",
+        "hover:bg-primary-fg/10",
+        "text-text-muted",
+        "hover:bg-surface",
+      );
+      if (solid) {
+        btn.classList.add("text-text-muted", "hover:bg-surface");
+      } else {
+        btn.classList.add("text-primary-fg", "hover:bg-primary-fg/10");
+      }
+    };
+
+    const syncOverlayFromScroll = () => {
+      if (!isOverlay) return;
+      const menuOpen = btn.getAttribute("aria-expanded") === "true";
+      setOverlaySolid(menuOpen || window.scrollY > 24);
+    };
+
     const setMenuOpen = (nextOpen) => {
       if (isDesktop()) nextOpen = false;
       btn.setAttribute("aria-expanded", String(nextOpen));
       menu.classList.toggle("hidden", !nextOpen);
       iconOpen.classList.toggle("hidden", nextOpen);
       iconClose.classList.toggle("hidden", !nextOpen);
+      if (isOverlay) {
+        setOverlaySolid(nextOpen || window.scrollY > 24);
+      }
     };
 
     const syncActiveLinks = () => {
@@ -235,10 +348,6 @@ const currentPath = Astro.url.pathname;
         const href = link.getAttribute("href") || "";
         const isActive =
           href === path || (href !== "/" && path.startsWith(href));
-        link.classList.toggle(activeClasses[0], isActive);
-        link.classList.toggle(activeClasses[1], isActive);
-        link.classList.toggle(inactiveDesktop[0], !isActive);
-        link.classList.toggle(inactiveDesktop[1], !isActive);
         if (isActive) link.setAttribute("aria-current", "page");
         else link.removeAttribute("aria-current");
       });
@@ -255,6 +364,17 @@ const currentPath = Astro.url.pathname;
         if (isActive) link.setAttribute("aria-current", "page");
         else link.removeAttribute("aria-current");
       });
+
+      if (isOverlay) syncOverlayFromScroll();
+      else {
+        desktopLinks.forEach((link) => {
+          const isActive = link.getAttribute("aria-current") === "page";
+          link.classList.toggle(activeClasses[0], isActive);
+          link.classList.toggle(activeClasses[1], isActive);
+          link.classList.toggle(inactiveDesktop[0], !isActive);
+          link.classList.toggle(inactiveDesktop[1], !isActive);
+        });
+      }
     };
 
     if (header.dataset.menuInit !== "true") {
@@ -281,10 +401,12 @@ const currentPath = Astro.url.pathname;
       });
 
       window.addEventListener("resize", () => setMenuOpen(false));
+      window.addEventListener("scroll", syncOverlayFromScroll, { passive: true });
     }
 
     setMenuOpen(false);
     syncActiveLinks();
+    syncOverlayFromScroll();
   };
 
   initHeaderMenu();

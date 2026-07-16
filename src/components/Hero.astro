@@ -1,20 +1,14 @@
 ---
 import { brand } from '../config/brand';
-import { client } from '../data/client';
 import { heroImage as localHeroImage } from '../config/images';
 
-// Fallback Unsplash URL used until a local image is added to
-// src/assets/images/hero/ and registered in src/config/images.ts
-const PLACEHOLDER = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80';
+const PLACEHOLDER = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&q=80';
 
 interface Props {
   heading?: string;
   description?: string;
   ctaLabel?: string;
   ctaHref?: string;
-  secondaryLabel?: string;
-  secondaryHref?: string;
-  secondaryHidden?: boolean;
   imageSrc?: string;
   imageGallery?: string[];
   imageAlt?: string;
@@ -23,14 +17,11 @@ interface Props {
 const {
   heading = brand.tagline,
   description = brand.description,
-  ctaLabel = 'Zobacz Inwestycje',
+  ctaLabel = 'Zobacz inwestycje',
   ctaHref = '/inwestycje',
-  secondaryLabel = 'O nas',
-  secondaryHref = '/o-nas',
-  secondaryHidden = true,
   imageSrc,
   imageGallery = [],
-  imageAlt = 'Nowoczesne budynki mieszkalne',
+  imageAlt = 'Osiedle mieszkaniowe Evenement',
 } = Astro.props;
 
 const fallbackImage =
@@ -44,91 +35,116 @@ const galleryImages =
     : [imageSrc ?? fallbackImage];
 ---
 
-<section class="relative overflow-hidden bg-background py-12 sm:py-16 md:py-20 lg:py-24">
-  <div class="mx-auto grid max-w-site grid-cols-1 items-center gap-8 pl-4 sm:pl-6 lg:grid-cols-[1fr_1.3fr] lg:gap-12">
+<section
+  class="relative isolate min-h-[100svh] overflow-hidden bg-dark text-primary-fg"
+  data-hero-gallery-root
+  aria-label="Wprowadzenie"
+>
+  <div class="absolute inset-0" data-hero-gallery>
+    <div class="embla h-full overflow-hidden" data-hero-gallery-viewport>
+      <div class="embla__container flex h-full">
+        {galleryImages.map((src, index) => (
+          <div class="embla__slide relative min-w-0 flex-[0_0_100%] overflow-hidden">
+            <img
+              src={src}
+              alt={index === 0 ? imageAlt : ''}
+              aria-hidden={index === 0 ? undefined : 'true'}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              fetchpriority={index === 0 ? 'high' : undefined}
+              decoding="async"
+              class="hero-slide-image absolute inset-0 size-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
 
-    <!-- Copy -->
-    <div class="order-2 space-y-5 pr-4 sm:pr-6 lg:order-1 lg:space-y-6">
+  <div
+    class="pointer-events-none absolute inset-0 bg-gradient-to-r from-dark/88 via-dark/55 to-dark/25"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="pointer-events-none absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-dark/40"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative z-10 mx-auto flex min-h-[100svh] max-w-site flex-col justify-end px-4 pb-14 pt-28 sm:px-6 sm:pb-16 lg:pb-20">
+    <div class="hero-copy max-w-xl space-y-6 sm:space-y-7">
       <img
         src="/logo.png"
         alt={brand.name}
-        width="280"
-        height="83"
-        class="h-14 w-auto sm:h-16 md:h-[4.5rem]"
+        width="320"
+        height="95"
+        class="h-12 w-auto brightness-0 invert sm:h-14 md:h-16"
         decoding="async"
+        transition:name="hero-brand"
       />
 
       <h1
-        class="font-heading text-display font-bold uppercase leading-none tracking-tight text-text"
+        class="font-heading text-display font-semibold leading-[1.05] tracking-tight text-primary-fg"
         transition:name="hero-heading"
       >
         {heading}
       </h1>
 
-      <p class="max-w-lg text-lead text-text-muted leading-relaxed">
+      <p class="max-w-md text-lead leading-relaxed text-primary-fg/80">
         {description}
       </p>
 
-      <!-- CTA row -->
-      <div class="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:gap-4">
+      <div class="pt-1">
         <a
           href={ctaHref}
-          class="inline-flex min-h-[44px] items-center justify-center rounded-md bg-accent px-6 py-3 text-base font-bold text-accent-fg shadow-sm transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          class="inline-flex min-h-[48px] items-center justify-center bg-accent px-7 py-3 text-sm font-semibold tracking-wide text-accent-fg transition-[transform,opacity] duration-300 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.98]"
         >
           {ctaLabel}
         </a>
-        {!secondaryHidden && (
-          <a
-            href={secondaryHref}
-            class="inline-flex min-h-[44px] items-center justify-center rounded-md border-2 border-primary px-6 py-3 text-base font-bold text-primary transition-colors hover:bg-primary hover:text-primary-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-          >
-            {secondaryLabel}
-          </a>
-        )}
-      </div>
-
-      <a
-        href={`tel:${client.phoneForTel}`}
-        class="inline-flex items-center gap-2 pt-1 text-sm font-semibold text-text-muted transition-colors hover:text-primary"
-      >
-        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-        </svg>
-        Zadzwoń: {client.phoneFormatted}
-      </a>
-    </div>
-
-    <!-- Hero image — flush to content column right edge -->
-    <div
-      class="relative order-1 pr-4 sm:pr-6 lg:order-2 lg:pr-0"
-      transition:name="hero-image"
-      data-hero-gallery-root
-    >
-      <div class="embla aspect-[4/3.9] overflow-hidden rounded-md" data-hero-gallery>
-        <div class="embla__viewport h-full overflow-hidden" data-hero-gallery-viewport>
-          <div class="embla__container flex h-full touch-pan-y">
-            {galleryImages.map((src, index) => (
-              <div class="embla__slide min-w-0 flex-[0_0_100%]">
-                <img
-                  src={src}
-                  alt={imageAlt}
-                  loading={index === 0 ? 'eager' : 'lazy'}
-                  decoding="async"
-                  class="size-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </section>
 
+<style>
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes hero-ken {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.06);
+    }
+  }
+
+  .hero-copy {
+    animation: hero-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero-slide-image {
+    animation: hero-ken 18s ease-out forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-copy,
+    .hero-slide-image {
+      animation: none;
+    }
+  }
+</style>
+
 <script>
   import EmblaCarousel from 'embla-carousel';
 
-  const AUTOPLAY_DELAY_MS = 4500;
+  const AUTOPLAY_DELAY_MS = 5500;
   const HERO_GALLERY_KEY = '__heroGalleryCleanup';
 
   const destroyHeroGallery = () => {
@@ -153,6 +169,7 @@ const galleryImages =
       skipSnaps: false,
       containScroll: false,
       watchDrag: true,
+      duration: 40,
     });
 
     let autoplayId = window.setInterval(() => {

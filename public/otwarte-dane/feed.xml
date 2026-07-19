@@ -77,6 +77,26 @@
       <hasResearchData>false</hasResearchData>
       <containsProtectedData>false</containsProtectedData>
     </resource>
+    <resource status="published">
+      <extIdent>res07a44d5aec81b7c87ccf3f4473a9fe2db</extIdent>
+      <url>https://evenement24.com/otwarte-dane/sloneczna-polana-iv/ceny-ofertowe-evenement-m-szmur-o-marek-szmur-o-sloneczna-polana-iv-2026-07-19.csv</url>
+      <title>
+        <polish>Ceny ofertowe mieszkań dewelopera "EVENEMENT M. Szmurło" Marek Szmurło — inwestycja Słoneczna Polana IV etap (2026-07-19)</polish>
+      </title>
+      <description>
+        <polish>Dane dotyczące cen ofertowych mieszkań dewelopera "EVENEMENT M. Szmurło" Marek Szmurło w inwestycji Słoneczna Polana IV etap, udostępnione 2026-07-19 zgodnie z art. 19b. ust. 1 Ustawy z dnia 20 maja 2021 r. o ochronie praw nabywcy lokalu mieszkalnego lub domu jednorodzinnego oraz Deweloperskim Funduszu Gwarancyjnym (Dz. U. z 2024 r. poz. 695).</polish>
+      </description>
+      <availability>local</availability>
+      <dataDate>2026-07-19</dataDate>
+      <specialSigns>
+        <specialSign>X</specialSign>
+      </specialSigns>
+      <hasDynamicData>false</hasDynamicData>
+      <hasHighValueData>true</hasHighValueData>
+      <hasHighValueDataFromEuropeanCommissionList>false</hasHighValueDataFromEuropeanCommissionList>
+      <hasResearchData>false</hasResearchData>
+      <containsProtectedData>false</containsProtectedData>
+    </resource>
     </resources>
     <tags>
       <tag lang="pl">Deweloper</tag>

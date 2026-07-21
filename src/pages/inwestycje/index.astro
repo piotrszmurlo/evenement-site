@@ -7,6 +7,7 @@ import ImagePlaceholder from '../../components/ImagePlaceholder.astro';
 import { brand } from '../../config/brand';
 import { Image } from 'astro:assets';
 import { getInvestments } from '../../lib/content';
+import { investmentImageAlt } from '../../lib/investment-seo';
 
 const investments = await getInvestments();
 const activeInvestments = investments.filter((investment) => investment.salesStatus === 'active');
@@ -17,7 +18,7 @@ const restActive = activeInvestments.slice(1);
 
 <BaseLayout
   title="Inwestycje"
-  description={`Aktualne i zrealizowane inwestycje dewelopera ${brand.name} — kameralne osiedla w Krupnikach.`}
+  description={`Aktualne i zrealizowane inwestycje dewelopera ${brand.name} — kameralne osiedla w Krupnikach koło Białegostoku, w tym Słoneczna Polana.`}
 >
   <Header slot="header" overlay={Boolean(featured)} />
 
@@ -53,7 +54,7 @@ const restActive = activeInvestments.slice(1);
                     {investment.coverImage ? (
                       <Image
                         src={investment.coverImage}
-                        alt={investment.name}
+                        alt={investmentImageAlt(investment)}
                         width={400}
                         height={280}
                         class="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
@@ -124,7 +125,7 @@ const restActive = activeInvestments.slice(1);
                     {investment.coverImage ? (
                       <Image
                         src={investment.coverImage}
-                        alt={investment.name}
+                        alt={investmentImageAlt(investment)}
                         width={isLoneLast ? 1600 : 900}
                         height={isLoneLast ? 700 : 1000}
                         class="absolute inset-0 size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"

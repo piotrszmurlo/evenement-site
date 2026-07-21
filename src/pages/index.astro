@@ -9,6 +9,7 @@ import { brand } from '../config/brand';
 import { client } from '../data/client';
 import { Image } from 'astro:assets';
 import { getHomepageContent, getInvestments } from '../lib/content';
+import { investmentImageAlt } from '../lib/investment-seo';
 
 const homepageContent = await getHomepageContent();
 const investments = await getInvestments();
@@ -74,7 +75,14 @@ const localBusinessSchema = {
 >
   <Header slot="header" overlay />
 
-  <Hero imageGallery={heroGallery} imageAlt={featuredInvestment?.name ?? 'Osiedle mieszkaniowe Evenement'} />
+  <Hero
+    imageGallery={heroGallery}
+    imageAlt={
+      featuredInvestment
+        ? investmentImageAlt(featuredInvestment)
+        : 'Osiedle mieszkaniowe Evenement w Krupnikach koło Białegostoku'
+    }
+  />
 
   {featuredInvestment && (
     <section class="bg-background" aria-labelledby="featured-investment-heading">
@@ -85,7 +93,7 @@ const localBusinessSchema = {
         {featuredInvestment.coverImage ? (
           <Image
             src={featuredInvestment.coverImage}
-            alt={featuredInvestment.name}
+            alt={investmentImageAlt(featuredInvestment)}
             width={1920}
             height={1080}
             class="absolute inset-0 size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"

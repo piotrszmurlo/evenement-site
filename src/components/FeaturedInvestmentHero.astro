@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import ImagePlaceholder from './ImagePlaceholder.astro';
 import type { Investment } from '../lib/content';
+import { investmentImageAlt } from '../lib/investment-seo';
 
 interface Props {
   investment: Investment;
@@ -21,6 +22,7 @@ const {
 } = Astro.props;
 
 const HeadingTag = headingLevel;
+const imageAlt = investmentImageAlt(investment);
 ---
 
 <a
@@ -33,7 +35,7 @@ const HeadingTag = headingLevel;
   {investment.coverImage ? (
     <Image
       src={investment.coverImage}
-      alt={investment.name}
+      alt={imageAlt}
       width={1920}
       height={1080}
       class="absolute inset-0 size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"

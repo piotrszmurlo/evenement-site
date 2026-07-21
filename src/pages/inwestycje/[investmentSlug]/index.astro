@@ -5,8 +5,16 @@ import Footer from '../../../components/Footer.astro';
 import ImagePlaceholder from '../../../components/ImagePlaceholder.astro';
 import UnitAvailabilityTable from '../../../components/UnitAvailabilityTable.astro';
 import { Image } from 'astro:assets';
+import { brand } from '../../../config/brand';
 import { getInvestments } from '../../../lib/content';
 import { renderBasehubRichText } from '../../../lib/basehub-rich-text';
+import {
+  buildInvestmentJsonLd,
+  investmentImageAlt,
+  investmentLocationIntro,
+  investmentSeoDescription,
+  investmentSeoTitle,
+} from '../../../lib/investment-seo';
 
 export async function getStaticPaths() {
   const investments = await getInvestments();
@@ -22,9 +30,21 @@ const investmentDescriptionHtml = renderBasehubRichText(investment.description);
 const salesLabel = investment.salesStatus === 'active' ? 'W sprzedaży' : 'Zakończona';
 const mapEmbedUrl = investment.mapEmbedUrl;
 const mapLink = investment.mapLink;
+const siteURL = Astro.site ?? brand.url;
+const pageURL = new URL(Astro.url.pathname, siteURL).href;
+const pageTitle = investmentSeoTitle(investment);
+const pageDescription = investmentSeoDescription(investment);
+const coverAlt = investmentImageAlt(investment);
+const schema = buildInvestmentJsonLd(investment, pageURL, String(siteURL));
 ---
 
-<BaseLayout title={investment.name} description={investment.summary}>
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  image={investment.coverImage ?? brand.ogImage.path}
+  imageAlt={coverAlt}
+  schema={schema}
+>
   <Header slot="header" />
 
   <section class="bg-background pb-section pt-8 sm:pt-10">
@@ -86,7 +106,7 @@ const mapLink = investment.mapLink;
                         >
                           <Image
                             src={src}
-                            alt={`${investment.name} - zdjęcie ${index + 1}`}
+                            alt={investmentImageAlt(investment, `zdjęcie ${index + 1}`)}
                             width={1600}
                             height={1000}
                             class="aspect-[16/10] min-h-[min(58vh,560px)] w-full object-cover"
@@ -289,7 +309,7 @@ const mapLink = investment.mapLink;
             <div class="max-w-2xl">
               <h2 class="font-heading text-h2 font-semibold tracking-tight text-text">Lokalizacja</h2>
               <p class="mt-3 text-base leading-relaxed text-text-muted">
-                Okolica inwestycji — tereny zielone i spokojne sąsiedztwo.
+                {investmentLocationIntro(investment)}
               </p>
             </div>
             <div class="overflow-hidden border border-border bg-background">

@@ -15,11 +15,18 @@
 export const brand = {
   // ── Site Identity ──────────────────────────────────────────────────────────
   name: 'Evenement',
+  seoTitle: 'Evenement - Deweloper Białystok | Domy w Krupnikach',
   tagline: 'Wyjątkowe osiedla domów jednorodzinnych',
   description:
     'Kameralne inwestycje w Krupnikach — blisko lasu, ciszy i spokoju.',
   url: 'https://evenement24.com',
   locale: 'pl_PL',
+  ogImage: {
+    path: '/og-image.jpg',
+    width: 1200,
+    height: 630,
+    alt: 'Evenement — kameralne osiedla domów jednorodzinnych w Krupnikach',
+  },
 
   // ── Fonts ──────────────────────────────────────────────────────────────────
   // To swap fonts: change the `name` values here AND update astro.config.mjs

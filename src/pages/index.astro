@@ -18,27 +18,59 @@ const heroGallery =
   homepageContent.homepageGallery.length > 0
     ? homepageContent.homepageGallery
     : featuredInvestment?.gallery ?? [];
+
+const organizationId = `${client.domain}/#organization`;
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'RealEstateAgent',
+  '@id': organizationId,
+  name: client.name,
+  legalName: `${client.name} ${client.legalForm}`,
+  description: brand.description,
+  url: client.domain,
+  telephone: client.phoneForTel,
+  email: client.email,
+  image: new URL(brand.ogImage.path, client.domain).href,
+  logo: new URL('/logo.png', client.domain).href,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: client.address.lineOne,
+    addressLocality: client.address.city,
+    addressRegion: client.address.state,
+    postalCode: client.address.zip,
+    addressCountry: client.address.country,
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: client.address.geo.latitude,
+    longitude: client.address.geo.longitude,
+  },
+  areaServed: [
+    { '@type': 'Place', name: 'Krupniki' },
+    { '@type': 'City', name: 'Białystok' },
+    { '@type': 'AdministrativeArea', name: 'województwo podlaskie' },
+  ],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'sales',
+    telephone: client.phoneForTel,
+    email: client.email,
+    availableLanguage: ['pl', 'Polish'],
+    areaServed: 'PL',
+  },
+  ...(client.nip
+    ? {
+        taxID: client.nip,
+        vatID: `PL${client.nip}`,
+      }
+    : {}),
+};
 ---
 
 <BaseLayout
-  title={brand.name}
+  title={brand.seoTitle}
   description={brand.description}
-  schema={{
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    name: client.name,
-    telephone: client.phoneForTel,
-    email: client.email,
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: client.address.lineOne,
-      addressLocality: client.address.city,
-      addressRegion: client.address.state,
-      postalCode: client.address.zip,
-      addressCountry: client.address.country,
-    },
-    url: client.domain,
-  }}
+  schema={localBusinessSchema}
 >
   <Header slot="header" overlay />
 

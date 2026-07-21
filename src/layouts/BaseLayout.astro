@@ -20,14 +20,16 @@ interface Props {
 }
 
 const {
-  title = brand.name,
+  title = brand.seoTitle,
   description = brand.description,
-  image = '/og-image.png',
+  image = brand.ogImage.path,
   schema,
 } = Astro.props;
 
-const pageTitle = title === brand.name ? title : `${title} — ${brand.name}`;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? brand.url);
+const siteURL = Astro.site ?? brand.url;
+const pageTitle = title.includes(brand.name) ? title : `${title} — ${brand.name}`;
+const canonicalURL = new URL(Astro.url.pathname, siteURL);
+const ogImageURL = new URL(image, siteURL);
 ---
 
 <html lang={brand.locale.split('_')[0]} class="scroll-smooth">
@@ -42,17 +44,22 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? brand.url);
 
     <!-- Open Graph -->
     <meta property="og:type"        content="website" />
+    <meta property="og:site_name"   content={brand.name} />
     <meta property="og:url"         content={canonicalURL} />
     <meta property="og:title"       content={pageTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:image"       content={image} />
+    <meta property="og:image"       content={ogImageURL} />
+    <meta property="og:image:width" content={String(brand.ogImage.width)} />
+    <meta property="og:image:height" content={String(brand.ogImage.height)} />
+    <meta property="og:image:alt"   content={brand.ogImage.alt} />
     <meta property="og:locale"      content={brand.locale} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card"        content="summary_large_image" />
     <meta name="twitter:title"       content={pageTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image"       content={image} />
+    <meta name="twitter:image"       content={ogImageURL} />
+    <meta name="twitter:image:alt"   content={brand.ogImage.alt} />
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" sizes="any" />

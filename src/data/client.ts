@@ -30,6 +30,11 @@ export const client = {
     zip: '16-070',
     country: 'PL',
     mapLink: 'https://maps.google.com',
+    geo: {
+      // Village centroid (Nominatim) — street-level pin unavailable for Krokusowa 12
+      latitude: 53.1307903,
+      longitude: 23.0563949,
+    },
   },
   salesOffice: {
     lineOne: basehubContact.salesOfficeAddress.lineOne,

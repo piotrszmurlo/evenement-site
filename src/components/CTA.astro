@@ -1,6 +1,4 @@
 ---
-import { client } from '../data/client';
-
 interface Props {
   title?: string;
   description?: string;
@@ -9,9 +7,9 @@ interface Props {
 }
 
 const {
-  title = 'Porozmawiajmy o ofercie',
+  title = 'Zadzwoń do nas',
   description = 'Porozmawiajmy o Twoim wymarzonym domu — chętnie odpowiemy na pytania i umówimy spotkanie.',
-  buttonText = 'Napisz do nas',
+  buttonText = 'Zadzwoń',
   buttonHref = '/kontakt',
 } = Astro.props;
 ---
@@ -31,18 +29,12 @@ const {
         {description}
       </p>
 
-      <div class="mt-10 flex flex-col items-center gap-5 sm:flex-row sm:justify-center sm:gap-8">
+      <div class="mt-10">
         <a
           href={buttonHref}
           class="btn-accent"
         >
           {buttonText}
-        </a>
-        <a
-          href={`tel:${client.phoneForTel}`}
-          class="text-sm font-medium text-primary-fg/80 underline-offset-4 transition-colors hover:text-primary-fg hover:underline"
-        >
-          {client.phoneFormatted}
         </a>
       </div>
     </div>

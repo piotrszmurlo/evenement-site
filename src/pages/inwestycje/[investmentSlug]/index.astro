@@ -2,6 +2,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
+import CTA from '../../../components/CTA.astro';
 import ImagePlaceholder from '../../../components/ImagePlaceholder.astro';
 import UnitAvailabilityTable from '../../../components/UnitAvailabilityTable.astro';
 import { Image } from 'astro:assets';
@@ -576,5 +577,6 @@ const schema = buildInvestmentJsonLd(investment, pageURL, String(siteURL));
     document.addEventListener('astro:before-swap', destroyGallery);
   </script>
 
+  <CTA />
   <Footer slot="footer" />
 </BaseLayout>

@@ -41,6 +41,32 @@ export const client = {
     lineTwo: basehubContact.salesOfficeAddress.lineTwo ?? '',
     mapLink: 'https://maps.app.goo.gl/rbNMkR1xbUUue2Y69',
   },
+  /** Biuro sprzedaży prowadzone przez DoktorDom.pl */
+  salesPartner: {
+    name: 'DoktorDom.pl',
+    legalName: 'DoktorDom.pl sp. z o.o.',
+    personName: 'Piotr Ignaciuk-Gruszecki',
+    phone: '+48535731731',
+    phoneFormatted: '+48 535 731 731',
+    email: 'piotr@doktordom.pl',
+    website: 'https://www.doktordom.pl',
+    logoSrc: '/logo-doktordom.png',
+    logoAlt: 'DoktorDom.pl — partner mFinanse',
+    services: [
+      {
+        title: 'Kredyt hipoteczny',
+        note: 'Doświadczeni doradcy pomogą dobrać finansowanie i przeprowadzą Cię przez cały proces kredytowy. Partner mFinanse SA (Grupa mBank SA)',
+      },
+      {
+        title: 'Formalności przy zakupie',
+        note: 'Załatwiamy wszelkie formalności przy zakupie, w tym świadectwo energetyczne (uprawnienia nr 530)',
+      },
+      {
+        title: 'Licencjonowany pośrednik',
+        note: 'Licencja pośrednika w obrocie nieruchomościami nr 8296',
+      },
+    ],
+  },
   socials: {
     facebook: 'https://www.facebook.com/',
     instagram: 'https://www.instagram.com/',

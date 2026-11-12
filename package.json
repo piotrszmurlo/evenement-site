@@ -47,8 +47,10 @@
     "tailwindcss": "^4.2.1"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.12",
     "@playwright/test": "^1.58.2",
-    "concurrently": "^10.0.3"
+    "concurrently": "^10.0.3",
+    "typescript": "^6.0.3"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

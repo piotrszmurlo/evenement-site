@@ -1,13 +1,13 @@
 # Small Business Starter
 
-A fast, mobile-first website template for trade and service businesses — handymen, electricians, plumbers, landscapers, and more. Built with [Astro 6](https://astro.build) and [Tailwind CSS v4](https://tailwindcss.com). Ready to deploy on [Netlify](https://netlify.com) in minutes.
+A fast, mobile-first website template for trade and service businesses — handymen, electricians, plumbers, landscapers, and more. Built with [Astro 6](https://astro.build) and [Tailwind CSS v4](https://tailwindcss.com). Deployed on [Cloudflare Pages](https://pages.cloudflare.com).
 
 ---
 
 ## What's included
 
 - Full homepage with Hero, Trust Bar, Services, About, Reviews, Gallery, and CTA sections
-- Inner pages: About, Services, Contact (with Netlify Forms), Reviews, Blog
+- Inner pages: About, Services, Contact, Reviews, Blog
 - SEO-ready: `<title>`, meta descriptions, canonical URLs, Open Graph, JSON-LD structured data, sitemap, robots.txt
 - Mobile-first responsive layout with a hamburger drawer nav and sticky desktop header
 - Astro View Transitions for smooth page navigation
@@ -152,7 +152,7 @@ small-business-starter/
 │   │   ├── services.astro
 │   │   ├── reviews.astro
 │   │   ├── contact/
-│   │   │   ├── index.astro     # Contact form (Netlify Forms-ready)
+│   │   │   ├── index.astro     # Contact page
 │   │   │   └── success.astro   # Confirmation page after form submit
 │   │   └── blog/
 │   │       ├── index.astro     # Blog listing
@@ -161,7 +161,6 @@ small-business-starter/
 │       ├── global.css          # Base styles, dark mode, reduced motion
 │       └── theme.css           # Tailwind v4 @theme design tokens
 ├── astro.config.mjs            # Astro config (fonts, integrations, site URL)
-├── netlify.toml                # Netlify build + security headers config
 └── package.json
 ```
 
@@ -252,17 +251,17 @@ Set `draft: true` to write a post without publishing it.
 
 ---
 
-## Deploying to Netlify
+## Deploying to Cloudflare Pages
 
-1. Push the project to a GitHub repository
-2. In Netlify, click **Add new site → Import an existing project** and connect the repo
-3. Netlify will auto-detect the build settings from `netlify.toml` — no manual config needed
-4. Set your live domain in two places after deploying:
+1. Connect the GitHub repository in **Cloudflare → Workers & Pages → Create → Pages**
+2. Build command: `npm run build`, output directory: `dist`, env var `NODE_VERSION=22`, plus the BaseHub token
+3. Set your live domain in:
    - `src/data/client.ts` → `domain`
    - `src/config/brand.ts` → `url`
    - `astro.config.mjs` → `site`
+4. Create a deploy hook (**Settings → Builds → Deploy hooks**) and add it as a BaseHub webhook so publishing content triggers a rebuild
 
-The `netlify.toml` file already includes security headers (`X-Frame-Options`, `X-Content-Type-Options`, etc.) and immutable caching for hashed assets.
+`public/_headers` sets security headers (`X-Frame-Options`, `X-Content-Type-Options`, etc.) and immutable caching for hashed assets.
 
 ---
 
@@ -272,7 +271,7 @@ The `netlify.toml` file already includes security headers (`X-Frame-Options`, `X
 |---|---|---|
 | [Astro](https://astro.build) | 6 | Framework & static site generator |
 | [Tailwind CSS](https://tailwindcss.com) | 4 | Utility-first styling |
-| [Netlify](https://netlify.com) | — | Hosting, forms, CDN |
+| [Cloudflare Pages](https://pages.cloudflare.com) | — | Hosting, CDN |
 | [npm](https://www.npmjs.com/) | 10+ | Package manager |
 
 ---

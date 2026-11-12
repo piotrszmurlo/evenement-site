@@ -27,9 +27,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# ── Netlify CLI cache ─────────────────────────────────────────────────────────
-.netlify/
-
 # ── macOS ─────────────────────────────────────────────────────────────────────
 .DS_Store
 .AppleDouble

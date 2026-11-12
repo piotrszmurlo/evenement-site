@@ -15,6 +15,11 @@ test.describe('Homepage', () => {
   test('has meta description', async ({ page }) => {
     await page.goto('/');
     const meta = page.locator('meta[name="description"]');
-    await expect(meta).toHaveAttribute('content', /.+/);
+    const content = (await meta.getAttribute('content')) ?? '';
+    expect(content.length).toBeGreaterThanOrEqual(140);
+    expect(content.length).toBeLessThanOrEqual(160);
+    expect(content).toMatch(/Białegostoku|Białystok/);
+    expect(content).toMatch(/Krupnik/);
+    expect(content).toMatch(/domy/i);
   });
 });

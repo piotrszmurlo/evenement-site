@@ -28,7 +28,7 @@ const localBusinessSchema = {
   '@id': organizationId,
   name: client.name,
   legalName: `${client.name} ${client.legalForm}`,
-  description: brand.description,
+  description: brand.seoDescription,
   url: client.domain,
   telephone: client.phoneForTel,
   email: client.email,
@@ -80,7 +80,7 @@ const websiteSchema = {
 
 <BaseLayout
   title={brand.seoTitle}
-  description={brand.description}
+  description={brand.seoDescription}
   schema={[websiteSchema, localBusinessSchema]}
 >
   <Header slot="header" overlay />

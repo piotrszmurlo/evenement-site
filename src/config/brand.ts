@@ -19,6 +19,10 @@ export const brand = {
   tagline: 'Wyjątkowe osiedla domów jednorodzinnych',
   description:
     'Kameralne inwestycje w Krupnikach – blisko lasu, ciszy i spokoju.',
+  // Meta description for the homepage (aim for 140–160 chars). `description`
+  // above is the short visible hero tagline.
+  seoDescription:
+    'Domy na sprzedaż w Krupnikach koło Białegostoku. Evenement – deweloper kameralnych osiedli domów w zabudowie szeregowej, blisko lasu, ciszy i spokoju.',
   url: 'https://evenement24.com',
   locale: 'pl_PL',
   ogImage: {

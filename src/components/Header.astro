@@ -13,7 +13,6 @@ const nav = [
   { label: "Strona główna", href: "/" },
   { label: "Inwestycje", href: "/inwestycje" },
   { label: "Kontakt", href: "/kontakt" },
-  { label: "O nas", href: "/o-nas", hidden: true },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -56,7 +55,7 @@ const currentPath = Astro.url.pathname;
       data-overlay-nav={overlay ? "" : undefined}
     >
       {
-        nav.filter((item) => !item.hidden).map(({ label, href }) => {
+        nav.map(({ label, href }) => {
           const isActive =
             currentPath === href ||
             (href !== "/" && currentPath.startsWith(href));
@@ -166,7 +165,7 @@ const currentPath = Astro.url.pathname;
   >
     <nav class="flex flex-col gap-1" aria-label="Mobile navigation">
       {
-        nav.filter((item) => !item.hidden).map(({ label, href }) => {
+        nav.map(({ label, href }) => {
           const isActive =
             currentPath === href ||
             (href !== "/" && currentPath.startsWith(href));

@@ -18,7 +18,6 @@
  * ────────────────
  *   src/assets/images/
  *     hero/      ← one image used in the homepage Hero section
- *     about/     ← one image used in the About section and About page
  *     gallery/   ← all project photos (drop any number of files here)
  *
  * Until you add local files the components fall back to placeholder URLs
@@ -39,17 +38,6 @@ import type { ImageMetadata } from 'astro';
 //
 // import heroImage from '../assets/images/hero/hero.jpg';
 export const heroImage: ImageMetadata | undefined = undefined;
-
-// ── About ─────────────────────────────────────────────────────────────────────
-// Recommended: portrait or square image of your team/job site, at least 900 × 700 px
-//
-// To use your own:
-//   1. Drop your file into src/assets/images/about/
-//   2. Uncomment and update the line below
-//   3. Replace the aboutImage export at the bottom of this section
-//
-// import aboutImage from '../assets/images/about/team.jpg';
-export const aboutImage: ImageMetadata | undefined = undefined;
 
 // ── Gallery - auto-discovered ─────────────────────────────────────────────────
 // Drop any number of image files into src/assets/images/gallery/ and they will

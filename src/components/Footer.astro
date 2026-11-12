@@ -9,7 +9,6 @@ const navCols = [
     title: 'Nawigacja',
     links: [
       { label: 'Strona główna', href: '/' },
-      { label: 'O nas',         href: '/o-nas', hidden: true },
       { label: 'Inwestycje',    href: '/inwestycje' },
       { label: 'Kontakt',       href: '/kontakt' },
     ],
@@ -44,7 +43,7 @@ const navCols = [
         <div>
           <h3 class="topper text-primary-fg">{col.title}</h3>
           <ul class="mt-3 space-y-2">
-            {col.links.filter((link) => !link.hidden).map(({ label, href }) => (
+            {col.links.map(({ label, href }) => (
               <li>
                 <a href={href} class="text-sm transition-colors hover:text-primary-fg">
                   {label}

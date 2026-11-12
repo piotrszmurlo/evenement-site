@@ -88,7 +88,6 @@ Recommended fields:
 - `prospectusFile`
 - `salesStatus`: `active` or `ended`
 - `salesEndedAt`
-- `salesEndedNote`
 - `isReportedToGovernment`
 
 For v1, build the UI around one active investment. Do not hard-code this in the core model or export logic.

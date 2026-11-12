@@ -64,7 +64,6 @@ const GOVERNMENT_CONTENT_QUERY = {
         slug: true,
         salesStatus: true,
         salesEndedAt: true,
-        salesEndedNote: true,
         isReportedToGovernment: true,
         governmentDatasetExtIdent: true,
         governmentDatasetTitle: true,
@@ -548,10 +547,6 @@ function buildDatasetDescription(developerName, investment) {
 
   if (investment.salesStatus === 'ended' && investment.salesEndedAt) {
     return `${description} Sprzedaż inwestycji zakończyła się z dniem ${investment.salesEndedAt}.`
-  }
-
-  if (investment.salesStatus === 'ended' && normalizeOptionalString(investment.salesEndedNote)) {
-    return `${description} ${investment.salesEndedNote.trim()}`
   }
 
   return description

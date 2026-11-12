@@ -18,14 +18,14 @@ export const brand = {
   seoTitle: 'Evenement - Deweloper Białystok | Domy w Krupnikach',
   tagline: 'Wyjątkowe osiedla domów jednorodzinnych',
   description:
-    'Kameralne inwestycje w Krupnikach — blisko lasu, ciszy i spokoju.',
+    'Kameralne inwestycje w Krupnikach – blisko lasu, ciszy i spokoju.',
   url: 'https://evenement24.com',
   locale: 'pl_PL',
   ogImage: {
     path: '/og-image.jpg',
     width: 1200,
     height: 630,
-    alt: 'Evenement — kameralne osiedla domów jednorodzinnych w Krupnikach',
+    alt: 'Evenement – kameralne osiedla domów jednorodzinnych w Krupnikach',
   },
 
   // ── Fonts ──────────────────────────────────────────────────────────────────
@@ -41,16 +41,16 @@ export const brand = {
   // Neutrals stay warm-neutral gray (no green cast). Orange is CTA-only.
   // Mirror these hex values in src/styles/theme.css.
   colors: {
-    // Charcoal — brand emphasis (nav active, badges, secondary buttons)
+    // Charcoal - brand emphasis (nav active, badges, secondary buttons)
     primary:      '#292728',
     primaryLight: '#4F4C4D',
     primaryFg:    '#F7F7F4',
 
-    // Orange — CTAs and highlights
+    // Orange - CTAs and highlights
     accent:       '#F87216',
     accentFg:     '#ffffff',
 
-    // Stone — secondary accents (e.g. reserved status), not green
+    // Stone - secondary accents (e.g. reserved status), not green
     secondary:    '#5C5650',
     secondaryFg:  '#F7F7F4',
     secondaryLight: '#7A736C',

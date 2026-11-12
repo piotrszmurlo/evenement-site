@@ -1,6 +1,6 @@
 /*
  * ─────────────────────────────────────────────────────────────────────────────
- * THEME — edit src/config/brand.ts to change values, not this file.
+ * THEME - edit src/config/brand.ts to change values, not this file.
  *
  * The @theme block registers Tailwind v4 design tokens as CSS custom
  * properties. After changing brand.ts, update the hex codes below to match.

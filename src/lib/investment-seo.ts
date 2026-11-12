@@ -5,11 +5,11 @@ import { cmsImage } from './cms-image';
 const MENTIONS_BIALYSTOK = /bia[łl]ystok/i;
 const MENTIONS_KRUPNIKI = /krupnik/i;
 
-/** Document title / og:title — keeps H1 as clean CMS `name`. */
+/** Document title / og:title - keeps H1 as clean CMS `name`. */
 export function investmentSeoTitle(investment: Investment): string {
   const locationCue = locationSeoCue(investment);
   return locationCue
-    ? `${investment.name} — ${locationCue} | ${brand.name}`
+    ? `${investment.name} – ${locationCue} | ${brand.name}`
     : `${investment.name} | ${brand.name}`;
 }
 
@@ -25,7 +25,7 @@ export function investmentSeoDescription(investment: Investment): string {
   if (MENTIONS_BIALYSTOK.test(location)) {
     return summary
       ? `${ensureSentence(summary)} Lokalizacja: ${location}.`
-      : `${investment.name} — ${location}.`;
+      : `${investment.name} – ${location}.`;
   }
 
   const cue = metaLocationCue(investment);
@@ -36,7 +36,7 @@ export function investmentSeoDescription(investment: Investment): string {
 
 export function investmentImageAlt(investment: Investment, detail?: string): string {
   const cue = locationSeoCue(investment);
-  const base = cue ? `${investment.name} — ${cue.toLowerCase()}` : investment.name;
+  const base = cue ? `${investment.name} – ${cue.toLowerCase()}` : investment.name;
   return detail ? `${base}, ${detail}` : base;
 }
 
@@ -111,12 +111,12 @@ export function buildInvestmentJsonLd(
   return [residence, breadcrumb];
 }
 
-/** Visible map blurb — only when CMS location points at Krupniki. */
+/** Visible map blurb - only when CMS location points at Krupniki. */
 export function investmentLocationIntro(investment: Investment): string {
   if (MENTIONS_KRUPNIKI.test(investment.locationAddress)) {
-    return `${investment.name} w Krupnikach koło Białegostoku — tereny zielone i spokojne sąsiedztwo.`;
+    return `${investment.name} w Krupnikach koło Białegostoku – tereny zielone i spokojne sąsiedztwo.`;
   }
-  return 'Okolica inwestycji — tereny zielone i spokojne sąsiedztwo.';
+  return 'Okolica inwestycji – tereny zielone i spokojne sąsiedztwo.';
 }
 
 function locationSeoCue(investment: Investment): string | null {

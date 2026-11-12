@@ -288,7 +288,7 @@ const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
           content: [
             {
               type: 'text',
-              text: 'Zaczynaliśmy jako niewielka firma rodzinna, a dziś jesteśmy zaufanym deweloperem realizującym nowoczesne inwestycje mieszkaniowe. Od ponad 15 lat tworzymy przemyślane nieruchomości z dbałością o każdy detal — z myślą o kolejnych pokoleniach.',
+              text: 'Zaczynaliśmy jako niewielka firma rodzinna, a dziś jesteśmy zaufanym deweloperem realizującym nowoczesne inwestycje mieszkaniowe. Od ponad 15 lat tworzymy przemyślane nieruchomości z dbałością o każdy detal – z myślą o kolejnych pokoleniach.',
             },
           ],
         },

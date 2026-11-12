@@ -10,7 +10,7 @@
  * ──────────────────────────
  * 1. Drop your image file into the correct folder under src/assets/images/
  * 2. Uncomment the matching import below and update the filename
- * 3. Export it — the component picks it up automatically
+ * 3. Export it - the component picks it up automatically
  *
  * Supported formats: .jpg  .jpeg  .png  .webp  .avif
  *
@@ -51,9 +51,9 @@ export const heroImage: ImageMetadata | undefined = undefined;
 // import aboutImage from '../assets/images/about/team.jpg';
 export const aboutImage: ImageMetadata | undefined = undefined;
 
-// ── Gallery — auto-discovered ─────────────────────────────────────────────────
+// ── Gallery - auto-discovered ─────────────────────────────────────────────────
 // Drop any number of image files into src/assets/images/gallery/ and they will
-// appear in the gallery automatically — no code changes needed.
+// appear in the gallery automatically - no code changes needed.
 //
 // The file name becomes the alt text:
 //   kitchen-remodel.jpg    → "Kitchen Remodel"
@@ -82,7 +82,7 @@ const discovered = Object.entries(
 }));
 
 // Unsplash placeholders used when the gallery folder is empty.
-// Replace by adding your own images — the placeholders are removed automatically.
+// Replace by adding your own images - the placeholders are removed automatically.
 const placeholders: GalleryImage[] = [
   { src: 'https://images.unsplash.com/photo-1772567732969-c1506edf80a0?w=600&q=80', alt: 'Completed kitchen renovation' },
   { src: 'https://images.unsplash.com/photo-1523413363574-c30aa1c2a516?w=600&q=80', alt: 'Bathroom remodel with modern fixtures' },

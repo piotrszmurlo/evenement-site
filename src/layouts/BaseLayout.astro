@@ -1,10 +1,10 @@
 ---
 /**
- * Base layout — wraps every page.
+ * Base layout - wraps every page.
  *
  * Astro 6 features used:
- *  • <Font />         — built-in font optimizer from astro.config.mjs fonts array
- *  • <ClientRouter /> — client-side navigation with CSS transition animations
+ *  • <Font />         - built-in font optimizer from astro.config.mjs fonts array
+ *  • <ClientRouter /> - client-side navigation with CSS transition animations
  */
 import { Font } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
@@ -34,7 +34,7 @@ const {
 } = Astro.props;
 
 const siteURL = Astro.site ?? brand.url;
-const pageTitle = title.includes(brand.name) ? title : `${title} — ${brand.name}`;
+const pageTitle = title.includes(brand.name) ? title : `${title} – ${brand.name}`;
 const canonicalURL = new URL(Astro.url.pathname, siteURL);
 const ogImageURL = new URL(image, siteURL);
 const schemaDocument = Array.isArray(schema)

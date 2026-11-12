@@ -31,7 +31,7 @@ export const client = {
     country: 'PL',
     mapLink: 'https://maps.google.com',
     geo: {
-      // Village centroid (Nominatim) — street-level pin unavailable for Krokusowa 12
+      // Village centroid (Nominatim) - street-level pin unavailable for Krokusowa 12
       latitude: 53.1307903,
       longitude: 23.0563949,
     },
@@ -51,7 +51,7 @@ export const client = {
     email: 'piotr@doktordom.pl',
     website: 'https://www.doktordom.pl',
     logoSrc: '/logo-doktordom.png',
-    logoAlt: 'DoktorDom.pl — partner mFinanse',
+    logoAlt: 'DoktorDom.pl – partner mFinanse',
     services: [
       {
         title: 'Kredyt hipoteczny',

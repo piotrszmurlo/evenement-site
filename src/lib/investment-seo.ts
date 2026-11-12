@@ -1,5 +1,6 @@
 import { brand } from '../config/brand';
 import type { Investment } from './content';
+import { cmsImage } from './cms-image';
 
 const MENTIONS_BIALYSTOK = /bia[łl]ystok/i;
 const MENTIONS_KRUPNIKI = /krupnik/i;
@@ -48,7 +49,9 @@ export function buildInvestmentJsonLd(
   const images = [
     investment.coverImage,
     ...investment.gallery.filter((url) => url !== investment.coverImage),
-  ].filter((url): url is string => Boolean(url));
+  ]
+    .filter((url): url is string => Boolean(url))
+    .map((url) => cmsImage(url, 1600, { format: 'jpeg', quality: 80 }));
 
   const inKrupniki = MENTIONS_KRUPNIKI.test(investment.locationAddress);
   const address: Record<string, unknown> = {

@@ -10,6 +10,7 @@ import { client } from '../data/client';
 import { Image } from 'astro:assets';
 import { getHomepageContent, getInvestments } from '../lib/content';
 import { investmentImageAlt } from '../lib/investment-seo';
+import { cmsImage } from '../lib/cms-image';
 
 const homepageContent = await getHomepageContent();
 const investments = await getInvestments();
@@ -92,7 +93,7 @@ const localBusinessSchema = {
       >
         {featuredInvestment.coverImage ? (
           <Image
-            src={featuredInvestment.coverImage}
+            src={cmsImage(featuredInvestment.coverImage, 1920)}
             alt={investmentImageAlt(featuredInvestment)}
             width={1920}
             height={1080}

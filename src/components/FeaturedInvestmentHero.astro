@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import ImagePlaceholder from './ImagePlaceholder.astro';
+import { cmsImage } from '../lib/cms-image';
 import type { Investment } from '../lib/content';
 import { investmentImageAlt } from '../lib/investment-seo';
 
@@ -34,7 +35,7 @@ const imageAlt = investmentImageAlt(investment);
 >
   {investment.coverImage ? (
     <Image
-      src={investment.coverImage}
+      src={cmsImage(investment.coverImage, 1920)}
       alt={imageAlt}
       width={1920}
       height={1080}

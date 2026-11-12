@@ -1,6 +1,7 @@
 ---
 import { brand } from '../config/brand';
 import { heroImage as localHeroImage } from '../config/images';
+import { cmsImage, cmsImageSrcset } from '../lib/cms-image';
 
 const PLACEHOLDER = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&q=80';
 
@@ -46,7 +47,9 @@ const galleryImages =
         {galleryImages.map((src, index) => (
           <div class="embla__slide relative min-w-0 flex-[0_0_100%] overflow-hidden">
             <img
-              src={src}
+              src={cmsImage(src, 1920)}
+              srcset={cmsImageSrcset(src, [768, 1280, 1920, 2560])}
+              sizes="100vw"
               alt={index === 0 ? imageAlt : ''}
               aria-hidden={index === 0 ? undefined : 'true'}
               loading={index === 0 ? 'eager' : 'lazy'}

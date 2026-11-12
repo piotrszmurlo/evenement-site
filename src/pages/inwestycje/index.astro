@@ -8,6 +8,7 @@ import { brand } from '../../config/brand';
 import { Image } from 'astro:assets';
 import { getInvestments } from '../../lib/content';
 import { investmentImageAlt } from '../../lib/investment-seo';
+import { cmsImage } from '../../lib/cms-image';
 
 const investments = await getInvestments();
 const activeInvestments = investments.filter((investment) => investment.salesStatus === 'active');
@@ -53,7 +54,7 @@ const restActive = activeInvestments.slice(1);
                   <div class="relative aspect-[4/3] overflow-hidden sm:aspect-auto sm:h-28">
                     {investment.coverImage ? (
                       <Image
-                        src={investment.coverImage}
+                        src={cmsImage(investment.coverImage, 800)}
                         alt={investmentImageAlt(investment)}
                         width={400}
                         height={280}
@@ -124,7 +125,7 @@ const restActive = activeInvestments.slice(1);
                   >
                     {investment.coverImage ? (
                       <Image
-                        src={investment.coverImage}
+                        src={cmsImage(investment.coverImage, isLoneLast ? 1920 : 1280)}
                         alt={investmentImageAlt(investment)}
                         width={isLoneLast ? 1600 : 900}
                         height={isLoneLast ? 700 : 1000}

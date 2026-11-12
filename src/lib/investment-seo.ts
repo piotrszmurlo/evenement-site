@@ -36,7 +36,7 @@ export function investmentSeoDescription(investment: Investment): string {
 
 export function investmentImageAlt(investment: Investment, detail?: string): string {
   const cue = locationSeoCue(investment);
-  const base = cue ? `${investment.name} – ${cue.toLowerCase()}` : investment.name;
+  const base = cue ? `${investment.name} – ${lowercaseFirst(cue)}` : investment.name;
   return detail ? `${base}, ${detail}` : base;
 }
 
@@ -141,4 +141,9 @@ function metaLocationCue(investment: Investment): string | null {
 
 function ensureSentence(text: string): string {
   return /[.!?…]$/.test(text) ? text : `${text}.`;
+}
+
+/** Lowercase only the leading word so place names keep their capitals. */
+function lowercaseFirst(text: string): string {
+  return text.charAt(0).toLowerCase() + text.slice(1);
 }

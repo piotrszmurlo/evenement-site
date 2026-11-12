@@ -83,26 +83,6 @@ export interface Scalars {
 } },
 }
 
-export interface AboutPageComponent {
-    _analyticsKey: Scalars['String']
-    _dashboardUrl: Scalars['String']
-    /** Array of search highlight information with field names and HTML markup */
-    _highlight: (SearchHighlight[] | null)
-    _id: Scalars['String']
-    _idPath: Scalars['String']
-    _slug: Scalars['String']
-    _slugPath: Scalars['String']
-    _sys: BlockDocumentSys
-    _title: Scalars['String']
-    storyContent: StoryContent
-    storyEyebrow: Scalars['String']
-    storyHeading: Scalars['String']
-    storyImage: (BlockImage | null)
-    __typename: 'AboutPageComponent'
-}
-
-export type AboutPageComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'storyContent__ASC' | 'storyContent__DESC' | 'storyEyebrow__ASC' | 'storyEyebrow__DESC' | 'storyHeading__ASC' | 'storyHeading__DESC' | 'storyImage__ASC' | 'storyImage__DESC'
-
 export type AnalyticsKeyScope = 'query' | 'send'
 
 export interface BaseRichTextJson {
@@ -142,7 +122,7 @@ export interface BlockColor {
     __typename: 'BlockColor'
 }
 
-export type BlockDocument = (AboutPageComponent | CloudflareWebhook | Content | DeveloperComponent | Gallery | Gallery_1 | InvestmentAddressComponent | Investments | PriceHistory | RegisteredAddressComponent | SalesOfficeAddressComponent | StronaRaportInwestycjaComponent | StronaRaportLokalLubDomComponent | StronaRaportWpisHistoriiCenyComponent | StronaZdjCieWGaleriiInwestycjiComponent | StronaZdjCieWGaleriiLokaluLubDomuComponent | Units | _AgentStart | aboutPageComponent_AsList | developerComponent_AsList | investmentAddressComponent_AsList | registeredAddressComponent_AsList | salesOfficeAddressComponent_AsList | stronaRaportInwestycjaComponent_AsList | stronaRaportLokalLubDomComponent_AsList | stronaRaportWpisHistoriiCenyComponent_AsList | stronaZdjCieWGaleriiInwestycjiComponent_AsList | stronaZdjCieWGaleriiLokaluLubDomuComponent_AsList) & { __isUnion?: true }
+export type BlockDocument = (CloudflareWebhook | Content | DeveloperComponent | Gallery | Gallery_1 | InvestmentAddressComponent | Investments | PriceHistory | RegisteredAddressComponent | SalesOfficeAddressComponent | StronaRaportInwestycjaComponent | StronaRaportLokalLubDomComponent | StronaRaportWpisHistoriiCenyComponent | StronaZdjCieWGaleriiInwestycjiComponent | StronaZdjCieWGaleriiLokaluLubDomuComponent | Units | _AgentStart | developerComponent_AsList | investmentAddressComponent_AsList | registeredAddressComponent_AsList | salesOfficeAddressComponent_AsList | stronaRaportInwestycjaComponent_AsList | stronaRaportLokalLubDomComponent_AsList | stronaRaportWpisHistoriiCenyComponent_AsList | stronaZdjCieWGaleriiInwestycjiComponent_AsList | stronaZdjCieWGaleriiLokaluLubDomuComponent_AsList) & { __isUnion?: true }
 
 export interface BlockDocumentSys {
     apiNamePath: Scalars['String']
@@ -201,7 +181,7 @@ export interface BlockImage {
     __typename: 'BlockImage'
 }
 
-export type BlockList = (Gallery | Gallery_1 | Investments | PriceHistory | Units | aboutPageComponent_AsList | developerComponent_AsList | investmentAddressComponent_AsList | registeredAddressComponent_AsList | salesOfficeAddressComponent_AsList | stronaRaportInwestycjaComponent_AsList | stronaRaportLokalLubDomComponent_AsList | stronaRaportWpisHistoriiCenyComponent_AsList | stronaZdjCieWGaleriiInwestycjiComponent_AsList | stronaZdjCieWGaleriiLokaluLubDomuComponent_AsList) & { __isUnion?: true }
+export type BlockList = (Gallery | Gallery_1 | Investments | PriceHistory | Units | developerComponent_AsList | investmentAddressComponent_AsList | registeredAddressComponent_AsList | salesOfficeAddressComponent_AsList | stronaRaportInwestycjaComponent_AsList | stronaRaportLokalLubDomComponent_AsList | stronaRaportWpisHistoriiCenyComponent_AsList | stronaZdjCieWGaleriiInwestycjiComponent_AsList | stronaZdjCieWGaleriiLokaluLubDomuComponent_AsList) & { __isUnion?: true }
 
 export interface BlockOgImage {
     height: Scalars['Int']
@@ -212,7 +192,7 @@ export interface BlockOgImage {
 
 
 /** Rich text block */
-export type BlockRichText = (Description | StoryContent) & { __isUnion?: true }
+export type BlockRichText = (Description) & { __isUnion?: true }
 
 export interface BlockVideo {
     aspectRatio: Scalars['String']
@@ -250,7 +230,6 @@ export interface Content {
     _slugPath: Scalars['String']
     _sys: BlockDocumentSys
     _title: Scalars['String']
-    aboutPage: AboutPageComponent
     developer: DeveloperComponent
     homepageImage1: (BlockImage | null)
     homepageImage2: (BlockImage | null)
@@ -509,7 +488,7 @@ export interface RepoSys {
     __typename: 'RepoSys'
 }
 
-export type RichTextJson = (BaseRichTextJson | DescriptionRichText | StoryContentRichText) & { __isUnion?: true }
+export type RichTextJson = (BaseRichTextJson | DescriptionRichText) & { __isUnion?: true }
 
 export interface SalesOfficeAddressComponent {
     _analyticsKey: Scalars['String']
@@ -543,21 +522,6 @@ export interface SearchHighlight {
     __typename: 'SearchHighlight'
 }
 
-export interface StoryContent {
-    html: Scalars['String']
-    json: StoryContentRichText
-    markdown: Scalars['String']
-    plainText: Scalars['String']
-    readingTime: Scalars['Int']
-    __typename: 'StoryContent'
-}
-
-export interface StoryContentRichText {
-    content: Scalars['BSHBRichTextContentSchema']
-    toc: Scalars['BSHBRichTextTOCSchema']
-    __typename: 'StoryContentRichText'
-}
-
 export interface StronaRaportInwestycjaComponent {
     _analyticsKey: Scalars['String']
     _dashboardUrl: Scalars['String']
@@ -583,7 +547,6 @@ export interface StronaRaportInwestycjaComponent {
     prospectusFile: (BlockFile | null)
     /** ISO 8601 date string. */
     salesEndedAt: (Scalars['String'] | null)
-    salesEndedNote: (Scalars['String'] | null)
     salesStatus: Scalars['BSHBSelect__320691785']
     slug: Scalars['String']
     summary: Scalars['String']
@@ -591,7 +554,7 @@ export interface StronaRaportInwestycjaComponent {
     __typename: 'StronaRaportInwestycjaComponent'
 }
 
-export type StronaRaportInwestycjaComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'description__ASC' | 'description__DESC' | 'gallery__ASC' | 'gallery__DESC' | 'governmentDatasetDescription__ASC' | 'governmentDatasetDescription__DESC' | 'governmentDatasetExtIdent__ASC' | 'governmentDatasetExtIdent__DESC' | 'governmentDatasetTitle__ASC' | 'governmentDatasetTitle__DESC' | 'investmentAddress__ASC' | 'investmentAddress__DESC' | 'isReportedToGovernment__ASC' | 'isReportedToGovernment__DESC' | 'locationAddress__ASC' | 'locationAddress__DESC' | 'mapEmbedUrl__ASC' | 'mapEmbedUrl__DESC' | 'mapLink__ASC' | 'mapLink__DESC' | 'name__ASC' | 'name__DESC' | 'prospectusFile__ASC' | 'prospectusFile__DESC' | 'salesEndedAt__ASC' | 'salesEndedAt__DESC' | 'salesEndedNote__ASC' | 'salesEndedNote__DESC' | 'salesStatus__ASC' | 'salesStatus__DESC' | 'slug__ASC' | 'slug__DESC' | 'summary__ASC' | 'summary__DESC' | 'units__ASC' | 'units__DESC'
+export type StronaRaportInwestycjaComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__DESC' | '_sys_hash__ASC' | '_sys_hash__DESC' | '_sys_id__ASC' | '_sys_id__DESC' | '_sys_lastModifiedAt__ASC' | '_sys_lastModifiedAt__DESC' | '_sys_slug__ASC' | '_sys_slug__DESC' | '_sys_title__ASC' | '_sys_title__DESC' | 'description__ASC' | 'description__DESC' | 'gallery__ASC' | 'gallery__DESC' | 'governmentDatasetDescription__ASC' | 'governmentDatasetDescription__DESC' | 'governmentDatasetExtIdent__ASC' | 'governmentDatasetExtIdent__DESC' | 'governmentDatasetTitle__ASC' | 'governmentDatasetTitle__DESC' | 'investmentAddress__ASC' | 'investmentAddress__DESC' | 'isReportedToGovernment__ASC' | 'isReportedToGovernment__DESC' | 'locationAddress__ASC' | 'locationAddress__DESC' | 'mapEmbedUrl__ASC' | 'mapEmbedUrl__DESC' | 'mapLink__ASC' | 'mapLink__DESC' | 'name__ASC' | 'name__DESC' | 'prospectusFile__ASC' | 'prospectusFile__DESC' | 'salesEndedAt__ASC' | 'salesEndedAt__DESC' | 'salesStatus__ASC' | 'salesStatus__DESC' | 'slug__ASC' | 'slug__DESC' | 'summary__ASC' | 'summary__DESC' | 'units__ASC' | 'units__DESC'
 
 export interface StronaRaportLokalLubDomComponent {
     _analyticsKey: Scalars['String']
@@ -828,7 +791,6 @@ export interface _agents {
 }
 
 export interface _components {
-    aboutPage: aboutPageComponent_AsList
     developer: developerComponent_AsList
     investmentAddress: investmentAddressComponent_AsList
     registeredAddress: registeredAddressComponent_AsList
@@ -839,25 +801,6 @@ export interface _components {
     stronaZdjCieWGaleriiInwestycji: stronaZdjCieWGaleriiInwestycjiComponent_AsList
     stronaZdjCieWGaleriiLokaluLubDomu: stronaZdjCieWGaleriiLokaluLubDomuComponent_AsList
     __typename: '_components'
-}
-
-export interface aboutPageComponent_AsList {
-    _analyticsKey: Scalars['String']
-    _dashboardUrl: Scalars['String']
-    _id: Scalars['String']
-    _idPath: Scalars['String']
-    _meta: ListMeta
-    /** The key used to search from the frontend. */
-    _searchKey: Scalars['String']
-    _slug: Scalars['String']
-    _slugPath: Scalars['String']
-    _sys: BlockDocumentSys
-    _title: Scalars['String']
-    /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item: (AboutPageComponent | null)
-    /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items: AboutPageComponent[]
-    __typename: 'aboutPageComponent_AsList'
 }
 
 export interface developerComponent_AsList {
@@ -1031,39 +974,6 @@ export interface stronaZdjCieWGaleriiLokaluLubDomuComponent_AsList {
     __typename: 'stronaZdjCieWGaleriiLokaluLubDomuComponent_AsList'
 }
 
-export interface AboutPageComponentGenqlSelection{
-    _analyticsKey?: { __args: {
-    /**
-     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
-     * 
-     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
-     */
-    scope?: (AnalyticsKeyScope | null)} } | boolean | number
-    _dashboardUrl?: boolean | number
-    /** Array of search highlight information with field names and HTML markup */
-    _highlight?: SearchHighlightGenqlSelection
-    _id?: boolean | number
-    _idPath?: boolean | number
-    _slug?: boolean | number
-    _slugPath?: boolean | number
-    _sys?: BlockDocumentSysGenqlSelection
-    _title?: boolean | number
-    storyContent?: StoryContentGenqlSelection
-    storyEyebrow?: boolean | number
-    storyHeading?: boolean | number
-    storyImage?: BlockImageGenqlSelection
-    __typename?: boolean | number
-    __fragmentOn?: "AboutPageComponent"
-}
-
-export interface AboutPageComponentFilterInput {AND?: (AboutPageComponentFilterInput | null),OR?: (AboutPageComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),storyEyebrow?: (StringFilter | null),storyHeading?: (StringFilter | null)}
-
-export interface AboutPageComponentSearchInput {
-/** Searchable fields for query */
-by?: (Scalars['String'][] | null),
-/** Search query */
-q?: (Scalars['String'] | null)}
-
 export interface BaseRichTextJsonGenqlSelection{
     blocks?: boolean | number
     content?: boolean | number
@@ -1122,7 +1032,6 @@ export interface BlockDocumentGenqlSelection{
     _slugPath?: boolean | number
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
-    on_AboutPageComponent?: AboutPageComponentGenqlSelection
     on_CloudflareWebhook?: CloudflareWebhookGenqlSelection
     on_Content?: ContentGenqlSelection
     on_DeveloperComponent?: DeveloperComponentGenqlSelection
@@ -1140,7 +1049,6 @@ export interface BlockDocumentGenqlSelection{
     on_StronaZdjCieWGaleriiLokaluLubDomuComponent?: StronaZdjCieWGaleriiLokaluLubDomuComponentGenqlSelection
     on_Units?: UnitsGenqlSelection
     on__AgentStart?: _AgentStartGenqlSelection
-    on_aboutPageComponent_AsList?: aboutPageComponent_AsListGenqlSelection
     on_developerComponent_AsList?: developerComponent_AsListGenqlSelection
     on_investmentAddressComponent_AsList?: investmentAddressComponent_AsListGenqlSelection
     on_registeredAddressComponent_AsList?: registeredAddressComponent_AsListGenqlSelection
@@ -1237,7 +1145,6 @@ export interface BlockListGenqlSelection{
     on_Investments?: InvestmentsGenqlSelection
     on_PriceHistory?: PriceHistoryGenqlSelection
     on_Units?: UnitsGenqlSelection
-    on_aboutPageComponent_AsList?: aboutPageComponent_AsListGenqlSelection
     on_developerComponent_AsList?: developerComponent_AsListGenqlSelection
     on_investmentAddressComponent_AsList?: investmentAddressComponent_AsListGenqlSelection
     on_registeredAddressComponent_AsList?: registeredAddressComponent_AsListGenqlSelection
@@ -1274,7 +1181,6 @@ export interface BlockRichTextGenqlSelection{
     /** Words per minute, defaults to average 183wpm */
     wpm?: (Scalars['Int'] | null)} } | boolean | number
     on_Description?: DescriptionGenqlSelection
-    on_StoryContent?: StoryContentGenqlSelection
     __typename?: boolean | number
     __fragmentOn?: "BlockRichText"
 }
@@ -1329,7 +1235,6 @@ export interface ContentGenqlSelection{
     _slugPath?: boolean | number
     _sys?: BlockDocumentSysGenqlSelection
     _title?: boolean | number
-    aboutPage?: AboutPageComponentGenqlSelection
     developer?: DeveloperComponentGenqlSelection
     homepageImage1?: BlockImageGenqlSelection
     homepageImage2?: BlockImageGenqlSelection
@@ -1754,7 +1659,6 @@ export interface RichTextJsonGenqlSelection{
     toc?: boolean | number
     on_BaseRichTextJson?: BaseRichTextJsonGenqlSelection
     on_DescriptionRichText?: DescriptionRichTextGenqlSelection
-    on_StoryContentRichText?: StoryContentRichTextGenqlSelection
     __typename?: boolean | number
     __fragmentOn?: "RichTextJson"
 }
@@ -1807,29 +1711,6 @@ export interface SearchHighlightGenqlSelection{
 
 export interface SelectFilter {excludes?: (Scalars['String'] | null),excludesAll?: (Scalars['String'][] | null),includes?: (Scalars['String'] | null),includesAll?: (Scalars['String'][] | null),includesAny?: (Scalars['String'][] | null),isEmpty?: (Scalars['Boolean'] | null)}
 
-export interface StoryContentGenqlSelection{
-    html?: { __args: {
-    /** It automatically generates a unique id for each heading present in the HTML. Enabled by default. */
-    slugs?: (Scalars['Boolean'] | null), 
-    /** Inserts a table of contents at the beginning of the HTML. */
-    toc?: (Scalars['Boolean'] | null)} } | boolean | number
-    json?: StoryContentRichTextGenqlSelection
-    markdown?: boolean | number
-    plainText?: boolean | number
-    readingTime?: { __args: {
-    /** Words per minute, defaults to average 183wpm */
-    wpm?: (Scalars['Int'] | null)} } | boolean | number
-    __typename?: boolean | number
-    __fragmentOn?: "StoryContent"
-}
-
-export interface StoryContentRichTextGenqlSelection{
-    content?: boolean | number
-    toc?: boolean | number
-    __typename?: boolean | number
-    __fragmentOn?: "StoryContentRichText"
-}
-
 export interface StringFilter {contains?: (Scalars['String'] | null),endsWith?: (Scalars['String'] | null),eq?: (Scalars['String'] | null),in?: (Scalars['String'][] | null),isNull?: (Scalars['Boolean'] | null),matches?: (StringMatchesFilter | null),notEq?: (Scalars['String'] | null),notIn?: (Scalars['String'][] | null),startsWith?: (Scalars['String'] | null)}
 
 export interface StringMatchesFilter {caseSensitive?: (Scalars['Boolean'] | null),pattern: Scalars['String']}
@@ -1875,7 +1756,6 @@ export interface StronaRaportInwestycjaComponentGenqlSelection{
     prospectusFile?: BlockFileGenqlSelection
     /** ISO 8601 date string. */
     salesEndedAt?: boolean | number
-    salesEndedNote?: boolean | number
     salesStatus?: boolean | number
     slug?: boolean | number
     summary?: boolean | number
@@ -1894,7 +1774,7 @@ export interface StronaRaportInwestycjaComponentGenqlSelection{
     __fragmentOn?: "StronaRaportInwestycjaComponent"
 }
 
-export interface StronaRaportInwestycjaComponentFilterInput {AND?: (StronaRaportInwestycjaComponentFilterInput | null),OR?: (StronaRaportInwestycjaComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),gallery?: (ListFilter | null),governmentDatasetDescription?: (StringFilter | null),governmentDatasetExtIdent?: (StringFilter | null),governmentDatasetTitle?: (StringFilter | null),investmentAddress?: (StronaRaportInwestycjaComponentFilterInput__investmentAddress | null),isReportedToGovernment?: (Scalars['Boolean'] | null),locationAddress?: (StringFilter | null),mapEmbedUrl?: (StringFilter | null),mapLink?: (StringFilter | null),name?: (StringFilter | null),salesEndedAt?: (DateFilter | null),salesEndedNote?: (StringFilter | null),salesStatus?: (SelectFilter | null),slug?: (StringFilter | null),summary?: (StringFilter | null),units?: (ListFilter | null)}
+export interface StronaRaportInwestycjaComponentFilterInput {AND?: (StronaRaportInwestycjaComponentFilterInput | null),OR?: (StronaRaportInwestycjaComponentFilterInput | null),_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),gallery?: (ListFilter | null),governmentDatasetDescription?: (StringFilter | null),governmentDatasetExtIdent?: (StringFilter | null),governmentDatasetTitle?: (StringFilter | null),investmentAddress?: (StronaRaportInwestycjaComponentFilterInput__investmentAddress | null),isReportedToGovernment?: (Scalars['Boolean'] | null),locationAddress?: (StringFilter | null),mapEmbedUrl?: (StringFilter | null),mapLink?: (StringFilter | null),name?: (StringFilter | null),salesEndedAt?: (DateFilter | null),salesStatus?: (SelectFilter | null),slug?: (StringFilter | null),summary?: (StringFilter | null),units?: (ListFilter | null)}
 
 export interface StronaRaportInwestycjaComponentFilterInput__investmentAddress {_id?: (StringFilter | null),_slug?: (StringFilter | null),_sys_apiNamePath?: (StringFilter | null),_sys_createdAt?: (DateFilter | null),_sys_hash?: (StringFilter | null),_sys_id?: (StringFilter | null),_sys_idPath?: (StringFilter | null),_sys_lastModifiedAt?: (DateFilter | null),_sys_slug?: (StringFilter | null),_sys_slugPath?: (StringFilter | null),_sys_title?: (StringFilter | null),_title?: (StringFilter | null),buildingNumber?: (StringFilter | null),city?: (StringFilter | null),county?: (StringFilter | null),municipality?: (StringFilter | null),postalCode?: (StringFilter | null),street?: (StringFilter | null),unitNumber?: (StringFilter | null),voivodeship?: (StringFilter | null)}
 
@@ -2230,17 +2110,6 @@ export interface _agentsGenqlSelection{
 }
 
 export interface _componentsGenqlSelection{
-    aboutPage?: (aboutPageComponent_AsListGenqlSelection & { __args?: {
-    /** Filter by a field. */
-    filter?: (AboutPageComponentFilterInput | null), 
-    /** Limit the number of items returned. Defaults to 500. */
-    first?: (Scalars['Int'] | null), 
-    /** Order by a field. */
-    orderBy?: (AboutPageComponentOrderByEnum | null), 
-    /** Search configuration */
-    search?: (AboutPageComponentSearchInput | null), 
-    /** Skip the first n items. */
-    skip?: (Scalars['Int'] | null)} })
     developer?: (developerComponent_AsListGenqlSelection & { __args?: {
     /** Filter by a field. */
     filter?: (DeveloperComponentFilterInput | null), 
@@ -2342,32 +2211,6 @@ export interface _componentsGenqlSelection{
     skip?: (Scalars['Int'] | null)} })
     __typename?: boolean | number
     __fragmentOn?: "_components"
-}
-
-export interface aboutPageComponent_AsListGenqlSelection{
-    _analyticsKey?: { __args: {
-    /**
-     * The scope of the analytics key. Use `send` for just ingesting data. Use `query` if you need to show an analytics data in your website.
-     * 
-     * Have in mind, if you expose your `query` analytics key in the frontend, you'll be exposing all of this block's analytics data to the public. This is generally safe, but it might not be in your case.
-     */
-    scope?: (AnalyticsKeyScope | null)} } | boolean | number
-    _dashboardUrl?: boolean | number
-    _id?: boolean | number
-    _idPath?: boolean | number
-    _meta?: ListMetaGenqlSelection
-    /** The key used to search from the frontend. */
-    _searchKey?: boolean | number
-    _slug?: boolean | number
-    _slugPath?: boolean | number
-    _sys?: BlockDocumentSysGenqlSelection
-    _title?: boolean | number
-    /** Returns the first item in the list, or null if the list is empty. Useful when you expect only one result. */
-    item?: AboutPageComponentGenqlSelection
-    /** Returns the list of items after filtering and paginating according to the arguments sent by the client. */
-    items?: AboutPageComponentGenqlSelection
-    __typename?: boolean | number
-    __fragmentOn?: "aboutPageComponent_AsList"
 }
 
 export interface developerComponent_AsListGenqlSelection{
@@ -2605,10 +2448,6 @@ export interface stronaZdjCieWGaleriiLokaluLubDomuComponent_AsListGenqlSelection
 }
 
 export interface FragmentsMap {
-  AboutPageComponent: {
-    root: AboutPageComponent,
-    selection: AboutPageComponentGenqlSelection,
-}
   BaseRichTextJson: {
     root: BaseRichTextJson,
     selection: BaseRichTextJsonGenqlSelection,
@@ -2737,14 +2576,6 @@ export interface FragmentsMap {
     root: SearchHighlight,
     selection: SearchHighlightGenqlSelection,
 }
-  StoryContent: {
-    root: StoryContent,
-    selection: StoryContentGenqlSelection,
-}
-  StoryContentRichText: {
-    root: StoryContentRichText,
-    selection: StoryContentRichTextGenqlSelection,
-}
   StronaRaportInwestycjaComponent: {
     root: StronaRaportInwestycjaComponent,
     selection: StronaRaportInwestycjaComponentGenqlSelection,
@@ -2812,10 +2643,6 @@ export interface FragmentsMap {
   _components: {
     root: _components,
     selection: _componentsGenqlSelection,
-}
-  aboutPageComponent_AsList: {
-    root: aboutPageComponent_AsList,
-    selection: aboutPageComponent_AsListGenqlSelection,
 }
   developerComponent_AsList: {
     root: developerComponent_AsList,

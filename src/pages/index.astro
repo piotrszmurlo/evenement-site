@@ -67,12 +67,21 @@ const localBusinessSchema = {
       }
     : {}),
 };
+
+const websiteSchema = {
+  '@type': 'WebSite',
+  '@id': `${client.domain}/#website`,
+  url: `${client.domain}/`,
+  name: brand.name,
+  inLanguage: 'pl-PL',
+  publisher: { '@id': organizationId },
+};
 ---
 
 <BaseLayout
   title={brand.seoTitle}
   description={brand.description}
-  schema={localBusinessSchema}
+  schema={[websiteSchema, localBusinessSchema]}
 >
   <Header slot="header" overlay />
 

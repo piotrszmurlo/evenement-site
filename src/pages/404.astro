@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Nie znaleziono strony"
+  description="Ta strona nie istnieje lub została przeniesiona."
+>
+  <meta slot="head" name="robots" content="noindex" />
+  <Header slot="header" />
+
+  <section class="bg-background py-section">
+    <div class="mx-auto max-w-site px-4 sm:px-6">
+      <div class="max-w-2xl">
+        <p class="topper text-accent">Błąd 404</p>
+        <h1 class="mt-3 font-heading text-h1 font-semibold tracking-tight text-text">
+          Nie znaleziono strony
+        </h1>
+        <p class="mt-5 text-lead leading-relaxed text-text-muted">
+          Ta strona nie istnieje lub została przeniesiona.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a
+            href="/inwestycje/"
+            class="inline-flex items-center rounded-md bg-accent px-5 py-3 font-semibold text-accent-fg transition-opacity hover:opacity-90"
+          >
+            Zobacz inwestycje
+          </a>
+          <a
+            href="/"
+            class="inline-flex items-center rounded-md border border-border px-5 py-3 font-semibold text-text transition-colors hover:bg-surface"
+          >
+            Strona główna
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>

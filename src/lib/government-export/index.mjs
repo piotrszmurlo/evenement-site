@@ -14,10 +14,8 @@ const ART_19B_CITATION =
   'art. 19b. ust. 1 Ustawy z dnia 20 maja 2021 r. o ochronie praw nabywcy lokalu mieszkalnego lub domu jednorodzinnego oraz Deweloperskim Funduszu Gwarancyjnym (Dz. U. z 2024 r. poz. 695)'
 const FEED_PATH = 'feed.xml'
 const FEED_MD5_PATH = 'feed.md5'
-const CSV_REFERENCE_PATH = path.resolve(
-  process.cwd(),
-  'goverment-docs/Wcorcowy_zakres_danych_dotyczących_cen_mieszkań.csv',
-)
+// Header row: field names A1–H4 from the annex to Dz.U. 2026 poz. 1489 (in force since 2026-11-11).
+const CSV_REFERENCE_PATH = path.resolve(process.cwd(), 'goverment-docs/struktura_danych_dz_u_2026_poz_1489.csv')
 const XSD_PATH = path.resolve(process.cwd(), 'goverment-docs/otwarte_dane_latest.xsd')
 const JAVA_XSD_VALIDATOR_PATH = path.resolve(process.cwd(), 'scripts/ValidateXmlAgainstXsd.java')
 const execFile = promisify(execFileCallback)
@@ -26,15 +24,7 @@ const GOVERNMENT_CONTENT_QUERY = {
   content: {
     developer: {
       name: true,
-      legalForm: true,
-      krsNumber: true,
-      ceidgNumber: true,
       nip: true,
-      regon: true,
-      phone: true,
-      email: true,
-      fax: true,
-      websiteUrl: true,
       additionalSalesLocations: true,
       buyerContactMethod: true,
       registeredAddress: {
@@ -68,9 +58,8 @@ const GOVERNMENT_CONTENT_QUERY = {
         governmentDatasetExtIdent: true,
         governmentDatasetTitle: true,
         governmentDatasetDescription: true,
-        prospectusFile: {
-          url: true,
-        },
+        longitude: true,
+        latitude: true,
         investmentAddress: {
           voivodeship: true,
           county: true,
@@ -109,16 +98,10 @@ const GOVERNMENT_CONTENT_QUERY = {
 }
 
 const CSV_COLUMN_KEYS = [
+  // A. Podmiot obowiązany
   'developerName',
-  'developerLegalForm',
-  'developerKrs',
-  'developerCeidg',
   'developerNip',
-  'developerRegon',
-  'developerPhone',
-  'developerEmail',
-  'developerFax',
-  'developerWebsite',
+  // B. Adres siedziby
   'registeredVoivodeship',
   'registeredCounty',
   'registeredMunicipality',
@@ -127,6 +110,7 @@ const CSV_COLUMN_KEYS = [
   'registeredBuildingNumber',
   'registeredUnitNumber',
   'registeredPostalCode',
+  // C. Adres lokalu sprzedaży
   'salesOfficeVoivodeship',
   'salesOfficeCounty',
   'salesOfficeMunicipality',
@@ -137,6 +121,7 @@ const CSV_COLUMN_KEYS = [
   'salesOfficePostalCode',
   'additionalSalesLocations',
   'buyerContactMethod',
+  // D. Lokalizacja przedsięwzięcia
   'investmentVoivodeship',
   'investmentCounty',
   'investmentMunicipality',
@@ -144,29 +129,31 @@ const CSV_COLUMN_KEYS = [
   'investmentStreet',
   'investmentBuildingNumber',
   'investmentPostalCode',
+  'investmentLongitude',
+  'investmentLatitude',
+  // E. Lokal mieszkalny albo dom jednorodzinny
   'propertyType',
-  'unitNumber',
+  'unitIdentifier',
   'pricePerM2',
   'pricePerM2ValidFrom',
-  'baseTotalPrice',
-  'baseTotalPriceValidFrom',
-  'totalPriceWithComponents',
-  'totalPriceWithComponentsValidFrom',
-  'propertyPartType',
-  'propertyPartNumber',
-  'propertyPartPrice',
-  'propertyPartPriceValidFrom',
+  'totalPrice',
+  'totalPriceValidFrom',
+  // F. Pomieszczenia przynależne
   'appurtenantRoomType',
-  'appurtenantRoomNumber',
+  'appurtenantRoomIdentifier',
   'appurtenantRoomPrice',
   'appurtenantRoomPriceValidFrom',
+  'appurtenantRoomUnitIdentifier',
+  // G. Prawa niezbędne
   'useRightsDescription',
   'useRightsPrice',
   'useRightsPriceValidFrom',
+  'useRightsUnitIdentifier',
+  // H. Inne świadczenia pieniężne
   'otherFeesDescription',
   'otherFeesPrice',
   'otherFeesPriceValidFrom',
-  'prospectusUrl',
+  'otherFeesUnitIdentifier',
 ]
 
 export async function loadGovernmentSourceFromBasehub(env = process.env) {
@@ -196,6 +183,11 @@ export async function generateGovernmentFeed(options = {}) {
 
   const normalized = normalizeGovernmentSource(source, { exportDate, baseUrl })
   const csvHeader = await readGovernmentCsvHeader()
+  if (csvHeader.length !== CSV_COLUMN_KEYS.length) {
+    throw new Error(
+      `CSV header has ${csvHeader.length} columns but the export defines ${CSV_COLUMN_KEYS.length}.`,
+    )
+  }
   const existingFeedXml =
     options.existingFeedXml ??
     (await readIfExists(path.join(options.outputDir ?? DEFAULT_OUTPUT_DIR, FEED_PATH)))
@@ -342,27 +334,18 @@ export function normalizeGovernmentSource(source, { exportDate, baseUrl }) {
 }
 
 function normalizeDeveloper(developer, baseUrl, errors) {
-  const websiteUrl = normalizeOptionalString(developer?.websiteUrl) ?? baseUrl
-
   validateRequiredString(errors, 'developer.name', developer?.name)
-  validateRequiredString(errors, 'developer.phone', developer?.phone)
-  validateRequiredString(errors, 'developer.email', developer?.email)
-  validateRequiredHttpsUrl(errors, 'developer.websiteUrl', websiteUrl)
+  const nip = normalizeNip(developer?.nip)
+  if (!/^\d{10}$/.test(nip)) {
+    errors.push('developer.nip must be 10 digits (A2, Dz.U. 2026 poz. 1489).')
+  }
   validateAddress(errors, 'developer.registeredAddress', developer?.registeredAddress)
   validateAddress(errors, 'developer.salesOfficeAddress', developer?.salesOfficeAddress)
 
   return {
     name: developer.name.trim(),
     slug: sanitizeSlug(developer.name),
-    legalForm: normalizeCsvCell(developer.legalForm),
-    krsNumber: normalizeCsvCell(developer.krsNumber),
-    ceidgNumber: normalizeCsvCell(developer.ceidgNumber),
-    nip: normalizeCsvCell(developer.nip),
-    regon: normalizeCsvCell(developer.regon),
-    phone: developer.phone.trim(),
-    email: developer.email.trim(),
-    fax: normalizeCsvCell(developer.fax),
-    websiteUrl,
+    nip,
     additionalSalesLocations: normalizeCsvCell(developer.additionalSalesLocations),
     buyerContactMethod: normalizeOptionalString(developer.buyerContactMethod) ?? DEFAULT_BUYER_CONTACT_METHOD,
     registeredAddress: normalizeAddress(developer.registeredAddress),
@@ -375,7 +358,7 @@ function normalizeInvestment(investment, investmentIndex, developer, exportDate,
   validateRequiredString(errors, `${label}.name`, investment?.name)
   validateRequiredString(errors, `${label}.slug`, investment?.slug)
   validateAddress(errors, `${label}.investmentAddress`, investment?.investmentAddress)
-  validateRequiredHttpsUrl(errors, `${label}.prospectusFile.url`, investment?.prospectusFile?.url)
+  const coordinates = normalizeCoordinates(investment, label, errors)
 
   const reportableUnits = (investment?.units?.items ?? []).filter(
     (unit) => unit?.governmentReportingEnabled === true,
@@ -387,7 +370,7 @@ function normalizeInvestment(investment, investmentIndex, developer, exportDate,
     validateRequiredString(errors, `${unitLabel}.slug`, unit?.slug)
     validatePositiveNumber(errors, `${unitLabel}.usableAreaM2`, unit?.usableAreaM2)
 
-    if (!['dom jednorodzinny', 'dom w zabudowie szeregowej', 'lokal mieszkalny'].includes(unit?.propertyType)) {
+    if (!Object.hasOwn(CSV_PROPERTY_TYPES, unit?.propertyType ?? '')) {
       errors.push(`${unitLabel}.propertyType is invalid.`)
     }
 
@@ -411,6 +394,7 @@ function normalizeInvestment(investment, investmentIndex, developer, exportDate,
       createOfferRow({
         developer,
         investment,
+        coordinates,
         unit,
         currentPrice,
       }),
@@ -470,70 +454,63 @@ function normalizePriceHistory(priceHistory, unitLabel, errors) {
     .sort((left, right) => left.validFrom.localeCompare(right.validFrom))
 }
 
-function createOfferRow({ developer, investment, unit, currentPrice }) {
+function createOfferRow({ developer, investment, coordinates, unit, currentPrice }) {
   const na = 'X'
-  const priceDate = currentPrice.validFrom
+  const priceDateTime = formatDateTime(currentPrice.validFrom)
+  const registered = developer.registeredAddress
+  const salesOffice = developer.salesOfficeAddress
+  const location = normalizeAddress(investment.investmentAddress)
 
   return {
     developerName: developer.name,
-    developerLegalForm: developer.legalForm,
-    developerKrs: developer.krsNumber,
-    developerCeidg: developer.ceidgNumber,
     developerNip: developer.nip,
-    developerRegon: developer.regon,
-    developerPhone: developer.phone,
-    developerEmail: developer.email,
-    developerFax: developer.fax,
-    developerWebsite: developer.websiteUrl,
-    registeredVoivodeship: developer.registeredAddress.voivodeship,
-    registeredCounty: developer.registeredAddress.county,
-    registeredMunicipality: developer.registeredAddress.municipality,
-    registeredCity: developer.registeredAddress.city,
-    registeredStreet: developer.registeredAddress.street,
-    registeredBuildingNumber: developer.registeredAddress.buildingNumber,
-    registeredUnitNumber: developer.registeredAddress.unitNumber,
-    registeredPostalCode: developer.registeredAddress.postalCode,
-    salesOfficeVoivodeship: developer.salesOfficeAddress.voivodeship,
-    salesOfficeCounty: developer.salesOfficeAddress.county,
-    salesOfficeMunicipality: developer.salesOfficeAddress.municipality,
-    salesOfficeCity: developer.salesOfficeAddress.city,
-    salesOfficeStreet: developer.salesOfficeAddress.street,
-    salesOfficeBuildingNumber: developer.salesOfficeAddress.buildingNumber,
-    salesOfficeUnitNumber: developer.salesOfficeAddress.unitNumber,
-    salesOfficePostalCode: developer.salesOfficeAddress.postalCode,
+    registeredVoivodeship: registered.voivodeship,
+    registeredCounty: registered.county,
+    registeredMunicipality: registered.municipality,
+    registeredCity: registered.city,
+    registeredStreet: registered.street,
+    registeredBuildingNumber: registered.buildingNumber,
+    registeredUnitNumber: registered.unitNumber,
+    registeredPostalCode: registered.postalCode,
+    salesOfficeVoivodeship: salesOffice.voivodeship,
+    salesOfficeCounty: salesOffice.county,
+    salesOfficeMunicipality: salesOffice.municipality,
+    salesOfficeCity: salesOffice.city,
+    salesOfficeStreet: salesOffice.street,
+    salesOfficeBuildingNumber: salesOffice.buildingNumber,
+    salesOfficeUnitNumber: salesOffice.unitNumber,
+    salesOfficePostalCode: salesOffice.postalCode,
     additionalSalesLocations: developer.additionalSalesLocations,
     buyerContactMethod: developer.buyerContactMethod,
-    investmentVoivodeship: investment.investmentAddress.voivodeship,
-    investmentCounty: investment.investmentAddress.county,
-    investmentMunicipality: investment.investmentAddress.municipality,
-    investmentCity: investment.investmentAddress.city,
-    investmentStreet: investment.investmentAddress.street,
-    investmentBuildingNumber: investment.investmentAddress.buildingNumber,
-    investmentPostalCode: investment.investmentAddress.postalCode,
-    propertyType: mapPropertyTypeForCsv(unit.propertyType),
-    unitNumber: unit.unitNumber,
-    pricePerM2: formatNumber(currentPrice.pricePerM2),
-    pricePerM2ValidFrom: priceDate,
-    baseTotalPrice: formatNumber(currentPrice.baseTotalPrice),
-    baseTotalPriceValidFrom: priceDate,
-    totalPriceWithComponents:
-      currentPrice.totalPriceWithComponents == null ? na : formatNumber(currentPrice.totalPriceWithComponents),
-    totalPriceWithComponentsValidFrom: currentPrice.totalPriceWithComponents == null ? na : priceDate,
-    propertyPartType: na,
-    propertyPartNumber: na,
-    propertyPartPrice: na,
-    propertyPartPriceValidFrom: na,
+    investmentVoivodeship: location.voivodeship,
+    investmentCounty: location.county,
+    investmentMunicipality: location.municipality,
+    investmentCity: location.city,
+    investmentStreet: location.street,
+    investmentBuildingNumber: location.buildingNumber,
+    investmentPostalCode: location.postalCode,
+    investmentLongitude: formatCoordinate(coordinates.longitude),
+    investmentLatitude: formatCoordinate(coordinates.latitude),
+    propertyType: CSV_PROPERTY_TYPES[unit.propertyType],
+    unitIdentifier: unit.unitNumber.trim(),
+    pricePerM2: formatAmount(currentPrice.pricePerM2),
+    pricePerM2ValidFrom: priceDateTime,
+    totalPrice: formatAmount(currentPrice.baseTotalPrice),
+    totalPriceValidFrom: priceDateTime,
+    // F–H are conditional; the CMS does not model separately priced appurtenant rooms, rights or other fees.
     appurtenantRoomType: na,
-    appurtenantRoomNumber: na,
+    appurtenantRoomIdentifier: na,
     appurtenantRoomPrice: na,
     appurtenantRoomPriceValidFrom: na,
+    appurtenantRoomUnitIdentifier: na,
     useRightsDescription: na,
     useRightsPrice: na,
     useRightsPriceValidFrom: na,
-    otherFeesDescription: normalizeCsvCell(unit.includedInPriceNotes),
+    useRightsUnitIdentifier: na,
+    otherFeesDescription: na,
     otherFeesPrice: na,
     otherFeesPriceValidFrom: na,
-    prospectusUrl: normalizeCsvCell(investment?.prospectusFile?.url),
+    otherFeesUnitIdentifier: na,
   }
 }
 
@@ -807,12 +784,6 @@ function validatePositiveNumber(errors, pathLabel, value) {
   }
 }
 
-function validateRequiredHttpsUrl(errors, pathLabel, value) {
-  if (typeof value !== 'string' || !value.trim().startsWith('https://')) {
-    errors.push(`${pathLabel} must be a valid https:// URL.`)
-  }
-}
-
 function normalizeOptionalString(value) {
   if (typeof value !== 'string') {
     return undefined
@@ -841,12 +812,55 @@ function normalizeCsvCell(value) {
   return trimmed.length > 0 ? trimmed : 'X'
 }
 
-function formatNumber(value) {
+// E1 allows only "lokal mieszkalny" or "dom jednorodzinny"; a terraced house is a dom jednorodzinny.
+const CSV_PROPERTY_TYPES = {
+  'lokal mieszkalny': 'lokal mieszkalny',
+  'dom jednorodzinny': 'dom jednorodzinny',
+  'dom w zabudowie szeregowej': 'dom jednorodzinny',
+}
+
+// Rough bounding box of Poland, to catch missing or swapped coordinates before they are published.
+const POLAND_BOUNDS = { minLatitude: 49, maxLatitude: 55, minLongitude: 14, maxLongitude: 24.2 }
+
+function normalizeCoordinates(investment, label, errors) {
+  const { latitude, longitude } = investment ?? {}
+  const isNumber = (value) => typeof value === 'number' && Number.isFinite(value)
+
+  if (!isNumber(latitude) || !isNumber(longitude)) {
+    errors.push(`${label}.latitude and ${label}.longitude are required (WGS-84, D8/D9 of Dz.U. 2026 poz. 1489).`)
+    return undefined
+  }
+
+  if (
+    latitude < POLAND_BOUNDS.minLatitude ||
+    latitude > POLAND_BOUNDS.maxLatitude ||
+    longitude < POLAND_BOUNDS.minLongitude ||
+    longitude > POLAND_BOUNDS.maxLongitude
+  ) {
+    errors.push(
+      `${label} coordinates (latitude ${latitude}, longitude ${longitude}) are outside Poland. Check whether they are swapped.`,
+    )
+    return undefined
+  }
+
+  return { latitude, longitude }
+}
+
+function normalizeNip(value) {
+  return typeof value === 'string' ? value.replace(/[\s-]/g, '') : ''
+}
+
+function formatAmount(value) {
   return value.toFixed(2)
 }
 
-function mapPropertyTypeForCsv(propertyType) {
-  return propertyType === 'lokal mieszkalny' ? 'Lokal mieszkalny' : 'Dom jednorodzinny'
+function formatCoordinate(value) {
+  return value.toFixed(6)
+}
+
+// Price validity is a calendar date in the CMS; the regulation requires RRRR-MM-DD GG:MM:SS.
+function formatDateTime(isoDate) {
+  return `${isoDate} 00:00:00`
 }
 
 function sanitizeSlug(value) {

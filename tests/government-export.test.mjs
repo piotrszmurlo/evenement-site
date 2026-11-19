@@ -25,9 +25,7 @@ test('normalizeGovernmentSource accepts BaseHub ISO datetime validFrom values', 
     {
       developer: {
         name: 'Evenement',
-        phone: '+48 600 000 000',
-        email: 'test@example.com',
-        websiteUrl: 'https://evenement24.com',
+        nip: '5421943411',
         registeredAddress: {
           voivodeship: 'podlaskie',
           county: 'bialostocki',
@@ -55,7 +53,8 @@ test('normalizeGovernmentSource accepts BaseHub ISO datetime validFrom values', 
           slug: 'sloneczna-polana-iv',
           salesStatus: 'active',
           isReportedToGovernment: true,
-          prospectusFile: { url: 'https://evenement24.com/prospectus.pdf' },
+          latitude: 53.122654,
+          longitude: 23.058894,
           investmentAddress: {
             voivodeship: 'podlaskie',
             county: 'bialostocki',
@@ -98,7 +97,7 @@ test('normalizeGovernmentSource accepts BaseHub ISO datetime validFrom values', 
     },
   )
 
-  assert.equal(result.investments[0].offerRows[0].pricePerM2ValidFrom, '2026-06-13')
+  assert.equal(result.investments[0].offerRows[0].pricePerM2ValidFrom, '2026-06-13 00:00:00')
 })
 
 test('selectEffectivePrice picks latest valid price on export date', () => {
@@ -120,9 +119,7 @@ test('normalizeGovernmentSource defaults buyer contact method when CMS field is 
     {
       developer: {
         name: 'Evenement',
-        phone: '+48 600 000 000',
-        email: 'test@example.com',
-        websiteUrl: 'https://evenement24.com',
+        nip: '5421943411',
         buyerContactMethod: '',
         registeredAddress: {
           voivodeship: 'podlaskie',
@@ -150,7 +147,8 @@ test('normalizeGovernmentSource defaults buyer contact method when CMS field is 
           name: 'Sloneczna Polana IV etap',
           slug: 'sloneczna-polana-iv',
           isReportedToGovernment: true,
-          prospectusFile: { url: 'https://evenement24.com/prospectus.pdf' },
+          latitude: 53.122654,
+          longitude: 23.058894,
           investmentAddress: {
             voivodeship: 'podlaskie',
             county: 'bialostocki',
@@ -183,7 +181,7 @@ test('buildStableExtIdent is deterministic, ASCII, and within XSD limit', () => 
   assert.ok(first.length <= 36)
 })
 
-test('fixture export generates exact CSV header and skips non-available units', async () => {
+test('fixture export follows the Dz.U. 2026 poz. 1489 structure and skips non-available units', async () => {
   const result = await generateGovernmentFeed({
     exportDate: '2026-06-22',
     fixturePath: 'fixtures/sample-content.json',
@@ -191,14 +189,39 @@ test('fixture export generates exact CSV header and skips non-available units', 
   })
 
   assert.equal(result.csvFiles.length, 1)
+  assert.equal(result.csvHeader.length, 48)
+  assert.equal(new Set(result.csvHeader).size, 48)
 
   const csvLines = result.csvFiles[0].content.trim().split(/\r?\n/)
   assert.equal(csvLines.length, 2)
-  assert.ok(csvLines[0].startsWith('Nazwa dewelopera;Forma prawna dewelopera;Nr KRS;'))
-  assert.match(csvLines[1], /A1/)
+
+  const header = csvLines[0].split(';')
+  assert.equal(header.length, 48)
+  assert.equal(header[0], 'Firma')
+  assert.equal(header[1], 'Numer identyfikacji podatkowej (NIP)')
+  assert.match(header[27], /^Długość geograficzna/)
+  assert.match(header[28], /^Szerokość geograficzna/)
+
+  const row = parseCsvLine(csvLines[1])
+  assert.equal(row.length, 48)
+  const field = (name) => row[header.indexOf(name)]
+
+  assert.equal(row[1], '5421943411')
+  assert.equal(row[27], '23.058894')
+  assert.equal(row[28], '53.122654')
+  assert.equal(field('Rodzaj nieruchomości'), 'dom jednorodzinny')
+  assert.equal(field('Identyfikator lokalu mieszkalnego albo domu jednorodzinnego'), 'A1')
+  assert.equal(
+    field('Data i czas, od których obowiązuje cena 1 m2 powierzchni użytkowej lokalu mieszkalnego albo domu jednorodzinnego'),
+    '2026-06-13 00:00:00',
+  )
+  assert.equal(
+    field('Data i czas, od których obowiązuje cena lokalu mieszkalnego albo domu jednorodzinnego lub ich części'),
+    '2026-06-13 00:00:00',
+  )
+  assert.match(field('Cena lokalu mieszkalnego albo domu jednorodzinnego lub ich części będących przedmiotem umowy'), /^\d+\.\d{2}$/)
+  assert.deepEqual(row.slice(35), Array(13).fill('X'))
   assert.doesNotMatch(csvLines[1], /A2|A3/)
-  assert.match(csvLines[1], /789410\.00/)
-  assert.match(csvLines[1], /;X;X;X;X;/)
 })
 
 test('feed keeps historical daily resources for active dataset', async () => {
@@ -313,88 +336,114 @@ test(
   },
 )
 
-test('missing prospectus yields validation error instead of crashing', () => {
+function sourceWithCoordinates(coordinates) {
+  return {
+    developer: {
+      name: 'Evenement',
+      nip: '542-194-34-11',
+      registeredAddress: {
+        voivodeship: 'podlaskie',
+        county: 'bialostocki',
+        municipality: 'Choroszcz',
+        city: 'Krupniki',
+        street: 'Krokusowa',
+        buildingNumber: '12',
+        unitNumber: '',
+        postalCode: '16-070',
+      },
+      salesOfficeAddress: {
+        voivodeship: 'podlaskie',
+        county: 'Bialystok',
+        municipality: 'Bialystok',
+        city: 'Bialystok',
+        street: 'Mickiewicza',
+        buildingNumber: '7',
+        unitNumber: '2',
+        postalCode: '15-213',
+      },
+    },
+    investments: [
+      {
+        name: 'Sloneczna Polana IV etap',
+        slug: 'sloneczna-polana-iv',
+        isReportedToGovernment: true,
+        ...coordinates,
+        investmentAddress: {
+          voivodeship: 'podlaskie',
+          county: 'bialostocki',
+          municipality: 'Choroszcz',
+          city: 'Krupniki',
+          street: 'Rozana',
+          buildingNumber: '1',
+          unitNumber: '',
+          postalCode: '16-070',
+        },
+        units: { items: [] },
+      },
+    ],
+  }
+}
+
+test('normalizeGovernmentSource strips separators from NIP', () => {
+  const result = normalizeGovernmentSource(sourceWithCoordinates({ latitude: 53.122654, longitude: 23.058894 }), {
+    exportDate: '2026-06-22',
+    baseUrl: 'https://evenement24.com',
+  })
+
+  assert.equal(result.developer.nip, '5421943411')
+})
+
+test('missing investment coordinates yield a validation error', () => {
   assert.throws(
     () =>
-      normalizeGovernmentSource(
-        {
-          developer: {
-            name: 'Evenement',
-            phone: '+48 600 000 000',
-            email: 'test@example.com',
-            websiteUrl: 'https://evenement24.com',
-            registeredAddress: {
-              voivodeship: 'podlaskie',
-              county: 'bialostocki',
-              municipality: 'Choroszcz',
-              city: 'Krupniki',
-              street: 'Krokusowa',
-              buildingNumber: '12',
-              unitNumber: '',
-              postalCode: '16-070',
-            },
-            salesOfficeAddress: {
-              voivodeship: 'podlaskie',
-              county: 'Bialystok',
-              municipality: 'Bialystok',
-              city: 'Bialystok',
-              street: 'Mickiewicza',
-              buildingNumber: '7',
-              unitNumber: '2',
-              postalCode: '15-213',
-            },
-          },
-          investments: [
-            {
-              name: 'Sloneczna Polana IV etap',
-              slug: 'sloneczna-polana-iv',
-              salesStatus: 'active',
-              isReportedToGovernment: true,
-              prospectusFile: null,
-              investmentAddress: {
-                voivodeship: 'podlaskie',
-                county: 'bialostocki',
-                municipality: 'Choroszcz',
-                city: 'Krupniki',
-                street: 'Rozana',
-                buildingNumber: '1',
-                unitNumber: '',
-                postalCode: '16-070',
-              },
-              units: {
-                items: [
-                  {
-                    unitNumber: 'A1',
-                    slug: 'a1',
-                    propertyType: 'dom w zabudowie szeregowej',
-                    status: 'available',
-                    usableAreaM2: 119.14,
-                    governmentReportingEnabled: true,
-                    includedInPriceNotes: '',
-                    priceHistory: {
-                      items: [
-                        {
-                          validFrom: '2026-06-13T00:00:00.000Z',
-                          pricePerM2: 6500.08,
-                          baseTotalPrice: 774410,
-                          totalPriceWithComponents: 789410,
-                        },
-                      ],
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-        },
-        {
-          exportDate: '2026-06-22',
-          baseUrl: 'https://evenement24.com',
-        },
-      ),
-    /Government export validation failed:\n- investments\[0\]\.prospectusFile\.url must be a valid https:\/\/ URL\./,
+      normalizeGovernmentSource(sourceWithCoordinates({ latitude: null, longitude: undefined }), {
+        exportDate: '2026-06-22',
+        baseUrl: 'https://evenement24.com',
+      }),
+    /investments\[0\]\.latitude and investments\[0\]\.longitude are required/,
   )
 })
+
+test('swapped investment coordinates yield a validation error', () => {
+  assert.throws(
+    () =>
+      normalizeGovernmentSource(sourceWithCoordinates({ latitude: 23.058894, longitude: 53.122654 }), {
+        exportDate: '2026-06-22',
+        baseUrl: 'https://evenement24.com',
+      }),
+    /are outside Poland\. Check whether they are swapped\./,
+  )
+})
+
+function parseCsvLine(line) {
+  const cells = []
+  let current = ''
+  let quoted = false
+
+  for (let index = 0; index < line.length; index += 1) {
+    const char = line[index]
+    if (quoted) {
+      if (char === '"' && line[index + 1] === '"') {
+        current += '"'
+        index += 1
+      } else if (char === '"') {
+        quoted = false
+      } else {
+        current += char
+      }
+    } else if (char === '"') {
+      quoted = true
+    } else if (char === ';') {
+      cells.push(current)
+      current = ''
+    } else {
+      current += char
+    }
+  }
+
+  cells.push(current)
+  return cells
+}
 
 async function canRunJava() {
   try {

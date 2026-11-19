@@ -50,9 +50,18 @@ Raw reference files are stored in `goverment-docs/`:
 - Keep daily CSV files hosted on the site as public static files. They are expected to be small; do not optimize v1 around deletion.
 - Use `/otwarte-dane/` for government-facing files, separate from marketing pages.
 - Generate daily snapshots even when no prices changed.
-- Use the exact CSV header order from `Wcorcowy_zakres_danych_dotyczących_cen_mieszkań.csv`.
+- Since 2026-11-11 the CSV follows the data structure from the annex to the Minister of Digital Affairs regulation of 10 November 2026 (Dz.U. 2026 poz. 1489): 48 fields A1–H4, header order from `struktura_danych_dz_u_2026_poz_1489.csv`. The older 2025 template CSV is kept for reference only.
 - Use `X` for not-applicable values, matching the sample CSV and XML `specialSigns`.
 - Do not require broad CMS overrides for XML metadata if the same values can be generated deterministically from investment data.
+
+## Dz.U. 2026 poz. 1489 structure
+
+- Headers are the annex field names verbatim. The annex gives the same name to E2, F5, G4 and H4 ("Identyfikator lokalu mieszkalnego albo domu jednorodzinnego"), so F5, G4 and H4 get a parenthesised suffix to keep CSV headers unique.
+- D8 longitude and D9 latitude come from the BaseHub investment fields `longitude` and `latitude` (WGS-84 decimal degrees), written with six decimals. The export fails when they are missing or fall outside Poland (a swapped pair does).
+- E4/E6 price validity uses `RRRR-MM-DD GG:MM:SS`. The CMS stores a calendar date, so the time is `00:00:00`.
+- E1 is `lokal mieszkalny` or `dom jednorodzinny` only; `dom w zabudowie szeregowej` maps to `dom jednorodzinny`.
+- E5 is the base price (m² price × area). The structure no longer has the "total price with components" field, KRS/CEIDG/REGON/contact fields or the prospectus URL.
+- F, G and H are conditional and written as `X`; the CMS does not model separately priced appurtenant rooms, rights or other fees.
 
 ## Import Setup
 

@@ -53,8 +53,8 @@ test('normalizeGovernmentSource accepts BaseHub ISO datetime validFrom values', 
           slug: 'sloneczna-polana-iv',
           salesStatus: 'active',
           isReportedToGovernment: true,
-          latitude: 53.122654,
-          longitude: 23.058894,
+          latitude: 53.123045844199474,
+          longitude: 23.060240522312768,
           investmentAddress: {
             voivodeship: 'podlaskie',
             county: 'bialostocki',
@@ -147,8 +147,8 @@ test('normalizeGovernmentSource defaults buyer contact method when CMS field is 
           name: 'Sloneczna Polana IV etap',
           slug: 'sloneczna-polana-iv',
           isReportedToGovernment: true,
-          latitude: 53.122654,
-          longitude: 23.058894,
+          latitude: 53.123045844199474,
+          longitude: 23.060240522312768,
           investmentAddress: {
             voivodeship: 'podlaskie',
             county: 'bialostocki',
@@ -207,8 +207,8 @@ test('fixture export follows the Dz.U. 2026 poz. 1489 structure and skips non-av
   const field = (name) => row[header.indexOf(name)]
 
   assert.equal(row[1], '5421943411')
-  assert.equal(row[27], '23.058894')
-  assert.equal(row[28], '53.122654')
+  assert.equal(row[27], '23.060241')
+  assert.equal(row[28], '53.123046')
   assert.equal(field('Rodzaj nieruchomości'), 'dom jednorodzinny')
   assert.equal(field('Identyfikator lokalu mieszkalnego albo domu jednorodzinnego'), 'A1')
   assert.equal(
@@ -385,7 +385,7 @@ function sourceWithCoordinates(coordinates) {
 }
 
 test('normalizeGovernmentSource strips separators from NIP', () => {
-  const result = normalizeGovernmentSource(sourceWithCoordinates({ latitude: 53.122654, longitude: 23.058894 }), {
+  const result = normalizeGovernmentSource(sourceWithCoordinates({ latitude: 53.123045844199474, longitude: 23.060240522312768 }), {
     exportDate: '2026-06-22',
     baseUrl: 'https://evenement24.com',
   })
@@ -404,10 +404,21 @@ test('missing investment coordinates yield a validation error', () => {
   )
 })
 
+test('missing coordinates on an investment with available units yield a validation error, not a crash', async () => {
+  const fixture = JSON.parse(await readFile('fixtures/sample-content.json', 'utf8'))
+  delete fixture.investments[0].latitude
+  delete fixture.investments[0].longitude
+
+  assert.throws(
+    () => normalizeGovernmentSource(fixture, { exportDate: '2026-11-21', baseUrl: 'https://evenement24.com' }),
+    /Government export validation failed:[\s\S]*latitude and investments\[0\]\.longitude are required/,
+  )
+})
+
 test('swapped investment coordinates yield a validation error', () => {
   assert.throws(
     () =>
-      normalizeGovernmentSource(sourceWithCoordinates({ latitude: 23.058894, longitude: 53.122654 }), {
+      normalizeGovernmentSource(sourceWithCoordinates({ latitude: 23.060240522312768, longitude: 53.123045844199474 }), {
         exportDate: '2026-06-22',
         baseUrl: 'https://evenement24.com',
       }),

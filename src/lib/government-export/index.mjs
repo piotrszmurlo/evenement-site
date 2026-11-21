@@ -390,6 +390,11 @@ function normalizeInvestment(investment, investmentIndex, developer, exportDate,
       return []
     }
 
+    // Without valid coordinates the error is already recorded; skip the row instead of crashing on D8/D9.
+    if (!coordinates) {
+      return []
+    }
+
     return [
       createOfferRow({
         developer,
